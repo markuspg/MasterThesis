@@ -18,21 +18,11 @@
  */
 
 #include "helper_functions.h"
-#include "settings.h"
 
-#include <iostream>
+extern mt::Settings *settings;
 
-mt::Settings *settings = nullptr;
-
-int main( int argc, char *argv[] ) {
-    std::cout << "<---- MasterThesis ---->" << std::endl;
+void ParseCommandLine() {
+    std::cout << "  Parsing command line arguments" << std::endl;
     
-    ParseCommandLine();
-    
-    delete settings;
-    settings = nullptr;
-    
-    std::cout << "Finished MasterThesis" << std::endl;
-    
-    return 0;
+    settings = new mt::Settings{};
 }

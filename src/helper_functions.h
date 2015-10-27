@@ -17,22 +17,13 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "helper_functions.h"
+#ifndef HELPER_FUNCTIONS_H
+#define HELPER_FUNCTIONS_H
+
 #include "settings.h"
 
 #include <iostream>
 
-mt::Settings *settings = nullptr;
+void ParseCommandLine();
 
-int main( int argc, char *argv[] ) {
-    std::cout << "<---- MasterThesis ---->" << std::endl;
-    
-    ParseCommandLine();
-    
-    delete settings;
-    settings = nullptr;
-    
-    std::cout << "Finished MasterThesis" << std::endl;
-    
-    return 0;
-}
+#endif // HELPER_FUNCTIONS_H

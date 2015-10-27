@@ -17,22 +17,12 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "helper_functions.h"
 #include "settings.h"
 
-#include <iostream>
+mt::Settings::Settings() {
+    std::cout << "    Settings constructor" << std::endl;
+}
 
-mt::Settings *settings = nullptr;
-
-int main( int argc, char *argv[] ) {
-    std::cout << "<---- MasterThesis ---->" << std::endl;
-    
-    ParseCommandLine();
-    
-    delete settings;
-    settings = nullptr;
-    
-    std::cout << "Finished MasterThesis" << std::endl;
-    
-    return 0;
+mt::Settings::~Settings() {
+    std::cout << "    Settings destructor" << std::endl;
 }

@@ -17,22 +17,32 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "helper_functions.h"
-#include "settings.h"
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
 #include <iostream>
+#include <list>
+#include <string>
 
-mt::Settings *settings = nullptr;
+namespace mt {
 
-int main( int argc, char *argv[] ) {
-    std::cout << "<---- MasterThesis ---->" << std::endl;
-    
-    ParseCommandLine();
-    
-    delete settings;
-    settings = nullptr;
-    
-    std::cout << "Finished MasterThesis" << std::endl;
-    
-    return 0;
+class Settings {
+public:
+    Settings();
+    Settings( const Settings &argSettings ) = delete;
+    Settings( Settings &&argSettings ) = delete;
+    ~Settings();
+
+private:
+    const unsigned short * const gaInstances = nullptr;
+    const unsigned int * const maxFailures = nullptr;
+    const std::string * const outputFile = nullptr;
+    const std::list< std::string > * const problemFiles = nullptr;
+    const bool * randomizedTabooTenures = nullptr;
+    const unsigned short * const tabooTenuresFac = nullptr;
+    const unsigned short * const tsInstances = nullptr;
+};
+
 }
+
+#endif // SETTINGS_H
