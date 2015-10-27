@@ -18,25 +18,11 @@
  */
 
 #include "analyzer.h"
-#include "helper_functions.h"
-#include "settings.h"
 
-#include <iostream>
+mt::Analyzer::Analyzer() {
+    std::cout << "      Constructing Analyzer" << std::endl;
+}
 
-mt::Settings *settings = nullptr;
-
-int main( int argc, char *argv[] ) {
-    std::cout << "<---- MasterThesis ---->" << std::endl;
-    
-    ParseCommandLine();
-    
-    mt::Analyzer analyzer;
-    analyzer.Analyze();
-    
-    delete settings;
-    settings = nullptr;
-    
-    std::cout << "Finished MasterThesis" << std::endl;
-    
-    return 0;
+void mt::Analyzer::Analyze() {
+    std::cout << "       Analyzing ..." << std::endl;
 }

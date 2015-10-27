@@ -17,26 +17,22 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "analyzer.h"
-#include "helper_functions.h"
-#include "settings.h"
+#ifndef ANALYZER_H
+#define ANALYZER_H
 
 #include <iostream>
 
-mt::Settings *settings = nullptr;
+namespace mt {
 
-int main( int argc, char *argv[] ) {
-    std::cout << "<---- MasterThesis ---->" << std::endl;
+class Analyzer {
+public:
+    Analyzer();
+    Analyzer( const Analyzer &argAnalyzer ) = delete;
+    Analyzer( Analyzer &&argAnalyzer ) = delete;
     
-    ParseCommandLine();
-    
-    mt::Analyzer analyzer;
-    analyzer.Analyze();
-    
-    delete settings;
-    settings = nullptr;
-    
-    std::cout << "Finished MasterThesis" << std::endl;
-    
-    return 0;
+    void Analyze();
+};
+
 }
+
+#endif // ANALYZER_H
