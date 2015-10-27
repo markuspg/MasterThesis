@@ -20,9 +20,9 @@
 #include "settings.h"
 
 mt::Settings::Settings() {
-    std::cout << "    Settings constructor" << std::endl;
+    std::cout << "  Settings constructor" << std::endl;
 }
 
 mt::Settings::~Settings() {
-    std::cout << "    Settings destructor" << std::endl;
+    std::cout << " Settings destructor" << std::endl;
 }

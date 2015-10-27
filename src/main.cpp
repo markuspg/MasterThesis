@@ -28,7 +28,9 @@ mt::Settings *settings = nullptr;
 int main( int argc, char *argv[] ) {
     std::cout << "<---- MasterThesis ---->" << std::endl;
     
-    ParseCommandLine();
+    if ( ParseCommandLine( argc, argv ) ) {
+        return 1;
+    }
     
     mt::Analyzer analyzer;
     analyzer.Analyze();

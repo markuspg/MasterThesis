@@ -20,9 +20,9 @@
 #include "analyzer.h"
 
 mt::Analyzer::Analyzer() {
-    std::cout << "      Constructing Analyzer" << std::endl;
+    std::cout << "    Constructing Analyzer" << std::endl;
 }
 
 void mt::Analyzer::Analyze() {
-    std::cout << "       Analyzing ..." << std::endl;
+    std::cout << "     Analyzing ..." << std::endl;
 }

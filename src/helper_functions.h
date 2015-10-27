@@ -23,7 +23,8 @@
 #include "settings.h"
 
 #include <iostream>
+#include <vector>
 
-void ParseCommandLine();
+int ParseCommandLine( int argC, char *argV[] );
 
 #endif // HELPER_FUNCTIONS_H
