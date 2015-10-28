@@ -20,11 +20,13 @@
 #include "settings.h"
 
 mt::Settings::Settings( const unsigned short &argGAInstances, const unsigned int &argMaxFailures,
-                        const std::string &argOutputFile, const bool &argRandomizedTabooTenures,
-                        const unsigned short &argTabooTenureFac, const unsigned short &argTSInstances ) :
+                        const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
+                        const bool &argRandomizedTabooTenures, const unsigned short &argTabooTenureFac,
+                        const unsigned short &argTSInstances ) :
     gaInstances{ new unsigned short{ argGAInstances } },
     maxFailures{ new unsigned int{ argMaxFailures } },
     outputFile{ new std::string{ argOutputFile } },
+    problemFiles{ new std::vector< std::string >{ argProblemFiles } },
     randomizedTabooTenures{ new bool{ argRandomizedTabooTenures } },
     tabooTenuresFac{ new unsigned short{ argTabooTenureFac } },
     tsInstances{ new unsigned short{ argTSInstances } }
@@ -33,7 +35,7 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const unsigned int
     std::cout << "   gaInstances:\t\t\t" << *gaInstances
               << "\n   maxFailures:\t\t\t" << *maxFailures
               << "\n   outputFile:\t\t\t" << *outputFile
-              << "\n   problemFiles:\t\t\t" << CreateStringOfProblemFiles()
+              << "\n   problemFiles:\t\t" << CreateStringOfProblemFiles()
               << "\n   randomizedTabooTenures:\t" << *randomizedTabooTenures
               << "\n   tabooTenuresFac:\t\t" << *tabooTenuresFac
               << "\n   tsInstances:\t\t\t" << *tsInstances << std::endl;

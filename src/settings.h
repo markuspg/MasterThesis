@@ -30,8 +30,9 @@ namespace mt {
 class Settings {
 public:
     Settings( const unsigned short &argGAInstances, const unsigned int &argMaxFailures,
-              const std::string &argOutputFile, const bool &argRandomizedTabooTenures,
-              const unsigned short &argTabooTenureFac, const unsigned short &argTSInstances );
+              const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
+              const bool &argRandomizedTabooTenures, const unsigned short &argTabooTenureFac,
+              const unsigned short &argTSInstances );
     Settings( const Settings &argSettings ) = delete;
     Settings( Settings &&argSettings ) = delete;
     ~Settings();

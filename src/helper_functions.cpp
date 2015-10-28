@@ -30,7 +30,7 @@ int ParseCommandLine( int argC, char *argV[] ) {
     unsigned short tempGAInstances = 0;
     unsigned int tempMaxFailures = 0;
     std::string tempOutputFile;
-    std::list< std::string > tempProblemFiles;
+    std::vector< std::string > tempProblemFiles;
     bool tempRandomizedTabooTenures = false;
     unsigned short tempTabooTenureFac = 0;
     unsigned short tempTSInstances = 0;
@@ -80,15 +80,16 @@ int ParseCommandLine( int argC, char *argV[] ) {
             lastActiveIndex = i + 1;
             continue;
         }
-
-        for ( unsigned int i = lastActiveIndex; i < static_cast< unsigned int >( argC ) - 1; ++i ) {
-            tempProblemFiles.emplace_back( argV[ i ] );
-        }
-
-        tempOutputFile = commandLineArguments.back();
     }
+
+    for ( unsigned int i = lastActiveIndex + 1; i < static_cast< unsigned int >( argC ) - 1; ++i ) {
+        tempProblemFiles.emplace_back( argV[ i ] );
+    }
+
+    tempOutputFile = commandLineArguments.back();
     
-    settings = new mt::Settings{ tempGAInstances, tempMaxFailures, tempOutputFile, tempRandomizedTabooTenures,
+    settings = new mt::Settings{ tempGAInstances, tempMaxFailures, tempOutputFile,
+                                 std::move( tempProblemFiles ), tempRandomizedTabooTenures,
                                  tempTabooTenureFac, tempTSInstances };
     
     return 0;
