@@ -22,7 +22,13 @@
 extern mt::Settings *settings;
 
 mt::Problem *LoadProblem( const std::string &argLine ) {
-    return new mt::Problem{ argLine };
+    std::vector< std::string > problemTokens = Split( argLine, '|' );
+    if ( problemTokens[ 1 ] == "QAP" ) {
+        return new mt::QAP{ problemTokens };
+    }
+    if ( problemTokens[ 1 ] == "SALBP" ) {
+    }
+    return nullptr;
 }
 
 int ParseCommandLine( int argC, char *argV[] ) {
@@ -97,4 +103,18 @@ int ParseCommandLine( int argC, char *argV[] ) {
                                  tempTabooTenureFac, tempTSInstances };
     
     return 0;
+}
+
+std::vector<std::string> Split( const std::string &argString, char argDelim ) {
+    std::vector<std::string> elements;
+    Split( argString, argDelim, elements );
+    return elements;
+}
+
+void Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements ) {
+    std::stringstream stringStream{ argString };
+    std::string item;
+    while (std::getline( stringStream, item, argDelim ) ) {
+        argElements.push_back( item );
+    }
 }

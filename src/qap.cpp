@@ -17,30 +17,10 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PROBLEM_H
-#define PROBLEM_H
+#include "qap.h"
 
-#include <iostream>
-#include <vector>
-
-enum class problemTypes_t : unsigned short {
-    QAP,
-    SALBP
-};
-
-namespace mt {
-
-class Problem {
-public:
-    Problem( const problemTypes_t &argType, const std::vector<std::string> &argTokens );
-    Problem( const Problem &argProblem ) = delete;
-    Problem( Problem &&argProblem ) = delete;
-
-    const std::string name;
-    const unsigned long size = 0;
-    const problemTypes_t type;
-};
-
+mt::QAP::QAP( const std::vector<std::string> &argTokens ) :
+    Problem{ problemTypes_t::QAP, argTokens }
+{
+    std::cout << "      > Constructing QAP " << argTokens[ 0 ] << std::endl;
 }
-
-#endif // PROBLEM_H

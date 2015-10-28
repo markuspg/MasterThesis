@@ -21,12 +21,17 @@
 #define HELPER_FUNCTIONS_H
 
 #include "problem.h"
+#include "qap.h"
 #include "settings.h"
 
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <vector>
 
 mt::Problem *LoadProblem( const std::string &argLine );
 int ParseCommandLine( int argC, char *argV[] );
+std::vector<std::string> Split( const std::string &argString, char argDelim );
+void Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements );
 
 #endif // HELPER_FUNCTIONS_H

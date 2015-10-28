@@ -19,6 +19,10 @@
 
 #include "problem.h"
 
-mt::Problem::Problem( const std::string &argLine ) {
-    std::cout << "      Constructing Problem from line " << argLine << std::endl;
+mt::Problem::Problem( const problemTypes_t &argType, const std::vector<std::string> &argTokens ) :
+    name{ argTokens[ 0 ] },
+    size{ std::stoul( argTokens[ 2 ] ) },
+    type{ argType }
+{
+    std::cout << "      Constructing Problem " << argTokens[ 0 ] << std::endl;
 }
