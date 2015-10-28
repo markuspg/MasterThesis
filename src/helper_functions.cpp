@@ -81,7 +81,7 @@ int ParseCommandLine( int argC, char *argV[] ) {
             continue;
         }
 
-        for ( unsigned int i = lastActiveIndex; i < argC - 1; ++i ) {
+        for ( unsigned int i = lastActiveIndex; i < static_cast< unsigned int >( argC ) - 1; ++i ) {
             tempProblemFiles.emplace_back( argV[ i ] );
         }
 
