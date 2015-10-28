@@ -17,16 +17,8 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HELPER_FUNCTIONS_H
-#define HELPER_FUNCTIONS_H
-
 #include "problem.h"
-#include "settings.h"
 
-#include <iostream>
-#include <vector>
-
-mt::Problem *LoadProblem( const std::string &argLine );
-int ParseCommandLine( int argC, char *argV[] );
-
-#endif // HELPER_FUNCTIONS_H
+mt::Problem::Problem( const std::string &argLine ) {
+    std::cout << "      Constructing Problem from line " << argLine << std::endl;
+}

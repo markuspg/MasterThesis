@@ -14,11 +14,13 @@ TEMPLATE = app
 SOURCES += src/main.cpp \
     src/analyzer.cpp \
     src/helper_functions.cpp \
+    src/problem.cpp \
     src/settings.cpp
 
 HEADERS += \
     src/analyzer.h \
     src/helper_functions.h \
+    src/problem.h \
     src/settings.h
 
 OTHER_FILES += \

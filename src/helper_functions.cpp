@@ -21,6 +21,10 @@
 
 extern mt::Settings *settings;
 
+mt::Problem *LoadProblem( const std::string &argLine ) {
+    return new mt::Problem{ argLine };
+}
+
 int ParseCommandLine( int argC, char *argV[] ) {
     // A temporary storage for the extracted strings
     std::vector< std::string > commandLineArguments{};

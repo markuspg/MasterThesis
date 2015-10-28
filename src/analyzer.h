@@ -20,17 +20,22 @@
 #ifndef ANALYZER_H
 #define ANALYZER_H
 
+#include "problem.h"
+
 #include <iostream>
 
 namespace mt {
 
 class Analyzer {
 public:
-    Analyzer();
+    Analyzer( const mt::Problem *argProblem );
     Analyzer( const Analyzer &argAnalyzer ) = delete;
     Analyzer( Analyzer &&argAnalyzer ) = delete;
     
     void Analyze();
+
+private:
+    const mt::Problem * const problem;
 };
 
 }

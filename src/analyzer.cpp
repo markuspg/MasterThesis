@@ -19,7 +19,9 @@
 
 #include "analyzer.h"
 
-mt::Analyzer::Analyzer() {
+mt::Analyzer::Analyzer( const mt::Problem *argProblem ) :
+    problem{ argProblem }
+{
     std::cout << "    Constructing Analyzer" << std::endl;
 }
 

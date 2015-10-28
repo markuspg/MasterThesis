@@ -37,9 +37,6 @@ public:
     Settings( Settings &&argSettings ) = delete;
     ~Settings();
 
-private:
-    std::string CreateStringOfProblemFiles() const;
-
     const unsigned short * const gaInstances = nullptr;
     const unsigned int * const maxFailures = nullptr;
     const std::string * const outputFile = nullptr;
@@ -47,6 +44,9 @@ private:
     const bool * randomizedTabooTenures = nullptr;
     const unsigned short * const tabooTenuresFac = nullptr;
     const unsigned short * const tsInstances = nullptr;
+
+private:
+    std::string CreateStringOfProblemFiles() const;
 };
 
 }

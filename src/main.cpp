@@ -21,7 +21,9 @@
 #include "helper_functions.h"
 #include "settings.h"
 
+#include <fstream>
 #include <iostream>
+#include <istream>
 
 mt::Settings *settings = nullptr;
 
@@ -31,9 +33,17 @@ int main( int argc, char *argv[] ) {
     if ( ParseCommandLine( argc, argv ) ) {
         return 1;
     }
-    
-    mt::Analyzer analyzer;
-    analyzer.Analyze();
+
+    for ( auto cit = settings->problemFiles->cbegin(); cit != settings->problemFiles->cend(); ++cit ) {
+        std::fstream inputFile;
+        inputFile.open( *cit, std::ios::in );
+        for ( std::string line; std::getline( inputFile, line ); ) {
+            const mt::Problem * const problem = LoadProblem( line );
+            mt::Analyzer analyzer{ problem };
+            analyzer.Analyze();
+            delete problem;
+        }
+    }
     
     delete settings;
     settings = nullptr;

@@ -17,16 +17,20 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HELPER_FUNCTIONS_H
-#define HELPER_FUNCTIONS_H
-
-#include "problem.h"
-#include "settings.h"
+#ifndef PROBLEM_H
+#define PROBLEM_H
 
 #include <iostream>
-#include <vector>
 
-mt::Problem *LoadProblem( const std::string &argLine );
-int ParseCommandLine( int argC, char *argV[] );
+namespace mt {
 
-#endif // HELPER_FUNCTIONS_H
+class Problem {
+public:
+    Problem( const std::string &argLine );
+    Problem( const Problem &argProblem ) = delete;
+    Problem( Problem &&argProblem ) = delete;
+};
+
+}
+
+#endif // PROBLEM_H
