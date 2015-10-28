@@ -37,9 +37,10 @@ int ParseCommandLine( int argC, char *argV[] ) {
     
     // Convert all arguments to strings and organize them in a vector
     for ( unsigned short i = 0; i < argC; ++i ) {
-        commandLineArguments.emplace_back( std::string{ argV[ i ] } );
+        commandLineArguments.emplace_back( argV[ i ] );
     }
     
+    unsigned int lastActiveIndex = 0;
     // Store relevant options to the settings
     for ( unsigned short i = 0; i < argC; ++i ) {
         if ( argC < 2 || commandLineArguments[ i ] == "--help" || commandLineArguments[ i ] == "-h" ) {
@@ -49,26 +50,46 @@ int ParseCommandLine( int argC, char *argV[] ) {
                          "\t--ts <tsInstances>    The desired number of taboo search threads\n"
                          "\t--mf <maxFailures>    The number of allowed improvement failures,\n"
                          "\t                      before the search terminates\n"
-                         "\t--rff <randTTenures>  If the taboo tenures shall be randomized {0;1}\n"
+                         "\t--rtt <randTTenures>  If the taboo tenures shall be randomized {0;1}\n"
                          "\t--ttf <tTenureFac>    How many times the problem size\n"
                          "\t                      the taboo tenure shall last" << std::endl;
             return 1;
         }
         if ( commandLineArguments[ i ] == "--ga" ) {
-            std::cout << "Hit!" << std::endl;
+            tempGAInstances = std::stoul( commandLineArguments[ i + 1 ] );
+            lastActiveIndex = i + 1;
             continue;
         }
         if ( commandLineArguments[ i ] == "--mf" ) {
-            std::cout << "Hit!" << std::endl;
+            tempMaxFailures = std::stoul( commandLineArguments[ i + 1 ] );
+            lastActiveIndex = i + 1;
+            continue;
+        }
+        if ( commandLineArguments[ i ] == "--rtt" ) {
+            tempRandomizedTabooTenures = static_cast< bool >( std::stoul( commandLineArguments[ i + 1 ] ) );
+            lastActiveIndex = i + 1;
+            continue;
+        }
+        if ( commandLineArguments[ i ] == "--ttf" ) {
+            tempTabooTenureFac = std::stoul( commandLineArguments[ i + 1 ] );
+            lastActiveIndex = i + 1;
             continue;
         }
         if ( commandLineArguments[ i ] == "--ts" ) {
-            std::cout << "Hit!" << std::endl;
+            tempTSInstances = std::stoul( commandLineArguments[ i + 1 ] );
+            lastActiveIndex = i + 1;
             continue;
         }
+
+        for ( unsigned int i = lastActiveIndex; i < argC - 1; ++i ) {
+            tempProblemFiles.emplace_back( argV[ i ] );
+        }
+
+        tempOutputFile = commandLineArguments.back();
     }
     
-    settings = new mt::Settings{};
+    settings = new mt::Settings{ tempGAInstances, tempMaxFailures, tempOutputFile, tempRandomizedTabooTenures,
+                                 tempTabooTenureFac, tempTSInstances };
     
     return 0;
 }

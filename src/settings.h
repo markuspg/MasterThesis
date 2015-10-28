@@ -23,21 +23,26 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <vector>
 
 namespace mt {
 
 class Settings {
 public:
-    Settings();
+    Settings( const unsigned short &argGAInstances, const unsigned int &argMaxFailures,
+              const std::string &argOutputFile, const bool &argRandomizedTabooTenures,
+              const unsigned short &argTabooTenureFac, const unsigned short &argTSInstances );
     Settings( const Settings &argSettings ) = delete;
     Settings( Settings &&argSettings ) = delete;
     ~Settings();
 
 private:
+    std::string CreateStringOfProblemFiles() const;
+
     const unsigned short * const gaInstances = nullptr;
     const unsigned int * const maxFailures = nullptr;
     const std::string * const outputFile = nullptr;
-    const std::list< std::string > * const problemFiles = nullptr;
+    const std::vector< std::string > * const problemFiles = nullptr;
     const bool * randomizedTabooTenures = nullptr;
     const unsigned short * const tabooTenuresFac = nullptr;
     const unsigned short * const tsInstances = nullptr;
