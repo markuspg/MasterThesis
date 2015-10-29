@@ -14,16 +14,18 @@ TEMPLATE = app
 SOURCES += src/main.cpp \
     src/analyzer.cpp \
     src/helper_functions.cpp \
+    src/matrix.cpp \
     src/problem.cpp \
-    src/settings.cpp \
-    src/qap.cpp
+    src/qap.cpp \
+    src/settings.cpp
 
 HEADERS += \
     src/analyzer.h \
     src/helper_functions.h \
+    src/matrix.h \
     src/problem.h \
-    src/settings.h \
-    src/qap.h
+    src/qap.h \
+    src/settings.h
 
 OTHER_FILES += \
     .gitignore \
