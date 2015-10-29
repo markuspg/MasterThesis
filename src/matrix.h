@@ -57,11 +57,11 @@ private:
 
 template< typename T>
 mt::Matrix< T >::Matrix( const std::vector< T > &argItems ) :
-    dimension{ static_cast< unsigned int >( std::round( std::sqrt( argItems.count() ) ) ) },
+    dimension{ static_cast< unsigned int >( std::round( std::sqrt( argItems.size() ) ) ) },
     A{ new std::vector< T > }
 {
     A->resize( dimension * dimension );
-    for ( int i = 0; i < argItems.count(); i++ ) {
+    for ( std::size_t i = 0; i < argItems.size(); i++ ) {
         ( *A )[ i ] = argItems.at( i );
     }
     A->shrink_to_fit();

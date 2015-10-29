@@ -20,6 +20,8 @@
 #ifndef QAP_H
 #define QAP_H
 
+#include "helper_functions.h"
+#include "matrix.h"
 #include "problem.h"
 
 #include <iostream>
@@ -32,6 +34,9 @@ public:
     QAP( const std::vector<std::string> &argTokens );
     QAP( const Problem &argProblem ) = delete;
     QAP( Problem &&argProblem ) = delete;
+
+    const mt::Matrix< int > distances;
+    const mt::Matrix< int > flows;
 };
 
 }
