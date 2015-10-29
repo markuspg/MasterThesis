@@ -19,6 +19,12 @@
 
 #include "taboosearch.h"
 
-void mt::TabooSearchCycle() {
-    std::cout << "      Running TabooSearchCycle" << std::endl;
+std::mutex tsMutex;
+
+void mt::TabooSearchCycle( mt::TabooSearchReferenceSet &argTSReferenceSet ) {
+    std::cout << "      Running TabooSearchCycle in thread " << std::this_thread::get_id() << std::endl;
+    argTSReferenceSet.GetStartSolution();
+
+    std::lock_guard< std::mutex > lockTSReferenceSet{ tsMutex };
+    argTSReferenceSet.SetSolution();
 }

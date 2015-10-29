@@ -17,21 +17,8 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TABOOSEARCH_H
-#define TABOOSEARCH_H
-
 #include "taboosearchreferenceset.h"
 
-#include <iostream>
-#include <mutex>
-#include <thread>
-
-extern std::mutex tsMutex;
-
-namespace mt {
-
-void TabooSearchCycle( mt::TabooSearchReferenceSet &argTSReferenceSet );
-
+mt::TabooSearchReferenceSet::TabooSearchReferenceSet() {
+    std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
 }
-
-#endif // TABOOSEARCH_H

@@ -21,6 +21,7 @@
 #define GENETICALGORITHM_H
 
 #include <iostream>
+#include <thread>
 
 namespace mt {
 

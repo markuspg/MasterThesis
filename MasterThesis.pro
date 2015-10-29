@@ -19,7 +19,8 @@ SOURCES += src/main.cpp \
     src/problem.cpp \
     src/qap.cpp \
     src/settings.cpp \
-    src/taboosearch.cpp
+    src/taboosearch.cpp \
+    src/taboosearchreferenceset.cpp
 
 HEADERS += \
     src/analyzer.h \
@@ -29,7 +30,8 @@ HEADERS += \
     src/problem.h \
     src/qap.h \
     src/settings.h \
-    src/taboosearch.h
+    src/taboosearch.h \
+    src/taboosearchreferenceset.h
 
 OTHER_FILES += \
     .gitignore \

@@ -20,5 +20,5 @@
 #include "geneticalgorithm.h"
 
 void mt::GeneticAlgorithmCycle() {
-    std::cout << "      Running GeneticAlgorithmCycle" << std::endl;
+    std::cout << "      Running GeneticAlgorithmCycle in thread " << std::this_thread::get_id() << std::endl;
 }

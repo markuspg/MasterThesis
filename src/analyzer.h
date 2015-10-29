@@ -24,7 +24,9 @@
 #include "problem.h"
 #include "settings.h"
 #include "taboosearch.h"
+#include "taboosearchreferenceset.h"
 
+#include <functional>
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -43,6 +45,7 @@ public:
 
 private:
     const mt::Problem * const problem;
+    mt::TabooSearchReferenceSet tsReferenceSet;
 };
 
 }
