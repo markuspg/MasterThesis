@@ -21,11 +21,10 @@
 #define GENETICALGORITHM_H
 
 #include <iostream>
-#include <thread>
 
 namespace mt {
 
-void GeneticAlgorithmCycle();
+void GeneticAlgorithmCycle( const unsigned short argIndex );
 
 }
 

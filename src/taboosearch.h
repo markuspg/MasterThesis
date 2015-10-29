@@ -24,13 +24,12 @@
 
 #include <iostream>
 #include <mutex>
-#include <thread>
 
 extern std::mutex tsMutex;
 
 namespace mt {
 
-void TabooSearchCycle( mt::TabooSearchReferenceSet &argTSReferenceSet );
+void TabooSearchCycle( const unsigned short argIndex, mt::TabooSearchReferenceSet &argTSReferenceSet );
 
 }
 

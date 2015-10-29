@@ -19,6 +19,6 @@
 
 #include "geneticalgorithm.h"
 
-void mt::GeneticAlgorithmCycle() {
-    std::cout << "      Running GeneticAlgorithmCycle in thread " << std::this_thread::get_id() << std::endl;
+void mt::GeneticAlgorithmCycle( const unsigned short argIndex ) {
+    std::cout << "      Running GeneticAlgorithmCycle in thread " << argIndex << std::endl;
 }

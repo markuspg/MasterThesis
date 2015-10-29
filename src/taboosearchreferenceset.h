@@ -32,12 +32,14 @@ class TabooSearchReferenceSet {
 public:
     TabooSearchReferenceSet( const mt::Problem * const argProblem,
                              const unsigned short &argTSInstanceAmount );
+    ~TabooSearchReferenceSet();
 
-    void GetStartSolution() const {}
+    mt::RandomKeySolution *GetStartSolution( const unsigned short &argIndex ) const
+        { return solution[ argIndex ]; }
     void SetSolution() {};
 
 private:
-    std::vector< mt::RandomKeySolution > solution;
+    std::vector< mt::RandomKeySolution* > solution;
 };
 
 }

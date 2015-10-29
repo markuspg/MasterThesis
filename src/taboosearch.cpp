@@ -21,9 +21,13 @@
 
 std::mutex tsMutex;
 
-void mt::TabooSearchCycle( mt::TabooSearchReferenceSet &argTSReferenceSet ) {
-    std::cout << "      Running TabooSearchCycle in thread " << std::this_thread::get_id() << std::endl;
-    argTSReferenceSet.GetStartSolution();
+void mt::TabooSearchCycle( const unsigned short argIndex, mt::TabooSearchReferenceSet &argTSReferenceSet ) {
+    std::cout << "      Running TabooSearchCycle in thread " << argIndex << std::endl;
+    mt::RandomKeySolution *tempSol = nullptr;
+    {
+        std::lock_guard< std::mutex > lockTSReferenceSet{ tsMutex };
+        tempSol = argTSReferenceSet.GetStartSolution( argIndex );
+    }
 
     std::lock_guard< std::mutex > lockTSReferenceSet{ tsMutex };
     argTSReferenceSet.SetSolution();
