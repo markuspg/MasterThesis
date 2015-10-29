@@ -20,7 +20,8 @@
 #include "analyzer.h"
 
 mt::Analyzer::Analyzer( const mt::Problem *argProblem ) :
-    problem{ argProblem }
+    problem{ argProblem },
+    tsReferenceSet{ problem, *settings->tsInstances }
 {
     std::cout << "    Constructing Analyzer" << std::endl;
 }

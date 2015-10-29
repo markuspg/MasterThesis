@@ -17,29 +17,28 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TABOOSEARCHREFERENCESET_H
-#define TABOOSEARCHREFERENCESET_H
+#ifndef RANDOMKEYSOLUTION_H
+#define RANDOMKEYSOLUTION_H
 
-#include "problem.h"
-#include "randomkeysolution.h"
-
-#include <iostream>
+#include <memory>
+#include <random>
 #include <vector>
 
 namespace mt {
 
-class TabooSearchReferenceSet {
+class RandomKeySolution
+{
 public:
-    TabooSearchReferenceSet( const mt::Problem * const argProblem,
-                             const unsigned short &argTSInstanceAmount );
+    RandomKeySolution( const std::size_t &argSize );
+    RandomKeySolution( const RandomKeySolution &argRandomKeySolution ) = delete;
+    RandomKeySolution( RandomKeySolution &&argRandomKeySolution );
+    ~RandomKeySolution();
 
-    void GetStartSolution() const {}
-    void SetSolution() {};
+    static std::vector< double > *GenerateRandomSolution( const std::size_t &argSize );
 
-private:
-    std::vector< mt::RandomKeySolution > solution;
+    std::vector< double > *solution = nullptr;
 };
 
 }
 
-#endif // TABOOSEARCHREFERENCESET_H
+#endif // RANDOMKEYSOLUTION_H

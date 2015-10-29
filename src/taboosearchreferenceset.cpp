@@ -19,6 +19,11 @@
 
 #include "taboosearchreferenceset.h"
 
-mt::TabooSearchReferenceSet::TabooSearchReferenceSet() {
+mt::TabooSearchReferenceSet::TabooSearchReferenceSet( const mt::Problem * const argProblem,
+                                                      const unsigned short &argTSInstanceAmount ) {
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
+    solution.reserve( argTSInstanceAmount );
+    for ( unsigned short i = 0; i < argTSInstanceAmount; ++i ) {
+        solution.emplace_back( mt::RandomKeySolution{ argProblem->size } );
+    }
 }

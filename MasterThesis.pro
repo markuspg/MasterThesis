@@ -18,6 +18,7 @@ SOURCES += src/main.cpp \
     src/matrix.cpp \
     src/problem.cpp \
     src/qap.cpp \
+    src/randomkeysolution.cpp \
     src/settings.cpp \
     src/taboosearch.cpp \
     src/taboosearchreferenceset.cpp
@@ -29,6 +30,7 @@ HEADERS += \
     src/matrix.h \
     src/problem.h \
     src/qap.h \
+    src/randomkeysolution.h \
     src/settings.h \
     src/taboosearch.h \
     src/taboosearchreferenceset.h
