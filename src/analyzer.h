@@ -20,9 +20,16 @@
 #ifndef ANALYZER_H
 #define ANALYZER_H
 
+#include "geneticalgorithm.h"
 #include "problem.h"
+#include "settings.h"
+#include "taboosearch.h"
 
 #include <iostream>
+#include <thread>
+#include <vector>
+
+extern mt::Settings *settings;
 
 namespace mt {
 

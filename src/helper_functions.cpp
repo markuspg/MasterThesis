@@ -19,8 +19,6 @@
 
 #include "helper_functions.h"
 
-extern mt::Settings *settings;
-
 mt::Problem *LoadProblem( const std::string &argLine ) {
     std::vector< std::string > problemTokens = Split( argLine, '|' );
     if ( problemTokens[ 1 ] == "QAP" ) {

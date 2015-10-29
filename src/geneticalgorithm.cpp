@@ -17,23 +17,8 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HELPER_FUNCTIONS_H
-#define HELPER_FUNCTIONS_H
+#include "geneticalgorithm.h"
 
-#include "problem.h"
-#include "qap.h"
-#include "settings.h"
-
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
-
-extern mt::Settings *settings;
-
-mt::Problem *LoadProblem( const std::string &argLine );
-int ParseCommandLine( int argC, char *argV[] );
-std::vector<std::string> Split( const std::string &argString, char argDelim );
-void Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements );
-
-#endif // HELPER_FUNCTIONS_H
+void mt::GeneticAlgorithmCycle() {
+    std::cout << "      Running GeneticAlgorithmCycle" << std::endl;
+}

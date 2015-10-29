@@ -17,23 +17,15 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HELPER_FUNCTIONS_H
-#define HELPER_FUNCTIONS_H
-
-#include "problem.h"
-#include "qap.h"
-#include "settings.h"
+#ifndef TABOOSEARCH_H
+#define TABOOSEARCH_H
 
 #include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 
-extern mt::Settings *settings;
+namespace mt {
 
-mt::Problem *LoadProblem( const std::string &argLine );
-int ParseCommandLine( int argC, char *argV[] );
-std::vector<std::string> Split( const std::string &argString, char argDelim );
-void Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements );
+void TabooSearchCycle();
 
-#endif // HELPER_FUNCTIONS_H
+}
+
+#endif // TABOOSEARCH_H

@@ -13,19 +13,23 @@ TEMPLATE = app
 
 SOURCES += src/main.cpp \
     src/analyzer.cpp \
+    src/geneticalgorithm.cpp \
     src/helper_functions.cpp \
     src/matrix.cpp \
     src/problem.cpp \
     src/qap.cpp \
-    src/settings.cpp
+    src/settings.cpp \
+    src/taboosearch.cpp
 
 HEADERS += \
     src/analyzer.h \
+    src/geneticalgorithm.h \
     src/helper_functions.h \
     src/matrix.h \
     src/problem.h \
     src/qap.h \
-    src/settings.h
+    src/settings.h \
+    src/taboosearch.h
 
 OTHER_FILES += \
     .gitignore \
