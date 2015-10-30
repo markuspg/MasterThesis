@@ -34,6 +34,9 @@ public:
     QAP( const std::vector<std::string> &argTokens );
     QAP( const Problem &argProblem ) = delete;
     QAP( Problem &&argProblem ) = delete;
+    ~QAP();
+
+    virtual double GetOFV( const mt::RandomKeySolution * const argSolution ) const;
 
     const mt::Matrix< int > distances;
     const mt::Matrix< int > flows;

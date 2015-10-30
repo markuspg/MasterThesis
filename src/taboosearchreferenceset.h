@@ -35,11 +35,11 @@ public:
     ~TabooSearchReferenceSet();
 
     mt::RandomKeySolution *GetStartSolution( const unsigned short &argIndex ) const
-        { return solution[ argIndex ]; }
-    void SetSolution() {};
+        { return solutions[ argIndex ]; }
+    void SetSolution( const unsigned short &argIndex, mt::RandomKeySolution *argSolution );
 
 private:
-    std::vector< mt::RandomKeySolution* > solution;
+    std::vector< mt::RandomKeySolution* > solutions;
 };
 
 }

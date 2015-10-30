@@ -45,7 +45,7 @@ public:
         ( const std::vector< std::string > &argStrList );
     T GetMinimumValueIndizes( long &argI, long &argJ );
 
-    T& operator() ( const unsigned int &argI, const unsigned int &argJ )
+    T& operator() ( const unsigned int &argI, const unsigned int &argJ ) const
         { return A->at( argI * dimension + argJ ); }
 
 private:

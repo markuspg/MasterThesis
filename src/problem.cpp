@@ -26,3 +26,6 @@ mt::Problem::Problem( const problemTypes_t &argType, const std::vector<std::stri
 {
     std::cout << "      Constructing Problem " << argTokens[ 0 ] << std::endl;
 }
+
+mt::Problem::~Problem() {
+}

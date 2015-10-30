@@ -20,6 +20,8 @@
 #ifndef PROBLEM_H
 #define PROBLEM_H
 
+#include "randomkeysolution.h"
+
 #include <iostream>
 #include <vector>
 
@@ -35,6 +37,9 @@ public:
     Problem( const problemTypes_t &argType, const std::vector<std::string> &argTokens );
     Problem( const Problem &argProblem ) = delete;
     Problem( Problem &&argProblem ) = delete;
+    virtual ~Problem();
+
+    virtual double GetOFV( const mt::RandomKeySolution * const argSolution ) const = 0;
 
     const std::string name;
     const unsigned long size = 0;

@@ -22,14 +22,20 @@
 mt::TabooSearchReferenceSet::TabooSearchReferenceSet( const mt::Problem * const argProblem,
                                                       const unsigned short &argTSInstanceAmount ) {
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
-    solution.reserve( argTSInstanceAmount );
+    solutions.reserve( argTSInstanceAmount );
     for ( unsigned short i = 0; i < argTSInstanceAmount; ++i ) {
-        solution.emplace_back( new mt::RandomKeySolution{ argProblem->size } );
+        solutions.emplace_back( new mt::RandomKeySolution{ argProblem->size } );
     }
 }
 
 mt::TabooSearchReferenceSet::~TabooSearchReferenceSet() {
-    for ( auto it = solution.begin(); it != solution.end(); ++it) {
+    for ( auto it = solutions.begin(); it != solutions.end(); ++it) {
         delete *it;
     }
+}
+
+void mt::TabooSearchReferenceSet::SetSolution( const unsigned short &argIndex,
+                                               mt::RandomKeySolution *argSolution ) {
+    delete solutions[ argIndex ];
+    solutions[ argIndex ] = argSolution;
 }

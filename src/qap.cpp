@@ -26,3 +26,35 @@ mt::QAP::QAP( const std::vector<std::string> &argTokens ) :
 {
     std::cout << "      > Constructing QAP " << argTokens[ 0 ] << std::endl;
 }
+
+mt::QAP::~QAP() {
+}
+
+double mt::QAP::GetOFV( const mt::RandomKeySolution * const argSolution ) const {
+    // The solution to be converted and calculated
+    std::vector< double > * solution = new std::vector< double >{ *argSolution->solution };
+    // Stores the converted solution
+    std::vector< unsigned long > assignments;
+    assignments.resize( solution->size() );
+
+    // Query for 'solution-size' iterations the minimum element and set the index in the assigment vector
+    for ( unsigned long i = 0; i < solution->size(); ++i ) {
+        std::vector<double>::iterator minElem = std::min_element( solution->begin(), solution->end() );
+        auto offset = std::distance( solution->begin(), minElem) ;
+        assignments[ i ] = offset;
+        *minElem = std::numeric_limits< double >::max();
+    }
+    delete solution;
+    solution = nullptr;
+
+    unsigned long ofv = 0;
+    for ( unsigned long i = 0; i < assignments.size(); ++i ) {
+        for ( unsigned long j = 0; j < assignments.size(); ++j ) {
+            const int flow = flows( assignments[ i ], assignments[ j ] );
+            const int distance = distances( i, j );
+            ofv += flow * distance;
+        }
+    }
+
+    return ofv;
+}

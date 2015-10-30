@@ -36,7 +36,7 @@ public:
 
     static std::vector< double > *GenerateRandomSolution( const std::size_t &argSize );
 
-    std::vector< double > *solution = nullptr;
+    const std::vector< double > * solution = nullptr;
 };
 
 }

@@ -36,7 +36,7 @@ void mt::Analyzer::Analyze() {
         gaThreads.emplace_back( mt::GeneticAlgorithmCycle, i );
     }
     for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-        tsThreads.emplace_back( mt::TabooSearchCycle, i, std::ref( tsReferenceSet ) );
+        tsThreads.emplace_back( mt::TabooSearchCycle, i, problem, std::ref( tsReferenceSet ) );
     }
     for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
         gaThreads[ i ].join();
