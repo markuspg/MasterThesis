@@ -36,6 +36,9 @@ mt::TabooSearchReferenceSet::~TabooSearchReferenceSet() {
 
 void mt::TabooSearchReferenceSet::SetSolution( const unsigned short &argIndex,
                                                mt::RandomKeySolution *argSolution ) {
+    if ( argSolution == solutions[ argIndex ] ) {
+        return;
+    }
     delete solutions[ argIndex ];
     solutions[ argIndex ] = argSolution;
 }

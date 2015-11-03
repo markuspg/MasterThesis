@@ -29,19 +29,26 @@ mt::Analyzer::Analyzer( const mt::Problem *argProblem ) :
 void mt::Analyzer::Analyze() {
     std::cout << "     Analyzing ..." << std::endl;
 
-    // Create the threads
-    std::vector< std::thread > gaThreads;
-    std::vector< std::thread > tsThreads;
-    for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
-        gaThreads.emplace_back( mt::GeneticAlgorithmCycle, i );
+    unsigned int iterationCounter = 0;
+    while ( true ) {
+        iterationCounter += 1;
+
+        // Create the threads
+        std::vector< std::thread > gaThreads;
+        std::vector< std::thread > tsThreads;
+        for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
+            gaThreads.emplace_back( mt::GeneticAlgorithmCycle, i );
+        }
+        for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
+            tsThreads.emplace_back( mt::TabooSearchCycle, i, problem, std::ref( tsReferenceSet ) );
+        }
+        for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
+            gaThreads[ i ].join();
+        }
+        for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
+            tsThreads[ i ].join();
+        }
     }
-    for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-        tsThreads.emplace_back( mt::TabooSearchCycle, i, problem, std::ref( tsReferenceSet ) );
-    }
-    for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
-        gaThreads[ i ].join();
-    }
-    for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-        tsThreads[ i ].join();
-    }
+
+    std::cout << "     Analyzer finished after " << iterationCounter << " iterations" << std::endl;
 }
