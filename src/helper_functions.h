@@ -37,6 +37,7 @@ mt::RandomKeySolution *GetBestNeighbour( const double &argBestSolV, const unsign
                                          const mt::RandomKeySolution * const argSolution,
                                          unsigned int &argTabooTenure,
                                          mt::Matrix< unsigned int > * const argTabooTenures );
+unsigned int GetRandomizedTT( const double &argDeviation, const unsigned int &argPS );
 mt::Problem *LoadProblem( const std::string &argLine );
 int ParseCommandLine( int argC, char *argV[] );
 std::vector<std::string> Split( const std::string &argString, char argDelim );

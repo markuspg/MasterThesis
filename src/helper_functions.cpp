@@ -57,6 +57,19 @@ mt::RandomKeySolution *GetBestNeighbour( const double &argBestSolV, const unsign
     }
 }
 
+unsigned int GetRandomizedTT( const double &argDeviation, const unsigned int &argPS ) {
+    std::random_device randomDevice;
+#ifdef Q_PROCESSOR_X86_64
+    std::mt19937_64 engine{ randomDevice() };
+#else
+    std::mt19937 engine{ randomDevice() };
+#endif
+    std::uniform_int_distribution<> distribution{ static_cast< int > ( argPS * ( 1.0 - argDeviation ) ),
+                                                  static_cast< int > ( argPS * ( 1.0 + argDeviation ) ) };
+
+    return distribution( engine );
+}
+
 mt::Problem *LoadProblem( const std::string &argLine ) {
     std::vector< std::string > problemTokens = Split( argLine, '|' );
     if ( problemTokens[ 1 ] == "QAP" ) {

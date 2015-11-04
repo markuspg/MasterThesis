@@ -20,9 +20,11 @@
 #ifndef TABOOSEARCHREFERENCESET_H
 #define TABOOSEARCHREFERENCESET_H
 
+#include "helper_functions.h"
 #include "matrix.h"
 #include "problem.h"
 #include "randomkeysolution.h"
+#include "tsprocessorsettings.h"
 
 #include <iostream>
 #include <vector>
@@ -40,6 +42,7 @@ public:
     void SetSolution( const unsigned short &argIndex, mt::RandomKeySolution *argSolution );
 
 private:
+    std::vector< mt::TSProcessorSettings* > processorSettings;
     std::vector< mt::RandomKeySolution* > solutions;
     std::vector< mt::Matrix< unsigned int >* > tabooTenures;
 };

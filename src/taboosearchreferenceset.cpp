@@ -21,6 +21,7 @@
 
 mt::TabooSearchReferenceSet::TabooSearchReferenceSet( const mt::Problem * const argProblem,
                                                       const unsigned short &argTSInstanceAmount ) :
+    processorSettings{ argTSInstanceAmount, nullptr },
     solutions{ argTSInstanceAmount, nullptr },
     tabooTenures{ argTSInstanceAmount, nullptr }
 {
@@ -28,10 +29,15 @@ mt::TabooSearchReferenceSet::TabooSearchReferenceSet( const mt::Problem * const 
     for ( unsigned short i = 0; i < argTSInstanceAmount; ++i ) {
         solutions[ i ] = new mt::RandomKeySolution{ argProblem->size };
         tabooTenures[ i ] = new mt::Matrix< unsigned int >{ static_cast< int >( argProblem->size ), 0 };
+        processorSettings[ i ] = new mt::TSProcessorSettings{ GetRandomizedTT( 0.1, argProblem->size ),
+                                                              tabooTenures[ i ] };
     }
 }
 
 mt::TabooSearchReferenceSet::~TabooSearchReferenceSet() {
+    for ( auto it = processorSettings.begin(); it != processorSettings.end(); ++it) {
+        delete *it;
+    }
     for ( auto it = solutions.begin(); it != solutions.end(); ++it) {
         delete *it;
     }
