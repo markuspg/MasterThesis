@@ -20,7 +20,7 @@
 #ifndef TABOOSEARCH_H
 #define TABOOSEARCH_H
 
-#include "taboosearchreferenceset.h"
+#include "tsreferenceset.h"
 
 #include <iostream>
 #include <mutex>
@@ -30,7 +30,7 @@ extern std::mutex tsMutex;
 namespace mt {
 
 void TabooSearchCycle( const unsigned short argIndex, const mt::Problem * const argProblem,
-                       mt::TabooSearchReferenceSet &argTSReferenceSet );
+                       mt::TSReferenceSet &argTSReferenceSet );
 
 }
 

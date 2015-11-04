@@ -31,11 +31,11 @@
 
 namespace mt {
 
-class TabooSearchReferenceSet {
+class TSReferenceSet {
 public:
-    TabooSearchReferenceSet( const mt::Problem * const argProblem,
-                             const unsigned short &argTSInstanceAmount );
-    ~TabooSearchReferenceSet();
+    TSReferenceSet( const mt::Problem * const argProblem,
+                    const unsigned short &argTSInstanceAmount );
+    ~TSReferenceSet();
 
     mt::RandomKeySolution *GetStartSolution( const unsigned short &argIndex ) const
         { return solutions[ argIndex ]; }

@@ -17,10 +17,10 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "taboosearchreferenceset.h"
+#include "tsreferenceset.h"
 
-mt::TabooSearchReferenceSet::TabooSearchReferenceSet( const mt::Problem * const argProblem,
-                                                      const unsigned short &argTSInstanceAmount ) :
+mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem,
+                                    const unsigned short &argTSInstanceAmount ) :
     processorSettings{ argTSInstanceAmount, nullptr },
     solutions{ argTSInstanceAmount, nullptr },
     tabooTenures{ argTSInstanceAmount, nullptr }
@@ -34,7 +34,7 @@ mt::TabooSearchReferenceSet::TabooSearchReferenceSet( const mt::Problem * const 
     }
 }
 
-mt::TabooSearchReferenceSet::~TabooSearchReferenceSet() {
+mt::TSReferenceSet::~TSReferenceSet() {
     for ( auto it = processorSettings.begin(); it != processorSettings.end(); ++it) {
         delete *it;
     }
@@ -46,7 +46,7 @@ mt::TabooSearchReferenceSet::~TabooSearchReferenceSet() {
     }
 }
 
-void mt::TabooSearchReferenceSet::SetSolution( const unsigned short &argIndex,
+void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
                                                mt::RandomKeySolution *argSolution ) {
     if ( argSolution == solutions[ argIndex ] ) {
         return;

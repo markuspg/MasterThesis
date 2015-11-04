@@ -21,8 +21,8 @@ SOURCES += src/main.cpp \
     src/randomkeysolution.cpp \
     src/settings.cpp \
     src/taboosearch.cpp \
-    src/taboosearchreferenceset.cpp \
-    src/tsprocessorsettings.cpp
+    src/tsprocessorsettings.cpp \
+    src/tsreferenceset.cpp
 
 HEADERS += \
     src/analyzer.h \
@@ -34,8 +34,8 @@ HEADERS += \
     src/randomkeysolution.h \
     src/settings.h \
     src/taboosearch.h \
-    src/taboosearchreferenceset.h \
-    src/tsprocessorsettings.h
+    src/tsprocessorsettings.h \
+    src/tsreferenceset.h
 
 OTHER_FILES += \
     .gitignore \
