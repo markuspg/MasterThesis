@@ -108,7 +108,8 @@ template< typename T >
 T mt::Matrix< T >::GetMinimumValueIndizes( long &argI, long &argJ ) {
     typename std::vector< T >::iterator minElem = std::min_element( A->begin(), A->end() );
     auto offset = std::distance( A->begin(), minElem );
-    std::ldiv_t result = std::div( offset, dimension );
+    std::ldiv_t result = std::div( static_cast< long >( offset ),
+                                   static_cast< long >( dimension ) );
     argI = result.quot;
     argJ = result.rem;
 

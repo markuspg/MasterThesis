@@ -30,11 +30,14 @@ class RandomKeySolution
 {
 public:
     RandomKeySolution( const std::size_t &argSize );
+    RandomKeySolution( const std::vector< double > * const argSolution );
     RandomKeySolution( const RandomKeySolution &argRandomKeySolution ) = delete;
     RandomKeySolution( RandomKeySolution &&argRandomKeySolution );
     ~RandomKeySolution();
 
     static std::vector< double > *GenerateRandomSolution( const std::size_t &argSize );
+    RandomKeySolution *GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                          const unsigned long &argSwapIndexJ ) const;
 
     const std::vector< double > * solution = nullptr;
 };

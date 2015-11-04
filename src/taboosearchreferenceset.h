@@ -20,6 +20,7 @@
 #ifndef TABOOSEARCHREFERENCESET_H
 #define TABOOSEARCHREFERENCESET_H
 
+#include "matrix.h"
 #include "problem.h"
 #include "randomkeysolution.h"
 
@@ -40,6 +41,7 @@ public:
 
 private:
     std::vector< mt::RandomKeySolution* > solutions;
+    std::vector< mt::Matrix< unsigned int >* > tabooTenures;
 };
 
 }

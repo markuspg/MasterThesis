@@ -20,6 +20,7 @@
 #ifndef HELPER_FUNCTIONS_H
 #define HELPER_FUNCTIONS_H
 
+#include "matrix.h"
 #include "problem.h"
 #include "qap.h"
 #include "settings.h"
@@ -31,6 +32,11 @@
 
 extern mt::Settings *settings;
 
+mt::RandomKeySolution *GetBestNeighbour( const double &argBestSolV, const unsigned int &argIterationCounter,
+                                         const mt::Problem * const argProblem,
+                                         const mt::RandomKeySolution * const argSolution,
+                                         unsigned int &argTabooTenure,
+                                         mt::Matrix< unsigned int > * const argTabooTenures );
 mt::Problem *LoadProblem( const std::string &argLine );
 int ParseCommandLine( int argC, char *argV[] );
 std::vector<std::string> Split( const std::string &argString, char argDelim );

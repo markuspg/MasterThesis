@@ -20,16 +20,22 @@
 #include "taboosearchreferenceset.h"
 
 mt::TabooSearchReferenceSet::TabooSearchReferenceSet( const mt::Problem * const argProblem,
-                                                      const unsigned short &argTSInstanceAmount ) {
+                                                      const unsigned short &argTSInstanceAmount ) :
+    solutions{ argTSInstanceAmount, nullptr },
+    tabooTenures{ argTSInstanceAmount, nullptr }
+{
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
-    solutions.reserve( argTSInstanceAmount );
     for ( unsigned short i = 0; i < argTSInstanceAmount; ++i ) {
-        solutions.emplace_back( new mt::RandomKeySolution{ argProblem->size } );
+        solutions[ i ] = new mt::RandomKeySolution{ argProblem->size };
+        tabooTenures[ i ] = new mt::Matrix< unsigned int >{ static_cast< int >( argProblem->size ), 0 };
     }
 }
 
 mt::TabooSearchReferenceSet::~TabooSearchReferenceSet() {
     for ( auto it = solutions.begin(); it != solutions.end(); ++it) {
+        delete *it;
+    }
+    for ( auto it = tabooTenures.begin(); it != tabooTenures.end(); ++it ) {
         delete *it;
     }
 }

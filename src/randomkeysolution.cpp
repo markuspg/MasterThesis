@@ -24,6 +24,11 @@ mt::RandomKeySolution::RandomKeySolution( const std::size_t &argSize ) :
 {
 }
 
+mt::RandomKeySolution::RandomKeySolution( const std::vector<double> * const argSolution ):
+    solution{ argSolution }
+{
+}
+
 mt::RandomKeySolution::RandomKeySolution( RandomKeySolution &&argRandomKeySolution ) :
     solution{ argRandomKeySolution.solution }
 {
@@ -51,4 +56,13 @@ std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const std:
     }
 
     return tempSolution;
+}
+
+mt::RandomKeySolution *mt::RandomKeySolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                                                 const unsigned long &argSwapIndexJ ) const {
+    std::vector< double > *temp = new std::vector< double >{ *solution };
+    double tempD = ( *temp )[ argSwapIndexI ];
+    ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
+    ( *temp )[ argSwapIndexJ ] = tempD;
+    return new RandomKeySolution{ temp };
 }
