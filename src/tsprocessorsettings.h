@@ -21,6 +21,7 @@
 #define TABOOSEARCHPROCESSORSETTINGS_H
 
 #include "matrix.h"
+#include "randomkeysolution.h"
 
 namespace mt {
 
@@ -29,8 +30,17 @@ public:
     TSProcessorSettings( const unsigned int &argTabooTenure,
                          mt::Matrix< unsigned int > * const argTabooTenures );
 
+    void IncFailures() { ++failures; }
+    void IncInvalidSolutions() { ++invalidSolutions; }
+
+    mt::RandomKeySolution *bestSol = nullptr;
+    double bestSolV = std::numeric_limits< double >::max();
     const unsigned int tabooTenure = 0;
     mt::Matrix< unsigned int > * const tabooTenures = nullptr;
+
+private:
+    unsigned int failures = 0;
+    unsigned int invalidSolutions = 0;
 };
 
 }

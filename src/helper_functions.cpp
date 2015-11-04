@@ -19,11 +19,11 @@
 
 #include "helper_functions.h"
 
-mt::RandomKeySolution *GetBestNeighbour( const double &argBestSolV, const unsigned int &argIterationCounter,
+mt::RandomKeySolution *GetBestNeighbour( const unsigned short &argIndex,
+                                         const unsigned int &argIterationCounter,
                                          const mt::Problem * const argProblem,
-                                         const mt::RandomKeySolution * const argSolution,
-                                         unsigned int &argTabooTenure,
-                                         mt::Matrix< unsigned int > * const argTabooTenures ) {
+                                         mt::TSProcessorSettings * const argProcessorSettings,
+                                         const mt::RandomKeySolution * const argSolution ) {
     mt::Matrix< double > costs{ static_cast< int >( argProblem->size ),
                                 std::numeric_limits< double >::max() };
     // Iterate over all lines
@@ -45,13 +45,14 @@ mt::RandomKeySolution *GetBestNeighbour( const double &argBestSolV, const unsign
             return nullptr;
         }
         // If a swap is taboo, exclude it from consideration by settings its cost to the maximum double value
-        if ( ( *argTabooTenures )( swapI, swapJ ) >= argIterationCounter
+        if ( ( *argProcessorSettings->tabooTenures )( swapI, swapJ ) >= argIterationCounter
              // New global optimum as aspiration criterion
-             && costV > argBestSolV ) {
+             && costV > argProcessorSettings->bestSolV ) {
             costs( swapI, swapJ ) = std::numeric_limits< double >::max();
         } else {
             // Taillard's taboo evaluation => constant time
-            ( *argTabooTenures )( swapI, swapJ ) = argIterationCounter + argTabooTenure;
+            ( *argProcessorSettings->tabooTenures )( swapI, swapJ ) =
+                    argIterationCounter + argProcessorSettings->tabooTenure;
             return argSolution->GetSwappedVariant( swapI, swapJ );
         }
     }

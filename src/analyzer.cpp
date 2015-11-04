@@ -29,9 +29,8 @@ mt::Analyzer::Analyzer( const mt::Problem *argProblem ) :
 void mt::Analyzer::Analyze() {
     std::cout << "     Analyzing ..." << std::endl;
 
-    unsigned int iterationCounter = 0;
     while ( true ) {
-        iterationCounter += 1;
+        ++tsReferenceSet;
 
         // Create the threads
         std::vector< std::thread > gaThreads;
@@ -50,5 +49,6 @@ void mt::Analyzer::Analyze() {
         }
     }
 
-    std::cout << "     Analyzer finished after " << iterationCounter << " iterations" << std::endl;
+    std::cout << "     Analyzer finished after " << tsReferenceSet.GetIterationCount()
+              << " iterations" << std::endl;
 }

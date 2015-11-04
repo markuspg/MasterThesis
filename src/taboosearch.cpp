@@ -22,14 +22,33 @@
 std::mutex tsMutex;
 
 void mt::TabooSearchCycle( const unsigned short argIndex, const mt::Problem * const argProblem,
-                           mt::TabooSearchReferenceSet &argTSReferenceSet ) {
+                           mt::TSReferenceSet &argTSReferenceSet ) {
     std::cout << "      Running TabooSearchCycle in thread " << argIndex << std::endl;
+
+    mt::TSProcessorSettings *processorSettings = argTSReferenceSet.GetProcessorSettings( argIndex );
+
     mt::RandomKeySolution *tempSol = nullptr;
     {
         std::lock_guard< std::mutex > lockTSReferenceSet{ tsMutex };
         tempSol = argTSReferenceSet.GetStartSolution( argIndex );
     }
     double tempSolV = argProblem->GetOFV( tempSol );
+
+    mt::RandomKeySolution *bestNeigh = GetBestNeighbour( argIndex, argTSReferenceSet.GetIterationCount(),
+                                                         argProblem, processorSettings, tempSol );
+    double bestNeighV = 0.0;
+
+    if ( !bestNeigh ) {
+        processorSettings->IncFailures();
+        processorSettings->IncInvalidSolutions();
+        return;
+    } else {
+        bestNeighV = argProblem->GetOFV( bestNeigh );
+    }
+
+    if ( bestNeighV > tempSolV ) {
+        processorSettings->IncFailures();
+    }
 
     std::lock_guard< std::mutex > lockTSReferenceSet{ tsMutex };
     argTSReferenceSet.SetSolution( argIndex, tempSol );

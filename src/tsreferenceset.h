@@ -37,11 +37,17 @@ public:
                     const unsigned short &argTSInstanceAmount );
     ~TSReferenceSet();
 
+    unsigned int GetIterationCount() const { return iterationCounter; }
+    mt::TSProcessorSettings *GetProcessorSettings( std::size_t argIndex ) const
+        { return processorSettings[ argIndex ]; }
     mt::RandomKeySolution *GetStartSolution( const unsigned short &argIndex ) const
         { return solutions[ argIndex ]; }
     void SetSolution( const unsigned short &argIndex, mt::RandomKeySolution *argSolution );
 
+    TSReferenceSet &operator++() { ++iterationCounter; return *this; }
+
 private:
+    unsigned int iterationCounter = 0;
     std::vector< mt::TSProcessorSettings* > processorSettings;
     std::vector< mt::RandomKeySolution* > solutions;
     std::vector< mt::Matrix< unsigned int >* > tabooTenures;
