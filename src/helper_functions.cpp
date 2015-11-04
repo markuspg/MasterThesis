@@ -19,11 +19,11 @@
 
 #include "helper_functions.h"
 
-mt::RandomKeySolution *GetBestNeighbour( const unsigned short &argIndex,
-                                         const unsigned int &argIterationCounter,
-                                         const mt::Problem * const argProblem,
-                                         mt::TSProcessorSettings * const argProcessorSettings,
-                                         const mt::RandomKeySolution * const argSolution ) {
+mt::RandomKeySolution *mt::GetBestNeighbour( const unsigned short &argIndex,
+                                             const unsigned int &argIterationCounter,
+                                             const mt::Problem * const argProblem,
+                                             mt::TSProcessorSettings * const argProcessorSettings,
+                                             const mt::RandomKeySolution * const argSolution ) {
     mt::Matrix< double > costs{ static_cast< int >( argProblem->size ),
                                 std::numeric_limits< double >::max() };
     // Iterate over all lines
@@ -58,7 +58,7 @@ mt::RandomKeySolution *GetBestNeighbour( const unsigned short &argIndex,
     }
 }
 
-unsigned int GetRandomizedTT( const double &argDeviation, const unsigned int &argPS ) {
+unsigned int mt::GetRandomizedTT( const double &argDeviation, const unsigned int &argPS ) {
     std::random_device randomDevice;
 #ifdef Q_PROCESSOR_X86_64
     std::mt19937_64 engine{ randomDevice() };
@@ -71,8 +71,8 @@ unsigned int GetRandomizedTT( const double &argDeviation, const unsigned int &ar
     return distribution( engine );
 }
 
-mt::Problem *LoadProblem( const std::string &argLine ) {
-    std::vector< std::string > problemTokens = Split( argLine, '|' );
+mt::Problem *mt::LoadProblem( const std::string &argLine ) {
+    std::vector< std::string > problemTokens = mt::Split( argLine, '|' );
     if ( problemTokens[ 1 ] == "QAP" ) {
         return new mt::QAP{ problemTokens };
     }
@@ -81,7 +81,7 @@ mt::Problem *LoadProblem( const std::string &argLine ) {
     return nullptr;
 }
 
-int ParseCommandLine( int argC, char *argV[] ) {
+int mt::ParseCommandLine( int argC, char *argV[] ) {
     // A temporary storage for the extracted strings
     std::vector< std::string > commandLineArguments{};
     commandLineArguments.reserve( argC );
@@ -155,13 +155,13 @@ int ParseCommandLine( int argC, char *argV[] ) {
     return 0;
 }
 
-std::vector<std::string> Split( const std::string &argString, char argDelim ) {
+std::vector<std::string> mt::Split( const std::string &argString, char argDelim ) {
     std::vector<std::string> elements;
-    Split( argString, argDelim, elements );
+    mt::Split( argString, argDelim, elements );
     return elements;
 }
 
-void Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements ) {
+void mt::Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements ) {
     std::stringstream stringStream{ argString };
     std::string item;
     while (std::getline( stringStream, item, argDelim ) ) {

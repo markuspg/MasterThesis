@@ -33,6 +33,8 @@
 
 extern mt::Settings *settings;
 
+namespace mt {
+
 mt::RandomKeySolution *GetBestNeighbour( const unsigned short &argIndex,
                                          const unsigned int &argIterationCounter,
                                          const mt::Problem * const argProblem,
@@ -43,5 +45,7 @@ mt::Problem *LoadProblem( const std::string &argLine );
 int ParseCommandLine( int argC, char *argV[] );
 std::vector<std::string> Split( const std::string &argString, char argDelim );
 void Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements );
+
+}
 
 #endif // HELPER_FUNCTIONS_H
