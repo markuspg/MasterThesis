@@ -33,8 +33,9 @@ mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem,
     for ( unsigned short i = 0; i < argTSInstanceAmount; ++i ) {
         solutions[ i ] = new mt::RandomKeySolution{ argProblem->size };
         tabooTenures[ i ] = new mt::Matrix< unsigned int >{ static_cast< int >( argProblem->size ), 0 };
-        processorSettings[ i ] = new mt::TSProcessorSettings{ GetRandomizedTT( 0.1, argProblem->size ),
-                                                              tabooTenures[ i ] };
+        processorSettings[ i ] = new mt::TSProcessorSettings{
+            *settings->randomizedTabooTenures ? GetRandomizedTT( argProblem->size ) : argProblem->size,
+            tabooTenures[ i ] };
     }
 }
 
