@@ -21,8 +21,7 @@
 
 std::mutex tsMutex;
 
-void mt::TabooSearchCycle( const unsigned short argIndex, const mt::Problem * const argProblem,
-                           mt::TSReferenceSet &argTSReferenceSet ) {
+void mt::TabooSearchCycle( const unsigned short argIndex, mt::TSReferenceSet &argTSReferenceSet ) {
     std::cout << "      Running TabooSearchCycle in thread " << argIndex << std::endl;
 
     mt::TSProcessorSettings *processorSettings = argTSReferenceSet.GetProcessorSettings( argIndex );
@@ -32,10 +31,11 @@ void mt::TabooSearchCycle( const unsigned short argIndex, const mt::Problem * co
         std::lock_guard< std::mutex > lockTSReferenceSet{ tsMutex };
         tempSol = argTSReferenceSet.GetStartSolution( argIndex );
     }
-    double tempSolV = argProblem->GetOFV( tempSol );
+    double tempSolV = argTSReferenceSet.GetStartSolutionValue( argIndex );
 
     mt::RandomKeySolution *bestNeigh = GetBestNeighbour( argIndex, argTSReferenceSet.GetIterationCount(),
-                                                         argProblem, processorSettings, tempSol );
+                                                         argTSReferenceSet.problem, processorSettings,
+                                                         tempSol );
     double bestNeighV = 0.0;
 
     if ( !bestNeigh ) {
@@ -43,13 +43,16 @@ void mt::TabooSearchCycle( const unsigned short argIndex, const mt::Problem * co
         processorSettings->IncInvalidSolutions();
         return;
     } else {
-        bestNeighV = argProblem->GetOFV( bestNeigh );
+        bestNeighV = argTSReferenceSet.problem->GetOFV( bestNeigh );
     }
 
     if ( bestNeighV > tempSolV ) {
         processorSettings->IncFailures();
     }
 
-    std::lock_guard< std::mutex > lockTSReferenceSet{ tsMutex };
-    argTSReferenceSet.SetSolution( argIndex, tempSol );
+    {
+        std::lock_guard< std::mutex > lockTSReferenceSet{ tsMutex };
+        argTSReferenceSet.SetSolution( argIndex, bestNeigh );
+        argTSReferenceSet.SetSolutionValue( argIndex, bestNeighV);
+    }
 }

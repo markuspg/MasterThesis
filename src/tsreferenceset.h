@@ -42,14 +42,23 @@ public:
         { return processorSettings[ argIndex ]; }
     mt::RandomKeySolution *GetStartSolution( const unsigned short &argIndex ) const
         { return solutions[ argIndex ]; }
+    double GetStartSolutionValue( const unsigned short &argIndex ) const
+        { return solutionValues[ argIndex ]; }
     void SetSolution( const unsigned short &argIndex, mt::RandomKeySolution *argSolution );
+    void SetSolutionValue( const unsigned short &argIndex, const double &argSolutionValue )
+        { solutionValues[ argIndex ] = argSolutionValue; }
 
     TSReferenceSet &operator++() { ++iterationCounter; return *this; }
 
+    const mt::Problem * const problem;
+
 private:
+    std::vector< mt::RandomKeySolution* > bestSolutions;
+    std::vector< double > bestSolutionValues;
     unsigned int iterationCounter = 0;
     std::vector< mt::TSProcessorSettings* > processorSettings;
     std::vector< mt::RandomKeySolution* > solutions;
+    std::vector< double > solutionValues;
     std::vector< mt::Matrix< unsigned int >* > tabooTenures;
 };
 

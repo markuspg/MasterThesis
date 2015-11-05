@@ -21,8 +21,12 @@
 
 mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem,
                                     const unsigned short &argTSInstanceAmount ) :
+    problem{ argProblem },
+    bestSolutions{ argTSInstanceAmount, nullptr },
+    bestSolutionValues{ argTSInstanceAmount, std::numeric_limits< double >::max() },
     processorSettings{ argTSInstanceAmount, nullptr },
     solutions{ argTSInstanceAmount, nullptr },
+    solutionValues{ argTSInstanceAmount, std::numeric_limits< double >::max() },
     tabooTenures{ argTSInstanceAmount, nullptr }
 {
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;

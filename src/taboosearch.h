@@ -29,8 +29,7 @@ extern std::mutex tsMutex;
 
 namespace mt {
 
-void TabooSearchCycle( const unsigned short argIndex, const mt::Problem * const argProblem,
-                       mt::TSReferenceSet &argTSReferenceSet );
+void TabooSearchCycle( const unsigned short argIndex,  mt::TSReferenceSet &argTSReferenceSet );
 
 }
 
