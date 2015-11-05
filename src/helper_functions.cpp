@@ -92,6 +92,7 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
     std::string tempOutputFile;
     std::vector< std::string > tempProblemFiles;
     bool tempRandomizedTabooTenures = false;
+    double tempTabooTenureDeviation = 0;
     unsigned short tempTabooTenureFac = 0;
     unsigned short tempTSInstances = 0;
     
@@ -111,6 +112,7 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
                          "\t--mf <maxFailures>    The number of allowed improvement failures,\n"
                          "\t                      before the search terminates\n"
                          "\t--rtt <randTTenures>  If the taboo tenures shall be randomized {0;1}\n"
+                         "\t--ttd <tTenureDev>    The spread factor for randomized taboo tenures\n"
                          "\t--ttf <tTenureFac>    How many times the problem size\n"
                          "\t                      the taboo tenure shall last" << std::endl;
             return 1;
@@ -127,6 +129,11 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
         }
         if ( commandLineArguments[ i ] == "--rtt" ) {
             tempRandomizedTabooTenures = static_cast< bool >( std::stoul( commandLineArguments[ i + 1 ] ) );
+            lastActiveIndex = i + 1;
+            continue;
+        }
+        if ( commandLineArguments[ i ] == "--ttd" ) {
+            tempTabooTenureDeviation = std::stod( commandLineArguments[ i + 1 ] );
             lastActiveIndex = i + 1;
             continue;
         }
@@ -150,7 +157,7 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
     
     settings = new mt::Settings{ tempGAInstances, tempMaxFailures, tempOutputFile,
                                  std::move( tempProblemFiles ), tempRandomizedTabooTenures,
-                                 tempTabooTenureFac, tempTSInstances };
+                                 tempTabooTenureDeviation, tempTabooTenureFac, tempTSInstances };
     
     return 0;
 }
