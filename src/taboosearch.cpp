@@ -27,11 +27,12 @@ void mt::TabooSearchCycle( const unsigned short argIndex, mt::TSReferenceSet &ar
     mt::TSProcessorSettings *processorSettings = argTSReferenceSet.GetProcessorSettings( argIndex );
 
     mt::RandomKeySolution *tempSol = nullptr;
+    double tempSolV = 0.0;
     {
         std::lock_guard< std::mutex > lockTSReferenceSet{ tsMutex };
         tempSol = argTSReferenceSet.GetStartSolution( argIndex );
+        tempSolV = argTSReferenceSet.GetStartSolutionValue( argIndex );
     }
-    double tempSolV = argTSReferenceSet.GetStartSolutionValue( argIndex );
 
     mt::RandomKeySolution *bestNeigh = GetBestNeighbour( argIndex, argTSReferenceSet.GetIterationCount(),
                                                          argTSReferenceSet.problem, processorSettings,
