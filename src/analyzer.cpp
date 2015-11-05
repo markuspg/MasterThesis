@@ -32,6 +32,7 @@ void mt::Analyzer::Analyze() {
     while ( true ) {
         ++tsReferenceSet;
 
+        unsigned short finishedThreads = 0;
         // Create the threads
         std::vector< std::thread > gaThreads;
         std::vector< std::thread > tsThreads;
@@ -39,13 +40,24 @@ void mt::Analyzer::Analyze() {
             gaThreads.emplace_back( mt::GeneticAlgorithmCycle, i );
         }
         for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-            tsThreads.emplace_back( mt::TabooSearchCycle, i, std::ref( tsReferenceSet ) );
+            if ( !tsReferenceSet.IsTSFinished( i ) ) {
+                tsThreads.emplace_back( mt::TabooSearchCycle, i, std::ref( tsReferenceSet ) );
+            } else {
+                ++finishedThreads;
+                tsThreads.emplace_back();
+            }
         }
         for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
             gaThreads[ i ].join();
         }
         for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-            tsThreads[ i ].join();
+            if ( tsThreads[ i ].joinable() ) {
+                tsThreads[ i ].join();
+            }
+        }
+
+        if ( finishedThreads == *settings->tsInstances ) {
+            break;
         }
     }
 

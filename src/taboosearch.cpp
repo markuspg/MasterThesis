@@ -56,4 +56,8 @@ void mt::TabooSearchCycle( const unsigned short argIndex, mt::TSReferenceSet &ar
         argTSReferenceSet.SetSolution( argIndex, bestNeigh );
         argTSReferenceSet.SetSolutionValue( argIndex, bestNeighV);
     }
+
+    if ( processorSettings->GetFailures() > *settings->maxFailures ) {
+        processorSettings->SetFinished();
+    }
 }

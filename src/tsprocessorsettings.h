@@ -30,8 +30,11 @@ public:
     TSProcessorSettings( const unsigned int &argTabooTenure,
                          mt::Matrix< unsigned int > * const argTabooTenures );
 
+    unsigned int GetFailures() const { return failures; }
     void IncFailures() { ++failures; }
     void IncInvalidSolutions() { ++invalidSolutions; }
+    bool IsFinished() const { return finished; }
+    void SetFinished() { finished = true; }
 
     mt::RandomKeySolution *bestSol = nullptr;
     double bestSolV = std::numeric_limits< double >::max();
@@ -40,6 +43,7 @@ public:
 
 private:
     unsigned int failures = 0;
+    bool finished = false;
     unsigned int invalidSolutions = 0;
 };
 
