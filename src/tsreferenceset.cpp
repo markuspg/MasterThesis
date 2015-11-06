@@ -25,28 +25,16 @@ mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem,
 {
     bestSolutions.resize( argTSInstanceAmount, nullptr );
     bestSolutionValues.resize( argTSInstanceAmount, std::numeric_limits< double >::max() );
-    processorSettings.resize( argTSInstanceAmount, nullptr );
     solutions.resize( argTSInstanceAmount, nullptr );
     solutionValues.resize( argTSInstanceAmount, std::numeric_limits< double >::max() );
-    tabooTenures.resize( argTSInstanceAmount, nullptr );
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
     for ( unsigned short i = 0; i < argTSInstanceAmount; ++i ) {
         solutions[ i ] = new mt::RandomKeySolution{ argProblem->size };
-        tabooTenures[ i ] = new mt::Matrix< unsigned int >{ static_cast< int >( argProblem->size ), 0 };
-        processorSettings[ i ] = new mt::TSProcessorSettings{
-            *settings->randomizedTabooTenures ? GetRandomizedTT( argProblem->size ) : argProblem->size,
-            tabooTenures[ i ] };
     }
 }
 
 mt::TSReferenceSet::~TSReferenceSet() {
-    for ( auto it = processorSettings.begin(); it != processorSettings.end(); ++it) {
-        delete *it;
-    }
     for ( auto it = solutions.begin(); it != solutions.end(); ++it) {
-        delete *it;
-    }
-    for ( auto it = tabooTenures.begin(); it != tabooTenures.end(); ++it ) {
         delete *it;
     }
 }

@@ -65,8 +65,13 @@ mt::RandomKeySolution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
 }
 
 void mt::TSThread::Iteration() {
-    mt::RandomKeySolution *tempSol = referenceSet.GetStartSolution( index );
-    double tempSolV = referenceSet.GetStartSolutionValue( index );
+    mt::RandomKeySolution *tempSol = nullptr;
+    double tempSolV = 0.0;
+    {
+        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
+        tempSol = referenceSet.GetStartSolution( index );
+        tempSolV = referenceSet.GetStartSolutionValue( index );
+    }
 
     double bestNeighV = std::numeric_limits< double >::max();
     mt::RandomKeySolution *bestNeigh = GetBestNeigh( bestNeighV, tempSol );
@@ -81,10 +86,13 @@ void mt::TSThread::Iteration() {
         ++failures;
     }
 
-    referenceSet.SetSolution( index, bestNeigh );
-    referenceSet.SetSolutionValue( index, bestNeighV );
+    {
+        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
+        referenceSet.SetSolution( index, bestNeigh );
+        referenceSet.SetSolutionValue( index, bestNeighV );
 
-    referenceSet.PromoteBestSolution( index );
+        referenceSet.PromoteBestSolution( index );
+    }
 
     if ( failures >= maxFailures ) {
         finished = true;

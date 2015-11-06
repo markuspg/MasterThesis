@@ -19,45 +19,6 @@
 
 #include "helper_functions.h"
 
-mt::RandomKeySolution *mt::GetBestNeighbour( const unsigned short &argIndex,
-                                             const unsigned int &argIterationCounter,
-                                             const mt::Problem * const argProblem,
-                                             mt::TSProcessorSettings * const argProcessorSettings,
-                                             const mt::RandomKeySolution * const argSolution ) {
-    mt::Matrix< double > costs{ static_cast< int >( argProblem->size ),
-                                std::numeric_limits< double >::max() };
-    // Iterate over all lines
-    for ( unsigned long i = 0; i < argProblem->size; ++i ) {
-        // Iterate over all columns above the main diagonal (because swaps are symmetrical)
-        for ( unsigned long j = i + 1; j < argProblem->size; ++j ) {
-            mt::RandomKeySolution *tempSolution =  argSolution->GetSwappedVariant( i, j );
-            costs( i, j ) = argProblem->GetOFV( tempSolution );
-            delete tempSolution;
-        }
-    }
-    // Analyze all swaps
-    double costV = 0;
-    long swapI = 0, swapJ = 0;
-    while ( true ) {
-        costV = costs.GetMinimumValueIndizes( swapI, swapJ );
-        // If no improvement could be achieved, leave with false, indicating improvement failure
-        if ( costV == std::numeric_limits< double >::max() ) {
-            return nullptr;
-        }
-        // If a swap is taboo, exclude it from consideration by settings its cost to the maximum double value
-        if ( ( *argProcessorSettings->tabooTenures )( swapI, swapJ ) >= argIterationCounter
-             // New global optimum as aspiration criterion
-             && costV > argProcessorSettings->bestSolV ) {
-            costs( swapI, swapJ ) = std::numeric_limits< double >::max();
-        } else {
-            // Taillard's taboo evaluation => constant time
-            ( *argProcessorSettings->tabooTenures )( swapI, swapJ ) =
-                    argIterationCounter + argProcessorSettings->tabooTenure;
-            return argSolution->GetSwappedVariant( swapI, swapJ );
-        }
-    }
-}
-
 unsigned int mt::GetRandomizedTT( const unsigned int &argPS ) {
     std::random_device randomDevice;
 #ifdef Q_PROCESSOR_X86_64

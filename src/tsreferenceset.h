@@ -24,7 +24,6 @@
 #include "matrix.h"
 #include "problem.h"
 #include "randomkeysolution.h"
-#include "tsprocessorsettings.h"
 
 #include <algorithm>
 #include <iostream>
@@ -41,13 +40,10 @@ public:
     double GetGlobalMinimumSolV() const { return *std::min_element( bestSolutionValues.begin(),
                                                                     bestSolutionValues.end() ); }
     unsigned int GetIterationCount() const { return iterationCounter; }
-    mt::TSProcessorSettings *GetProcessorSettings( std::size_t argIndex ) const
-        { return processorSettings[ argIndex ]; }
     mt::RandomKeySolution *GetStartSolution( const unsigned short &argIndex ) const
         { return solutions[ argIndex ]; }
     double GetStartSolutionValue( const unsigned short &argIndex ) const
         { return solutionValues[ argIndex ]; }
-    bool IsTSFinished( const unsigned short &argIndex ) const { return processorSettings[ argIndex ]->IsFinished(); }
     void PromoteBestSolution( const unsigned short &argIndex );
     void RotateSolutions() {}
     void SetSolution( const unsigned short &argIndex, mt::RandomKeySolution *argSolution );
@@ -62,10 +58,8 @@ private:
     std::vector< mt::RandomKeySolution* > bestSolutions;
     std::vector< double > bestSolutionValues;
     unsigned int iterationCounter = 0;
-    std::vector< mt::TSProcessorSettings* > processorSettings;
     std::vector< mt::RandomKeySolution* > solutions;
     std::vector< double > solutionValues;
-    std::vector< mt::Matrix< unsigned int >* > tabooTenures;
 };
 
 }

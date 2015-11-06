@@ -20,8 +20,6 @@ SOURCES += src/main.cpp \
     src/qap.cpp \
     src/randomkeysolution.cpp \
     src/settings.cpp \
-    src/taboosearch.cpp \
-    src/tsprocessorsettings.cpp \
     src/tsreferenceset.cpp \
     src/tsthread.cpp
 
@@ -34,8 +32,6 @@ HEADERS += \
     src/qap.h \
     src/randomkeysolution.h \
     src/settings.h \
-    src/taboosearch.h \
-    src/tsprocessorsettings.h \
     src/tsreferenceset.h \
     src/tsthread.h
 

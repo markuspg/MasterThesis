@@ -24,7 +24,6 @@
 #include "problem.h"
 #include "qap.h"
 #include "settings.h"
-#include "tsprocessorsettings.h"
 
 #include <iostream>
 #include <sstream>
@@ -35,11 +34,6 @@ extern mt::Settings *settings;
 
 namespace mt {
 
-mt::RandomKeySolution *GetBestNeighbour( const unsigned short &argIndex,
-                                         const unsigned int &argIterationCounter,
-                                         const mt::Problem * const argProblem,
-                                         mt::TSProcessorSettings * const argProcessorSettings,
-                                         const mt::RandomKeySolution * const argSolution );
 unsigned int GetRandomizedTT( const unsigned int &argPS );
 mt::Problem *LoadProblem( const std::string &argLine );
 int ParseCommandLine( int argC, char *argV[] );

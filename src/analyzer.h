@@ -23,7 +23,6 @@
 #include "geneticalgorithm.h"
 #include "problem.h"
 #include "settings.h"
-#include "taboosearch.h"
 #include "tsreferenceset.h"
 #include "tsthread.h"
 
