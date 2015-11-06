@@ -35,9 +35,9 @@ class Matrix
 public:
     Matrix() = delete;
     Matrix ( const Matrix &argMatrix ) = delete;
-    Matrix ( const Matrix &&argMatrix ) = delete;
+    Matrix ( Matrix &&argMatrix );
     Matrix( const std::vector< T > &argItems );
-    Matrix( const int &argDim, const T &argDefaultValue );
+    Matrix( const unsigned long &argDim, const T &argDefaultValue );
     ~Matrix();
 
     static std::vector< int > ConvertStringVecToIntVec( const std::vector< std::string > &argStrList );
@@ -49,10 +49,18 @@ public:
         { return A->at( argI * dimension + argJ ); }
 
 private:
-    const unsigned int dimension = 0;
+    const unsigned long dimension = 0;
     std::vector< T > *A = nullptr;
 };
 
+}
+
+template< typename T >
+mt::Matrix< T >::Matrix( Matrix &&argMatrix ) :
+    dimension{ argMatrix.dimension },
+    A{ argMatrix.A }
+{
+    argMatrix.A = nullptr;
 }
 
 template< typename T>
@@ -72,8 +80,8 @@ mt::Matrix< T >::Matrix( const std::vector< T > &argItems ) :
 }
 
 template< typename T>
-mt::Matrix< T >::Matrix( const int &argDim, const T &argDefaultValue ) :
-    dimension{ static_cast< unsigned int >( argDim ) },
+mt::Matrix< T >::Matrix( const unsigned long &argDim, const T &argDefaultValue ) :
+    dimension{ argDim },
     A{ new std::vector< T > }
 {
     A->resize( dimension * dimension, argDefaultValue );
