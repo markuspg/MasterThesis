@@ -58,14 +58,14 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
     commandLineArguments.reserve( argC );
     
     // The variables for the data
-    unsigned short tempGAInstances = 0;
-    unsigned int tempMaxFailures = 0;
+    unsigned short tempGAInstances = 1;
+    unsigned int tempMaxFailures = 1000000;
     std::string tempOutputFile;
     std::vector< std::string > tempProblemFiles;
     bool tempRandomizedTabooTenures = false;
     double tempTabooTenureDeviation = 0.1;
     unsigned short tempTabooTenureFac = 1;
-    unsigned short tempTSInstances = 0;
+    unsigned short tempTSInstances = 1;
     
     // Convert all arguments to strings and organize them in a vector
     for ( unsigned short i = 0; i < argC; ++i ) {
@@ -78,13 +78,16 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
         if ( argC < 2 || commandLineArguments[ i ] == "--help" || commandLineArguments[ i ] == "-h" ) {
             std::cout << "MasterThesis is a parallelized adaptive memory heuristic implementation\n"
                          "for my master thesis. The command line arguments are the following:\n\n"
-                         "\t--ga <gaInstances>    The desired number of genetic algorithm threads\n"
-                         "\t--ts <tsInstances>    The desired number of taboo search threads\n"
-                         "\t--mf <maxFailures>    The number of allowed improvement failures,\n"
-                         "\t                      before the search terminates\n"
-                         "\t--rtt <randTTenures>  If the taboo tenures shall be randomized {0;1}\n"
-                         "\t--ttd <tTenureDev>    The spread factor around the problem size for randomized\n"
-                         "\t                      taboo tenures [0.1,0.9] (default: 0.1)\n"
+                         "\t--ga <gaInstances>    The desired number of threads running the\n"
+                         "\t                      genetic algorithm (default: 1)\n"
+                         "\t--ts <tsInstances>    The desired number of threads running taboo\n"
+                         "\t                      search instances (default: 1)\n"
+                         "\t--mf <maxFailures>    The number of allowed improvement failures\n"
+                         "\t                      before the search terminates (default: 1000000)\n"
+                         "\t--rtt <randTTenures>  If the taboo tenures shall be randomized (any non-zero\n"
+                         "\t                      integer value will be interpreted as true; default: 0)\n"
+                         "\t--ttd <tTenureDev>    The spread factor for randomized taboo tenures [0.1,0.9]\n"
+                         "\t                      (default: 0.1)\n"
                          "\t--ttf <tTenureFac>    How many times the problem size\n"
                          "\t                      the taboo tenure shall last (default: 1)" << std::endl;
             return 1;
