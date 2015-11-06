@@ -44,6 +44,7 @@ public:
     static std::vector< unsigned long > ConvertStringVecToULongVec
         ( const std::vector< std::string > &argStrList );
     T GetMinimumValueIndizes( long &argI, long &argJ );
+    void ResetWithValue( const T &argValue );
 
     T& operator() ( const unsigned int &argI, const unsigned int &argJ ) const
         { return A->at( argI * dimension + argJ ); }
@@ -122,6 +123,13 @@ T mt::Matrix< T >::GetMinimumValueIndizes( long &argI, long &argJ ) {
     argJ = result.rem;
 
     return *minElem;
+}
+
+template< typename T >
+void mt::Matrix< T >::ResetWithValue( const T &argValue ) {
+    delete A;
+    A = new std::vector< T >;
+    A->resize( dimension * dimension, argValue );
 }
 
 #endif // MATRIX_H

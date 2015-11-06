@@ -43,6 +43,7 @@ public:
     Analyzer( Analyzer &&argAnalyzer ) = delete;
     
     void Analyze();
+    void Run();
 
 private:
     std::mutex tsThreadsMutex;

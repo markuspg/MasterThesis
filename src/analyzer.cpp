@@ -33,6 +33,16 @@ void mt::Analyzer::Analyze() {
         tsThreadObjects.emplace_back( i, tsThreadsMutex, tsReferenceSet );
     }
 
+    // Do the initialization run
+    Run();
+
+    tsReferenceSet.ResetIterationCounter();
+
+    // Do the optimization run
+    Run();
+}
+
+void mt::Analyzer::Run() {
     while ( true ) {
         ++tsReferenceSet;
 

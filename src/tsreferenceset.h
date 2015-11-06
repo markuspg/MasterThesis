@@ -45,6 +45,7 @@ public:
     double GetStartSolutionValue( const unsigned short &argIndex ) const
         { return solutionValues[ argIndex ]; }
     void PromoteBestSolution( const unsigned short &argIndex );
+    void ResetIterationCounter() { iterationCounter = 0; }
     void RotateSolutions() {}
     void SetSolution( const unsigned short &argIndex, mt::RandomKeySolution *argSolution );
     void SetSolutionValue( const unsigned short &argIndex, const double &argSolutionValue )

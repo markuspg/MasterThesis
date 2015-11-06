@@ -107,4 +107,5 @@ void mt::TSThread::Iteration() {
 void mt::TSThread::ResetIndizes() {
     failures = 0;
     invalidSolutions = 0;
+    tabooTenures.ResetWithValue( 0 );
 }
