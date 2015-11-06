@@ -26,6 +26,7 @@
 #include "randomkeysolution.h"
 #include "tsprocessorsettings.h"
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -37,6 +38,8 @@ public:
                     const unsigned short &argTSInstanceAmount );
     ~TSReferenceSet();
 
+    double GetGlobalMinimumSolV() const { return *std::min_element( bestSolutionValues.begin(),
+                                                                    bestSolutionValues.end() ); }
     unsigned int GetIterationCount() const { return iterationCounter; }
     mt::TSProcessorSettings *GetProcessorSettings( std::size_t argIndex ) const
         { return processorSettings[ argIndex ]; }

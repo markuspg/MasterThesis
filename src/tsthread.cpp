@@ -23,14 +23,44 @@ mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
                         mt::TSReferenceSet &argReferenceSet ) :
     index{ argIndex },
     mutex{ argMutex },
-    referenceSet{ argReferenceSet }
+    referenceSet{ argReferenceSet },
+    tabooTenures{ referenceSet.problem->size, 0 }
 {
     std::cout << "      Constructing TSThread with id " << index << std::endl;
 }
 
 mt::RandomKeySolution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
                                                    mt::RandomKeySolution *argTempSol ) {
-    return argTempSol;
+    mt::Matrix< double > costs{ referenceSet.problem->size, std::numeric_limits< double >::max() };
+    // Iterate over all lines
+    for ( unsigned long i = 0; i < referenceSet.problem->size; ++i ) {
+        // Iterate over all columns above the main diagonal (because swaps are symmetrical)
+        for ( unsigned long j = i + 1; j < referenceSet.problem->size; ++j ) {
+            mt::RandomKeySolution *tempSolution =  argTempSol->GetSwappedVariant( i, j );
+            costs( i, j ) = referenceSet.problem->GetOFV( tempSolution );
+            delete tempSolution;
+        }
+    }
+    // Analyze all swaps
+    long swapI = 0, swapJ = 0;
+    while ( true ) {
+        argBestNeighV = costs.GetMinimumValueIndizes( swapI, swapJ );
+        // If no improvement could be achieved, leave with false, indicating improvement failure
+        if ( argBestNeighV == std::numeric_limits< double >::max() ) {
+            return nullptr;
+        }
+        // If a swap is taboo, exclude it from consideration by settings its cost to the maximum double value
+        unsigned int iterationCount = referenceSet.GetIterationCount();
+        if ( tabooTenures( swapI, swapJ ) >= iterationCount
+             // New global optimum as aspiration criterion
+             && argBestNeighV > referenceSet.GetGlobalMinimumSolV() ) {
+            costs( swapI, swapJ ) = std::numeric_limits< double >::max();
+        } else {
+            // Taillard's taboo evaluation => constant time
+            tabooTenures( swapI, swapJ ) = iterationCount + tabooTenure;
+            return argTempSol->GetSwappedVariant( swapI, swapJ );
+        }
+    }
 }
 
 void mt::TSThread::Iteration() {

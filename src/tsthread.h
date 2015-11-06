@@ -43,6 +43,8 @@ private:
     unsigned int invalidSolutions = 0;
     std::mutex &mutex;
     mt::TSReferenceSet &referenceSet;
+    unsigned int tabooTenure = 0;
+    mt::Matrix< unsigned long > tabooTenures;
 };
 
 }
