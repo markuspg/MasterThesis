@@ -44,8 +44,8 @@ void mt::Analyzer::Analyze() {
             gaThreads.emplace_back( mt::GeneticAlgorithmCycle, i );
         }
         for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-            if ( !tsReferenceSet.IsTSFinished( i ) ) {
-                tsThreads.emplace_back( mt::TabooSearchCycle, i, std::ref( tsReferenceSet ) );
+            if ( !tsThreadObjects[ i ].IsFinished() ) {
+                tsThreads.emplace_back( &mt::TSThread::Iteration, &tsThreadObjects[ i ] );
             } else {
                 ++finishedThreads;
                 tsThreads.emplace_back();

@@ -34,13 +34,17 @@ public:
 
     mt::RandomKeySolution *GetBestNeigh( double &argBestNeighV,
                                          mt::RandomKeySolution *argTempSol );
+    bool IsFinished() const { return finished; }
     void Iteration();
+    void ResetIndizes();
 
 private:
     unsigned int failures = 0;
+    bool finished = false;
     bool firstRun = true;
     const unsigned short index = 0;
     unsigned int invalidSolutions = 0;
+    unsigned int maxFailures = 0;
     std::mutex &mutex;
     mt::TSReferenceSet &referenceSet;
     unsigned int tabooTenure = 0;

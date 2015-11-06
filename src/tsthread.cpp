@@ -22,6 +22,7 @@
 mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
                         mt::TSReferenceSet &argReferenceSet ) :
     index{ argIndex },
+    maxFailures{ *settings->maxFailures / 100 },
     mutex{ argMutex },
     referenceSet{ argReferenceSet },
     tabooTenures{ referenceSet.problem->size, 0 }
@@ -84,4 +85,18 @@ void mt::TSThread::Iteration() {
     referenceSet.SetSolutionValue( index, bestNeighV );
 
     referenceSet.PromoteBestSolution( index );
+
+    if ( failures >= maxFailures ) {
+        finished = true;
+        // These options are for the second run (after the initialization run)
+        firstRun = false;
+        maxFailures *= 100;
+
+        ResetIndizes();
+    }
+}
+
+void mt::TSThread::ResetIndizes() {
+    failures = 0;
+    invalidSolutions = 0;
 }
