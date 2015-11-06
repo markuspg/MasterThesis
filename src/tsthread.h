@@ -20,6 +20,8 @@
 #ifndef TSTHREAD_H
 #define TSTHREAD_H
 
+#include "tsreferenceset.h"
+
 #include <iostream>
 #include <mutex>
 
@@ -27,14 +29,20 @@ namespace mt {
 
 class TSThread {
 public:
-    TSThread( const unsigned short &argIndex, std::mutex &argMutex );
+    TSThread( const unsigned short &argIndex, std::mutex &argMutex,
+              mt::TSReferenceSet &argReferenceSet );
 
+    mt::RandomKeySolution *GetBestNeigh( double &argBestNeighV,
+                                         mt::RandomKeySolution *argTempSol );
     void Iteration();
 
 private:
+    unsigned int failures = 0;
     bool firstRun = true;
     const unsigned short index = 0;
+    unsigned int invalidSolutions = 0;
     std::mutex &mutex;
+    mt::TSReferenceSet &referenceSet;
 };
 
 }

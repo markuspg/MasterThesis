@@ -19,12 +19,39 @@
 
 #include "tsthread.h"
 
-mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex ) :
+mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
+                        mt::TSReferenceSet &argReferenceSet ) :
     index{ argIndex },
-    mutex{ argMutex }
+    mutex{ argMutex },
+    referenceSet{ argReferenceSet }
 {
     std::cout << "      Constructing TSThread with id " << index << std::endl;
 }
 
+mt::RandomKeySolution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
+                                                   mt::RandomKeySolution *argTempSol ) {
+    return argTempSol;
+}
+
 void mt::TSThread::Iteration() {
+    mt::RandomKeySolution *tempSol = referenceSet.GetStartSolution( index );
+    double tempSolV = referenceSet.GetStartSolutionValue( index );
+
+    double bestNeighV = std::numeric_limits< double >::max();
+    mt::RandomKeySolution *bestNeigh = GetBestNeigh( bestNeighV, tempSol );
+
+    if ( !bestNeigh ) {
+        ++failures;
+        ++invalidSolutions;
+        return;
+    }
+
+    if ( bestNeighV > tempSolV ) {
+        ++failures;
+    }
+
+    referenceSet.SetSolution( index, bestNeigh );
+    referenceSet.SetSolutionValue( index, bestNeighV );
+
+    referenceSet.PromoteBestSolution( index );
 }

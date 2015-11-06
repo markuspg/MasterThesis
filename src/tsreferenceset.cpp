@@ -51,6 +51,14 @@ mt::TSReferenceSet::~TSReferenceSet() {
     }
 }
 
+void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
+    if ( solutionValues[ argIndex ] < bestSolutionValues[ argIndex ] ) {
+        delete bestSolutions[ argIndex ];
+        bestSolutions[ argIndex ] = solutions[ argIndex ];
+        bestSolutionValues[ argIndex ] = solutionValues[ argIndex ];
+    }
+}
+
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
                                                mt::RandomKeySolution *argSolution ) {
     if ( argSolution == solutions[ argIndex ] ) {

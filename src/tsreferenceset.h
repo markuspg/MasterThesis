@@ -45,6 +45,8 @@ public:
     double GetStartSolutionValue( const unsigned short &argIndex ) const
         { return solutionValues[ argIndex ]; }
     bool IsTSFinished( const unsigned short &argIndex ) const { return processorSettings[ argIndex ]->IsFinished(); }
+    void PromoteBestSolution( const unsigned short &argIndex );
+    void RotateSolutions() {}
     void SetSolution( const unsigned short &argIndex, mt::RandomKeySolution *argSolution );
     void SetSolutionValue( const unsigned short &argIndex, const double &argSolutionValue )
         { solutionValues[ argIndex ] = argSolutionValue; }
