@@ -42,13 +42,15 @@ mt::TSReferenceSet::~TSReferenceSet() {
 void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
     if ( solutionValues[ argIndex ] < bestSolutionValues[ argIndex ] ) {
         delete bestSolutions[ argIndex ];
-        bestSolutions[ argIndex ] = solutions[ argIndex ];
+        bestSolutions[ argIndex ]
+                = new mt::RandomKeySolution{
+                        new std::vector< double >{ *solutions[ argIndex ]->solution } };
         bestSolutionValues[ argIndex ] = solutionValues[ argIndex ];
     }
 }
 
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
-                                               mt::RandomKeySolution *argSolution ) {
+                                      mt::RandomKeySolution *argSolution ) {
     if ( argSolution == solutions[ argIndex ] ) {
         return;
     }
