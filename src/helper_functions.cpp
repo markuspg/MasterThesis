@@ -29,12 +29,14 @@ unsigned int mt::GetTabooTenure( const unsigned int &argPS ) {
         std::mt19937 engine{ randomDevice() };
 #endif
         std::uniform_int_distribution<> distribution{
-            static_cast< int > ( argPS * ( 1.0 - *settings->tabooTenureDeviation ) ),
-            static_cast< int > ( argPS * ( 1.0 + *settings->tabooTenureDeviation ) ) };
+            static_cast< int >( *settings->tabooTenuresFac * argPS
+                                * ( 1.0 - *settings->tabooTenureDeviation ) ),
+            static_cast< int >( *settings->tabooTenuresFac * argPS
+                                * ( 1.0 + *settings->tabooTenureDeviation ) ) };
 
         tabooTenure = distribution( engine );
     } else {
-        tabooTenure = argPS;
+        tabooTenure = *settings->tabooTenuresFac * argPS;
     }
 
     return tabooTenure;
@@ -62,7 +64,7 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
     std::vector< std::string > tempProblemFiles;
     bool tempRandomizedTabooTenures = false;
     double tempTabooTenureDeviation = 0.1;
-    unsigned short tempTabooTenureFac = 0;
+    unsigned short tempTabooTenureFac = 1;
     unsigned short tempTSInstances = 0;
     
     // Convert all arguments to strings and organize them in a vector
@@ -84,7 +86,7 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
                          "\t--ttd <tTenureDev>    The spread factor around the problem size for randomized\n"
                          "\t                      taboo tenures [0.1,0.9] (default: 0.1)\n"
                          "\t--ttf <tTenureFac>    How many times the problem size\n"
-                         "\t                      the taboo tenure shall last" << std::endl;
+                         "\t                      the taboo tenure shall last (default: 1)" << std::endl;
             return 1;
         }
         if ( commandLineArguments[ i ] == "--ga" ) {
