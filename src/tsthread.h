@@ -17,41 +17,26 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ANALYZER_H
-#define ANALYZER_H
+#ifndef TSTHREAD_H
+#define TSTHREAD_H
 
-#include "geneticalgorithm.h"
-#include "problem.h"
-#include "settings.h"
-#include "taboosearch.h"
-#include "tsreferenceset.h"
-#include "tsthread.h"
-
-#include <functional>
 #include <iostream>
 #include <mutex>
-#include <thread>
-#include <vector>
-
-extern mt::Settings *settings;
 
 namespace mt {
 
-class Analyzer {
+class TSThread {
 public:
-    Analyzer( const mt::Problem *argProblem );
-    Analyzer( const Analyzer &argAnalyzer ) = delete;
-    Analyzer( Analyzer &&argAnalyzer ) = delete;
-    
-    void Analyze();
+    TSThread( const unsigned short &argIndex, std::mutex &argMutex );
+
+    void Iteration();
 
 private:
-    std::mutex tsThreadsMutex;
-    const mt::Problem * const problem;
-    mt::TSReferenceSet tsReferenceSet;
-    std::vector< mt::TSThread > tsThreadObjects;
+    bool firstRun = true;
+    const unsigned short index = 0;
+    std::mutex &mutex;
 };
 
 }
 
-#endif // ANALYZER_H
+#endif // TSTHREAD_H

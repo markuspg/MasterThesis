@@ -29,6 +29,10 @@ mt::Analyzer::Analyzer( const mt::Problem *argProblem ) :
 void mt::Analyzer::Analyze() {
     std::cout << "     Analyzing ..." << std::endl;
 
+    for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
+        tsThreadObjects.emplace_back( i, tsThreadsMutex );
+    }
+
     while ( true ) {
         ++tsReferenceSet;
 
