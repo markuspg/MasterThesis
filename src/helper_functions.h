@@ -34,7 +34,7 @@ extern mt::Settings *settings;
 
 namespace mt {
 
-unsigned int GetRandomizedTT( const unsigned int &argPS );
+unsigned int GetTabooTenure( const unsigned int &argPS );
 mt::Problem *LoadProblem( const std::string &argLine );
 int ParseCommandLine( int argC, char *argV[] );
 std::vector<std::string> Split( const std::string &argString, char argDelim );

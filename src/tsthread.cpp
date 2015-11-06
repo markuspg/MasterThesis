@@ -25,6 +25,7 @@ mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
     maxFailures{ *settings->maxFailures / 100 },
     mutex{ argMutex },
     referenceSet{ argReferenceSet },
+    tabooTenure{ mt::GetTabooTenure( referenceSet.problem->size ) },
     tabooTenures{ referenceSet.problem->size, 0 }
 {
     std::cout << "      Constructing TSThread with id " << index << std::endl;

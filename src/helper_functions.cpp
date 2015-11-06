@@ -19,18 +19,25 @@
 
 #include "helper_functions.h"
 
-unsigned int mt::GetRandomizedTT( const unsigned int &argPS ) {
-    std::random_device randomDevice;
+unsigned int mt::GetTabooTenure( const unsigned int &argPS ) {
+    unsigned int tabooTenure = 0;
+    if ( *settings->randomizedTabooTenures ) {
+        std::random_device randomDevice;
 #ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() };
+        std::mt19937_64 engine{ randomDevice() };
 #else
-    std::mt19937 engine{ randomDevice() };
+        std::mt19937 engine{ randomDevice() };
 #endif
-    std::uniform_int_distribution<> distribution{
-        static_cast< int > ( argPS * ( 1.0 - *settings->tabooTenureDeviation ) ),
-        static_cast< int > ( argPS * ( 1.0 + *settings->tabooTenureDeviation ) ) };
+        std::uniform_int_distribution<> distribution{
+            static_cast< int > ( argPS * ( 1.0 - *settings->tabooTenureDeviation ) ),
+            static_cast< int > ( argPS * ( 1.0 + *settings->tabooTenureDeviation ) ) };
 
-    return distribution( engine );
+        tabooTenure = distribution( engine );
+    } else {
+        tabooTenure = argPS;
+    }
+
+    return tabooTenure;
 }
 
 mt::Problem *mt::LoadProblem( const std::string &argLine ) {
@@ -54,7 +61,7 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
     std::string tempOutputFile;
     std::vector< std::string > tempProblemFiles;
     bool tempRandomizedTabooTenures = false;
-    double tempTabooTenureDeviation = 0;
+    double tempTabooTenureDeviation = 0.1;
     unsigned short tempTabooTenureFac = 0;
     unsigned short tempTSInstances = 0;
     
@@ -74,7 +81,8 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
                          "\t--mf <maxFailures>    The number of allowed improvement failures,\n"
                          "\t                      before the search terminates\n"
                          "\t--rtt <randTTenures>  If the taboo tenures shall be randomized {0;1}\n"
-                         "\t--ttd <tTenureDev>    The spread factor for randomized taboo tenures\n"
+                         "\t--ttd <tTenureDev>    The spread factor around the problem size for randomized\n"
+                         "\t                      taboo tenures [0.1,0.9] (default: 0.1)\n"
                          "\t--ttf <tTenureFac>    How many times the problem size\n"
                          "\t                      the taboo tenure shall last" << std::endl;
             return 1;
@@ -96,6 +104,9 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
         }
         if ( commandLineArguments[ i ] == "--ttd" ) {
             tempTabooTenureDeviation = std::stod( commandLineArguments[ i + 1 ] );
+            if ( tempTabooTenureDeviation < 0.1 || tempTabooTenureDeviation > 0.9 ) {
+                throw std::runtime_error{ "The taboo deviation is not in the valid range of [0.1,0.9]" };
+            }
             lastActiveIndex = i + 1;
             continue;
         }
