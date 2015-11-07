@@ -52,7 +52,6 @@ mt::RandomKeySolution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
             return nullptr;
         }
         // If a swap is taboo, exclude it from consideration by settings its cost to the maximum double value
-        unsigned int iterationCount = referenceSet.GetIterationCount();
         if ( tabooTenures( swapI, swapJ ) >= iterationCount
              // New global optimum as aspiration criterion
              && argBestNeighV > referenceSet.GetGlobalMinimumSolV() ) {
@@ -66,6 +65,7 @@ mt::RandomKeySolution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
 }
 
 void mt::TSThread::Iteration() {
+    ++iterationCount;
     mt::RandomKeySolution *tempSol = nullptr;
     double tempSolV = 0.0;
     {
@@ -80,19 +80,18 @@ void mt::TSThread::Iteration() {
     if ( !bestNeigh ) {
         ++failures;
         ++invalidSolutions;
-        return;
-    }
+    } else {
+        if ( bestNeighV > tempSolV ) {
+            ++failures;
+        }
 
-    if ( bestNeighV > tempSolV ) {
-        ++failures;
-    }
+        {
+            std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
+            referenceSet.SetSolution( index, bestNeigh );
+            referenceSet.SetSolutionValue( index, bestNeighV );
 
-    {
-        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
-        referenceSet.SetSolution( index, bestNeigh );
-        referenceSet.SetSolutionValue( index, bestNeighV );
-
-        referenceSet.PromoteBestSolution( index );
+            referenceSet.PromoteBestSolution( index );
+        }
     }
 
     if ( failures >= maxFailures ) {
@@ -108,5 +107,6 @@ void mt::TSThread::Iteration() {
 void mt::TSThread::ResetIndizes() {
     failures = 0;
     invalidSolutions = 0;
+    iterationCount = 0;
     tabooTenures.ResetWithValue( 0 );
 }
