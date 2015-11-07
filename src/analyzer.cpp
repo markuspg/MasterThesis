@@ -37,6 +37,9 @@ void mt::Analyzer::Analyze() {
     Run();
 
     tsReferenceSet.ResetIterationCounter();
+    for ( auto it = tsThreadObjects.begin(); it != tsThreadObjects.end(); ++it ) {
+        ( *it ).PrepareSecondTSRun();
+    }
 
     // Do the optimization run
     Run();

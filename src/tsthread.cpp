@@ -96,17 +96,15 @@ void mt::TSThread::Iteration() {
 
     if ( failures >= maxFailures ) {
         finished = true;
-        // These options are for the second run (after the initialization run)
-        firstRun = false;
-        maxFailures *= 100;
-
-        ResetIndizes();
     }
 }
 
-void mt::TSThread::ResetIndizes() {
+void mt::TSThread::PrepareSecondTSRun() {
+    // These options are for the second run (after the initialization run)
     failures = 0;
+    finished = false;
     invalidSolutions = 0;
     iterationCount = 0;
+    maxFailures *= 100;
     tabooTenures.ResetWithValue( 0 );
 }
