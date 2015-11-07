@@ -39,6 +39,8 @@ public:
     Problem( Problem &&argProblem ) = delete;
     virtual ~Problem();
 
+    virtual std::vector< unsigned long > ConvertRandomKeysToAssignment(
+             const mt::RandomKeySolution * const argSolution ) const = 0;
     virtual double GetOFV( const mt::RandomKeySolution * const argSolution ) const = 0;
 
     const std::string name;

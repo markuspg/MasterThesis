@@ -30,7 +30,8 @@ mt::QAP::QAP( const std::vector<std::string> &argTokens ) :
 mt::QAP::~QAP() {
 }
 
-double mt::QAP::GetOFV( const mt::RandomKeySolution * const argSolution ) const {
+std::vector< unsigned long > mt::QAP::ConvertRandomKeysToAssignment(
+             const mt::RandomKeySolution * const argSolution ) const {
     // The solution to be converted and calculated
     std::vector< double > * solution = new std::vector< double >{ *argSolution->solution };
     // Stores the converted solution
@@ -46,6 +47,13 @@ double mt::QAP::GetOFV( const mt::RandomKeySolution * const argSolution ) const 
     }
     delete solution;
     solution = nullptr;
+
+    return assignments;
+}
+
+double mt::QAP::GetOFV( const mt::RandomKeySolution * const argSolution ) const {
+    // Stores the converted solution
+    std::vector< unsigned long > assignments = ConvertRandomKeysToAssignment( argSolution );
 
     unsigned long ofv = 0;
     for ( unsigned long i = 0; i < assignments.size(); ++i ) {

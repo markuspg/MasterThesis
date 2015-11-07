@@ -36,10 +36,12 @@ public:
     QAP( Problem &&argProblem ) = delete;
     ~QAP();
 
+    virtual std::vector< unsigned long > ConvertRandomKeysToAssignment(
+             const mt::RandomKeySolution * const argSolution ) const;
     virtual double GetOFV( const mt::RandomKeySolution * const argSolution ) const;
 
-    const mt::Matrix< int > distances;
-    const mt::Matrix< int > flows;
+    const mt::Matrix< int > distances;  //! From location to location
+    const mt::Matrix< int > flows;      //! From unit to unit
 };
 
 }
