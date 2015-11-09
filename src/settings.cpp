@@ -21,13 +21,15 @@
 
 mt::Settings::Settings( const unsigned short &argGAInstances, const unsigned int &argMaxFailures,
                         const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
-                        const bool &argRandomizedTabooTenures, const double &argTabooTenureDeviation,
-                        const unsigned short &argTabooTenureFac, const unsigned short &argTSInstances ) :
+                        const bool &argRandomizedTabooTenures, const bool &argRandomKeys,
+                        const double &argTabooTenureDeviation, const unsigned short &argTabooTenureFac,
+                        const unsigned short &argTSInstances ) :
     gaInstances{ new unsigned short{ argGAInstances } },
     maxFailures{ new unsigned int{ argMaxFailures } },
     outputFile{ new std::string{ argOutputFile } },
     problemFiles{ new std::vector< std::string >{ argProblemFiles } },
     randomizedTabooTenures{ new bool{ argRandomizedTabooTenures } },
+    randomKeys{ new bool{ argRandomKeys } },
     tabooTenureDeviation{ new double { argTabooTenureDeviation } },
     tabooTenuresFac{ new unsigned short{ argTabooTenureFac } },
     tsInstances{ new unsigned short{ argTSInstances } }
@@ -38,6 +40,7 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const unsigned int
               << "\n   outputFile:\t\t\t" << *outputFile
               << "\n   problemFiles:\t\t" << CreateStringOfProblemFiles()
               << "\n   randomizedTabooTenures:\t" << *randomizedTabooTenures
+              << "\n   randomKeys:\t" << *randomKeys
               << "\n   tabooTenureDeviation:\t" << *tabooTenureDeviation
               << "\n   tabooTenuresFac:\t\t" << *tabooTenuresFac
               << "\n   tsInstances:\t\t\t" << *tsInstances << std::endl;
@@ -50,6 +53,7 @@ mt::Settings::~Settings() {
     delete outputFile;
     delete problemFiles;
     delete randomizedTabooTenures;
+    delete randomKeys;
     delete tabooTenureDeviation;
     delete tabooTenuresFac;
     delete tsInstances;

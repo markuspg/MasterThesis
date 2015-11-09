@@ -63,6 +63,7 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
     std::string tempOutputFile;
     std::vector< std::string > tempProblemFiles;
     bool tempRandomizedTabooTenures = false;
+    bool tempRandomKeys = false;
     double tempTabooTenureDeviation = 0.1;
     unsigned short tempTabooTenureFac = 1;
     unsigned short tempTSInstances = 1;
@@ -84,6 +85,8 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
                          "\t                      search instances (default: 1)\n"
                          "\t--mf <maxFailures>    The number of allowed improvement failures\n"
                          "\t                      before the search terminates (default: 1000000)\n"
+                         "\t--rk <UseRandomKeys>  If solutions shall be encoded as random keys (any non-zero\n"
+                         "\t                      integer value will be interpreted as true; default: 0)\n"
                          "\t--rtt <randTTenures>  If the taboo tenures shall be randomized (any non-zero\n"
                          "\t                      integer value will be interpreted as true; default: 0)\n"
                          "\t--ttd <tTenureDev>    The spread factor for randomized taboo tenures [0.1,0.9]\n"
@@ -104,6 +107,11 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
         }
         if ( commandLineArguments[ i ] == "--rtt" ) {
             tempRandomizedTabooTenures = static_cast< bool >( std::stoul( commandLineArguments[ i + 1 ] ) );
+            lastActiveIndex = i + 1;
+            continue;
+        }
+        if ( commandLineArguments[ i ] == "--rk" ) {
+            tempRandomKeys = static_cast< bool >( std::stoul( commandLineArguments[ i + 1 ] ) );
             lastActiveIndex = i + 1;
             continue;
         }
@@ -134,7 +142,7 @@ int mt::ParseCommandLine( int argC, char *argV[] ) {
     tempOutputFile = commandLineArguments.back();
     
     settings = new mt::Settings{ tempGAInstances, tempMaxFailures, tempOutputFile,
-                                 std::move( tempProblemFiles ), tempRandomizedTabooTenures,
+                                 std::move( tempProblemFiles ), tempRandomizedTabooTenures, tempRandomKeys,
                                  tempTabooTenureDeviation, tempTabooTenureFac, tempTSInstances };
     
     return 0;

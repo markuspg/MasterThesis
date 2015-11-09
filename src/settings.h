@@ -31,8 +31,9 @@ class Settings {
 public:
     Settings( const unsigned short &argGAInstances, const unsigned int &argMaxFailures,
               const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
-              const bool &argRandomizedTabooTenures, const double &argTabooTenureDeviation,
-              const unsigned short &argTabooTenureFac, const unsigned short &argTSInstances );
+              const bool &argRandomizedTabooTenures, const bool &argRandomKeys,
+              const double &argTabooTenureDeviation, const unsigned short &argTabooTenureFac,
+              const unsigned short &argTSInstances );
     Settings( const Settings &argSettings ) = delete;
     Settings( Settings &&argSettings ) = delete;
     ~Settings();
@@ -41,7 +42,8 @@ public:
     const unsigned int * const maxFailures = nullptr;
     const std::string * const outputFile = nullptr;
     const std::vector< std::string > * const problemFiles = nullptr;
-    const bool * randomizedTabooTenures = nullptr;
+    const bool * const randomizedTabooTenures = nullptr;
+    const bool * const randomKeys = nullptr;
     const double * const tabooTenureDeviation = nullptr;
     const unsigned short * const tabooTenuresFac = nullptr;
     const unsigned short * const tsInstances = nullptr;
