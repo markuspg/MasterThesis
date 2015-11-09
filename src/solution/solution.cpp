@@ -18,3 +18,13 @@
  */
 
 #include "solution.h"
+
+mt::Solution::Solution() {
+}
+
+mt::Solution::Solution( const Solution &argSolution ) {
+    ( void )argSolution;
+}
+
+mt::Solution::~Solution() {
+}

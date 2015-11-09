@@ -33,8 +33,8 @@ public:
     TSThread( const unsigned short &argIndex, std::mutex &argMutex,
               mt::TSReferenceSet &argReferenceSet );
 
-    mt::RandomKeySolution *GetBestNeigh( double &argBestNeighV,
-                                         mt::RandomKeySolution *argTempSol );
+    mt::Solution *GetBestNeigh( double &argBestNeighV,
+                                mt::Solution *argTempSol );
     bool IsFinished() const { return finished; }
     void Iteration();
     void PrepareSecondTSRun();

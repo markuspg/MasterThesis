@@ -24,6 +24,7 @@
 #include "matrix.h"
 #include "problem.h"
 #include "solution/qap_solution.h"
+#include "solution/solution.h"
 
 #include <iostream>
 #include <vector>
@@ -37,7 +38,8 @@ public:
     QAP( Problem &&argProblem ) = delete;
     ~QAP();
 
-    virtual double GetOFV( const mt::RandomKeySolution * const argSolution ) const;
+    virtual mt::Solution *GenerateRandomSolution( const std::size_t &argSize ) const;
+    virtual double GetOFV( const mt::Solution * const argSolution ) const;
 
     const mt::Matrix< int > distances;  //! From location to location
     const mt::Matrix< int > flows;      //! From unit to unit

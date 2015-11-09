@@ -20,8 +20,8 @@
 #ifndef QAPSOLUTION_H
 #define QAPSOLUTION_H
 
-#include "randomkeysolution.h"
 #include "solution.h"
+#include "randomkeysolution.h"
 
 #include <algorithm>
 #include <memory>
@@ -30,19 +30,23 @@
 
 namespace mt {
 
+class RandomKeySolution;
+
 class QAPSolution : public Solution
 {
 public:
     QAPSolution( const std::size_t &argSize );
     QAPSolution( const std::vector< unsigned long > * const argSolution );
-    QAPSolution( const QAPSolution &argQAPSolution ) = delete;
+    QAPSolution( const QAPSolution &argQAPSolution );
     QAPSolution( QAPSolution &&argQAPSolution );
-    ~QAPSolution();
+    virtual ~QAPSolution();
 
-    static std::vector< unsigned long > *ComputeFromRandomKeys( const mt::RandomKeySolution *argSol );
+    static std::vector< unsigned long > *ComputeFromRandomKeys( const RandomKeySolution *argSol );
+    virtual Solution *Copy() const;
     static std::vector< unsigned long > *GenerateRandomSolution( const std::size_t &argSize );
-    QAPSolution *GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                    const unsigned long &argSwapIndexJ ) const;
+    virtual QAPSolution *GetQAPSolution() const;
+    virtual Solution *GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                         const unsigned long &argSwapIndexJ ) const;
 
     const std::vector< unsigned long > * assignment = nullptr;
 };

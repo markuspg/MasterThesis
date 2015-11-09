@@ -40,7 +40,8 @@ public:
     Problem( Problem &&argProblem ) = delete;
     virtual ~Problem();
 
-    virtual double GetOFV( const mt::RandomKeySolution * const argSolution ) const = 0;
+    virtual Solution *GenerateRandomSolution( const std::size_t &argSize ) const = 0;
+    virtual double GetOFV( const Solution * const argSolution ) const = 0;
 
     const std::string name;
     const unsigned long size = 0;

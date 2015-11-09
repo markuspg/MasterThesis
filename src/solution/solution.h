@@ -20,13 +20,24 @@
 #ifndef SOLUTION_H
 #define SOLUTION_H
 
+#include <vector>
+
 namespace mt {
+
+class QAPSolution;
 
 class Solution
 {
 public:
-    Solution( const Solution &argSolution ) = delete;
+    Solution();
+    Solution( const Solution &argSolution );
     Solution( Solution &&argSolution ) = delete;
+    virtual ~Solution();
+
+    virtual Solution *Copy() const = 0;
+    virtual mt::QAPSolution *GetQAPSolution() const = 0;
+    virtual Solution *GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                         const unsigned long &argSwapIndexJ ) const = 0;
 };
 
 }

@@ -21,6 +21,7 @@
 #define RANDOMKEYSOLUTION_H
 
 #include "solution.h"
+#include "qap_solution.h"
 
 #include <memory>
 #include <random>
@@ -33,13 +34,15 @@ class RandomKeySolution : public Solution
 public:
     RandomKeySolution( const std::size_t &argSize );
     RandomKeySolution( const std::vector< double > * const argSolution );
-    RandomKeySolution( const RandomKeySolution &argRandomKeySolution ) = delete;
+    RandomKeySolution( const RandomKeySolution &argRandomKeySolution );
     RandomKeySolution( RandomKeySolution &&argRandomKeySolution );
     ~RandomKeySolution();
 
+    virtual Solution *Copy() const;
     static std::vector< double > *GenerateRandomSolution( const std::size_t &argSize );
-    RandomKeySolution *GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                          const unsigned long &argSwapIndexJ ) const;
+    virtual mt::QAPSolution *GetQAPSolution() const;
+    virtual Solution *GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                         const unsigned long &argSwapIndexJ ) const;
 
     const std::vector< double > * solutionVec = nullptr;
 };

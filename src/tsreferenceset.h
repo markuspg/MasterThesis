@@ -23,7 +23,7 @@
 #include "helper_functions.h"
 #include "matrix.h"
 #include "problem.h"
-#include "solution/randomkeysolution.h"
+#include "solution/solution.h"
 
 #include <algorithm>
 #include <iostream>
@@ -33,21 +33,21 @@ namespace mt {
 
 class TSReferenceSet {
 public:
-    TSReferenceSet( const mt::Problem * const argProblem,
+    TSReferenceSet( const Problem * const argProblem,
                     const unsigned short &argTSInstanceAmount );
     ~TSReferenceSet();
 
     double GetGlobalMinimumSolV() const { return *std::min_element( bestSolutionValues.begin(),
                                                                     bestSolutionValues.end() ); }
     unsigned int GetIterationCount() const { return iterationCounter; }
-    mt::RandomKeySolution *GetStartSolution( const unsigned short &argIndex ) const
+    Solution *GetStartSolution( const unsigned short &argIndex ) const
         { return solutions[ argIndex ]; }
     double GetStartSolutionValue( const unsigned short &argIndex ) const
         { return solutionValues[ argIndex ]; }
     void PromoteBestSolution( const unsigned short &argIndex );
     void ResetIterationCounter() { iterationCounter = 0; }
     void RotateSolutions() {}
-    void SetSolution( const unsigned short &argIndex, mt::RandomKeySolution *argSolution );
+    void SetSolution( const unsigned short &argIndex, Solution *argSolution );
     void SetSolutionValue( const unsigned short &argIndex, const double &argSolutionValue )
         { solutionValues[ argIndex ] = argSolutionValue; }
 
@@ -56,10 +56,10 @@ public:
     const mt::Problem * const problem;
 
 private:
-    std::vector< mt::RandomKeySolution* > bestSolutions;
+    std::vector< Solution* > bestSolutions;
     std::vector< double > bestSolutionValues;
     unsigned int iterationCounter = 0;
-    std::vector< mt::RandomKeySolution* > solutions;
+    std::vector< Solution* > solutions;
     std::vector< double > solutionValues;
 };
 

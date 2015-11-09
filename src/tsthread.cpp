@@ -31,14 +31,14 @@ mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
     std::cout << "      Constructing TSThread with id " << index << std::endl;
 }
 
-mt::RandomKeySolution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
-                                                   mt::RandomKeySolution *argTempSol ) {
+mt::Solution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
+                                          mt::Solution *argTempSol ) {
     mt::Matrix< double > costs{ referenceSet.problem->size, std::numeric_limits< double >::max() };
     // Iterate over all lines
     for ( unsigned long i = 0; i < referenceSet.problem->size; ++i ) {
         // Iterate over all columns above the main diagonal (because swaps are symmetrical)
         for ( unsigned long j = i + 1; j < referenceSet.problem->size; ++j ) {
-            mt::RandomKeySolution *tempSolution =  argTempSol->GetSwappedVariant( i, j );
+            mt::Solution *tempSolution =  argTempSol->GetSwappedVariant( i, j );
             costs( i, j ) = referenceSet.problem->GetOFV( tempSolution );
             delete tempSolution;
         }
@@ -66,7 +66,7 @@ mt::RandomKeySolution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
 
 void mt::TSThread::Iteration() {
     ++iterationCount;
-    mt::RandomKeySolution *tempSol = nullptr;
+    mt::Solution *tempSol = nullptr;
     double tempSolV = 0.0;
     {
         std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
@@ -75,7 +75,7 @@ void mt::TSThread::Iteration() {
     }
 
     double bestNeighV = std::numeric_limits< double >::max();
-    mt::RandomKeySolution *bestNeigh = GetBestNeigh( bestNeighV, tempSol );
+    mt::Solution *bestNeigh = GetBestNeigh( bestNeighV, tempSol );
 
     if ( !bestNeigh ) {
         ++failures;

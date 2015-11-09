@@ -29,7 +29,7 @@ mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem,
     solutionValues.resize( argTSInstanceAmount, std::numeric_limits< double >::max() );
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
     for ( unsigned short i = 0; i < argTSInstanceAmount; ++i ) {
-        solutions[ i ] = new mt::RandomKeySolution{ argProblem->size };
+        solutions[ i ] = problem->GenerateRandomSolution( problem->size );
     }
 }
 
@@ -42,15 +42,13 @@ mt::TSReferenceSet::~TSReferenceSet() {
 void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
     if ( solutionValues[ argIndex ] < bestSolutionValues[ argIndex ] ) {
         delete bestSolutions[ argIndex ];
-        bestSolutions[ argIndex ]
-                = new mt::RandomKeySolution{
-                        new std::vector< double >{ *solutions[ argIndex ]->solutionVec } };
+        bestSolutions[ argIndex ] = solutions[ argIndex ]->Copy();
         bestSolutionValues[ argIndex ] = solutionValues[ argIndex ];
     }
 }
 
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
-                                      mt::RandomKeySolution *argSolution ) {
+                                      mt::Solution *argSolution ) {
     if ( argSolution == solutions[ argIndex ] ) {
         return;
     }
