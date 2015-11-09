@@ -23,6 +23,7 @@
 #include "helper_functions.h"
 #include "matrix.h"
 #include "problem.h"
+#include "solution/qap_solution.h"
 
 #include <iostream>
 #include <vector>
@@ -36,8 +37,6 @@ public:
     QAP( Problem &&argProblem ) = delete;
     ~QAP();
 
-    virtual std::vector< unsigned long > ConvertRandomKeysToAssignment(
-             const mt::RandomKeySolution * const argSolution ) const;
     virtual double GetOFV( const mt::RandomKeySolution * const argSolution ) const;
 
     const mt::Matrix< int > distances;  //! From location to location

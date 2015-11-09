@@ -44,7 +44,7 @@ void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
         delete bestSolutions[ argIndex ];
         bestSolutions[ argIndex ]
                 = new mt::RandomKeySolution{
-                        new std::vector< double >{ *solutions[ argIndex ]->solution } };
+                        new std::vector< double >{ *solutions[ argIndex ]->solutionVec } };
         bestSolutionValues[ argIndex ] = solutionValues[ argIndex ];
     }
 }

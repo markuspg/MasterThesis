@@ -20,23 +20,26 @@
 #include "randomkeysolution.h"
 
 mt::RandomKeySolution::RandomKeySolution( const std::size_t &argSize ) :
-    solution{ GenerateRandomSolution( argSize ) }
+    Solution{},
+    solutionVec{ GenerateRandomSolution( argSize ) }
 {
 }
 
-mt::RandomKeySolution::RandomKeySolution( const std::vector<double> * const argSolution ):
-    solution{ argSolution }
+mt::RandomKeySolution::RandomKeySolution( const std::vector<double> * const argSolution ) :
+    Solution{},
+    solutionVec{ argSolution }
 {
 }
 
 mt::RandomKeySolution::RandomKeySolution( RandomKeySolution &&argRandomKeySolution ) :
-    solution{ argRandomKeySolution.solution }
+    Solution{},
+    solutionVec{ argRandomKeySolution.solutionVec }
 {
-    argRandomKeySolution.solution = nullptr;
+    argRandomKeySolution.solutionVec = nullptr;
 }
 
 mt::RandomKeySolution::~RandomKeySolution() {
-    delete solution;
+    delete solutionVec;
 }
 
 std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const std::size_t &argSize ) {
@@ -60,7 +63,7 @@ std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const std:
 
 mt::RandomKeySolution *mt::RandomKeySolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
                                                                  const unsigned long &argSwapIndexJ ) const {
-    std::vector< double > *temp = new std::vector< double >{ *solution };
+    std::vector< double > *temp = new std::vector< double >{ *solutionVec };
     double tempD = ( *temp )[ argSwapIndexI ];
     ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
     ( *temp )[ argSwapIndexJ ] = tempD;

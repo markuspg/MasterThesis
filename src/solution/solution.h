@@ -17,31 +17,18 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RANDOMKEYSOLUTION_H
-#define RANDOMKEYSOLUTION_H
-
-#include <memory>
-#include <random>
-#include <vector>
+#ifndef SOLUTION_H
+#define SOLUTION_H
 
 namespace mt {
 
-class RandomKeySolution
+class Solution
 {
 public:
-    RandomKeySolution( const std::size_t &argSize );
-    RandomKeySolution( const std::vector< double > * const argSolution );
-    RandomKeySolution( const RandomKeySolution &argRandomKeySolution ) = delete;
-    RandomKeySolution( RandomKeySolution &&argRandomKeySolution );
-    ~RandomKeySolution();
-
-    static std::vector< double > *GenerateRandomSolution( const std::size_t &argSize );
-    RandomKeySolution *GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                          const unsigned long &argSwapIndexJ ) const;
-
-    const std::vector< double > * solution = nullptr;
+    Solution( const Solution &argSolution ) = delete;
+    Solution( Solution &&argSolution ) = delete;
 };
 
 }
 
-#endif // RANDOMKEYSOLUTION_H
+#endif // SOLUTION_H

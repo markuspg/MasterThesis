@@ -23,7 +23,7 @@
 #include "helper_functions.h"
 #include "matrix.h"
 #include "problem.h"
-#include "randomkeysolution.h"
+#include "solution/randomkeysolution.h"
 
 #include <algorithm>
 #include <iostream>

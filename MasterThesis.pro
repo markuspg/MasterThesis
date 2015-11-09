@@ -18,10 +18,12 @@ SOURCES += src/main.cpp \
     src/matrix.cpp \
     src/problem.cpp \
     src/qap.cpp \
-    src/randomkeysolution.cpp \
     src/settings.cpp \
     src/tsreferenceset.cpp \
-    src/tsthread.cpp
+    src/tsthread.cpp \
+    src/solution/qap_solution.cpp \
+    src/solution/randomkeysolution.cpp \
+    src/solution/solution.cpp
 
 HEADERS += \
     src/analyzer.h \
@@ -30,10 +32,12 @@ HEADERS += \
     src/matrix.h \
     src/problem.h \
     src/qap.h \
-    src/randomkeysolution.h \
     src/settings.h \
     src/tsreferenceset.h \
-    src/tsthread.h
+    src/tsthread.h \
+    src/solution/qap_solution.h \
+    src/solution/randomkeysolution.h \
+    src/solution/solution.h
 
 OTHER_FILES += \
     .gitignore \

@@ -17,36 +17,4 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PROBLEM_H
-#define PROBLEM_H
-
-#include "solution/randomkeysolution.h"
-#include "solution/solution.h"
-
-#include <iostream>
-#include <vector>
-
-enum class problemTypes_t : unsigned short {
-    QAP,
-    SALBP
-};
-
-namespace mt {
-
-class Problem {
-public:
-    Problem( const problemTypes_t &argType, const std::vector<std::string> &argTokens );
-    Problem( const Problem &argProblem ) = delete;
-    Problem( Problem &&argProblem ) = delete;
-    virtual ~Problem();
-
-    virtual double GetOFV( const mt::RandomKeySolution * const argSolution ) const = 0;
-
-    const std::string name;
-    const unsigned long size = 0;
-    const problemTypes_t type;
-};
-
-}
-
-#endif // PROBLEM_H
+#include "solution.h"
