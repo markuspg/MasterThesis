@@ -26,6 +26,8 @@
 #include <iostream>
 #include <mutex>
 
+typedef std::pair< double, mt::Solution* > dSol;
+
 namespace mt {
 
 class TSThread {
@@ -33,6 +35,7 @@ public:
     TSThread( const unsigned short &argIndex, std::mutex &argMutex,
               mt::TSReferenceSet &argReferenceSet );
 
+    void CleanUpMatrix( mt::Matrix< dSol > *argMatrix ) const;
     mt::Solution *GetBestNeigh( double &argBestNeighV,
                                 mt::Solution *argTempSol );
     bool IsFinished() const { return finished; }

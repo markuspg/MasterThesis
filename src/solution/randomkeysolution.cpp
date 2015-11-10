@@ -76,7 +76,7 @@ mt::QAPSolution *mt::RandomKeySolution::GetQAPSolution() const {
 }
 
 mt::Solution *mt::RandomKeySolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                                                 const unsigned long &argSwapIndexJ ) const {
+                                                        const unsigned long &argSwapIndexJ ) const {
     std::vector< double > *temp = new std::vector< double >{ *solutionVec };
     double tempD = ( *temp )[ argSwapIndexI ];
     ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];

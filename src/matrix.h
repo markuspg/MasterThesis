@@ -43,7 +43,7 @@ public:
     static std::vector< int > ConvertStringVecToIntVec( const std::vector< std::string > &argStrList );
     static std::vector< unsigned long > ConvertStringVecToULongVec
         ( const std::vector< std::string > &argStrList );
-    T GetMinimumValueIndizes( long &argI, long &argJ );
+    T GetMinimumValueIndizes( long &argI, long &argJ, bool( *argComp )( T a, T b ) );
     void ResetWithValue( const T &argValue );
 
     T& operator() ( const unsigned int &argI, const unsigned int &argJ ) const
@@ -114,8 +114,8 @@ std::vector< unsigned long > mt::Matrix< T >::ConvertStringVecToULongVec
 }
 
 template< typename T >
-T mt::Matrix< T >::GetMinimumValueIndizes( long &argI, long &argJ ) {
-    typename std::vector< T >::iterator minElem = std::min_element( A->begin(), A->end() );
+T mt::Matrix< T >::GetMinimumValueIndizes( long &argI, long &argJ, bool( *argComp )( T a, T b ) ) {
+    typename std::vector< T >::iterator minElem = std::min_element( A->begin(), A->end(), argComp );
     auto offset = std::distance( A->begin(), minElem );
     std::ldiv_t result = std::div( static_cast< long >( offset ),
                                    static_cast< long >( dimension ) );

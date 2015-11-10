@@ -31,22 +31,30 @@ mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
     std::cout << "      Constructing TSThread with id " << index << std::endl;
 }
 
+void mt::TSThread::CleanUpMatrix( mt::Matrix< dSol > *argMatrix ) const {
+    for ( unsigned long i = 0; i < referenceSet.problem->size; ++i ) {
+        for ( unsigned long j = i + 1; j < referenceSet.problem->size; ++j ) {
+            delete ( *argMatrix )( i, j ).second;
+        }
+    }
+}
+
 mt::Solution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
                                           mt::Solution *argTempSol ) {
-    mt::Matrix< double > costs{ referenceSet.problem->size, std::numeric_limits< double >::max() };
+    mt::Matrix< dSol >costs =
+            { referenceSet.problem->size, dSol{ std::numeric_limits< double >::max(), nullptr } };
     // Iterate over all lines
     for ( unsigned long i = 0; i < referenceSet.problem->size; ++i ) {
         // Iterate over all columns above the main diagonal (because swaps are symmetrical)
         for ( unsigned long j = i + 1; j < referenceSet.problem->size; ++j ) {
             mt::Solution *tempSolution =  argTempSol->GetSwappedVariant( i, j );
-            costs( i, j ) = referenceSet.problem->GetOFV( tempSolution );
-            delete tempSolution;
+            costs( i, j ) = dSol{ referenceSet.problem->GetOFV( tempSolution ), tempSolution };
         }
     }
     // Analyze all swaps
     long swapI = 0, swapJ = 0;
     while ( true ) {
-        argBestNeighV = costs.GetMinimumValueIndizes( swapI, swapJ );
+        argBestNeighV = costs.GetMinimumValueIndizes( swapI, swapJ, []( dSol a, dSol b ){ return a.first < b.first; } ).first;
         // If no improvement could be achieved, leave with false, indicating improvement failure
         if ( argBestNeighV == std::numeric_limits< double >::max() ) {
             return nullptr;
@@ -55,10 +63,11 @@ mt::Solution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
         if ( tabooTenures( swapI, swapJ ) >= iterationCount
              // New global optimum as aspiration criterion
              && argBestNeighV > referenceSet.GetGlobalMinimumSolV() ) {
-            costs( swapI, swapJ ) = std::numeric_limits< double >::max();
+            costs( swapI, swapJ ).first = std::numeric_limits< double >::max();
         } else {
             // Taillard's taboo evaluation => constant time
             tabooTenures( swapI, swapJ ) = iterationCount + tabooTenure;
+            CleanUpMatrix( &costs );
             return argTempSol->GetSwappedVariant( swapI, swapJ );
         }
     }
