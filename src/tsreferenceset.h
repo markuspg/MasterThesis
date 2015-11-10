@@ -27,6 +27,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <memory>
 #include <vector>
 
 namespace mt {
@@ -46,7 +47,7 @@ public:
         { return solutionValues[ argIndex ]; }
     void PromoteBestSolution( const unsigned short &argIndex );
     void ResetIterationCounter() { iterationCounter = 0; }
-    void RotateSolutions() {}
+    void RotateSolutions();
     void SetSolution( const unsigned short &argIndex, Solution *argSolution );
     void SetSolutionValue( const unsigned short &argIndex, const double &argSolutionValue )
         { solutionValues[ argIndex ] = argSolutionValue; }
@@ -58,9 +59,13 @@ public:
 private:
     std::vector< Solution* > bestSolutions;
     std::vector< double > bestSolutionValues;
+    std::unique_ptr< mt::Solution > globalBestSolution = nullptr;
+    double globalBestSolutionV = std::numeric_limits< double >::max();
     unsigned int iterationCounter = 0;
     std::vector< Solution* > solutions;
     std::vector< double > solutionValues;
+    const unsigned short &tsInstanceQuantity;
+    bool updatedGlobalBestSolution = false;
 };
 
 }
