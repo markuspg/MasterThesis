@@ -40,10 +40,13 @@ public:
 
     const unsigned short * const gaInstances = nullptr;
     const unsigned int * const maxFailures = nullptr;
+    const double * mutationImpact = nullptr;
+    const double * const mutationRate = nullptr;
     const std::string * const outputFile = nullptr;
     const std::vector< std::string > * const problemFiles = nullptr;
     const bool * const randomizedTabooTenures = nullptr;
     const bool * const randomKeys = nullptr;
+    const double * const reproductionRate = nullptr;
     const double * const tabooTenureDeviation = nullptr;
     const unsigned short * const tabooTenuresFac = nullptr;
     const unsigned short * const tsInstances = nullptr;

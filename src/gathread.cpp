@@ -25,6 +25,12 @@ mt::GAThread::GAThread( const unsigned short &argIndex, std::mutex &argMutex,
     popSize{ argProblem->size * argProblem->size > 100 ? 100 : argProblem->size * argProblem->size },
     population{ popSize, nullptr },
     problem{ argProblem },
+    mutationGeneQuantity{ *settings->mutationImpact * problem->size < 1.0 ?
+            1 : static_cast< unsigned long >( *settings->mutationImpact * problem->size ) },
+    mutationsQuantity{ *settings->mutationRate * popSize < 1 ?
+            1 : static_cast< unsigned long >( *settings->mutationRate * popSize ) },
+    reproductionQuantity{ *settings->reproductionRate * popSize / 2 < 1 ?
+            1 : static_cast< unsigned long >( *settings->reproductionRate * popSize / 2 ) },
     tsReferenceSetMutex{ argMutex },
     referenceSet{ argReferenceSet }
 {
@@ -47,4 +53,16 @@ void mt::GAThread::CreateInitialPopulation() {
 
 void mt::GAThread::Iteration() {
     ++iterationCount;
+
+    Reproduce();
+
+    Mutate();
+}
+
+void mt::GAThread::Mutate() {
+
+}
+
+void mt::GAThread::Reproduce() {
+
 }

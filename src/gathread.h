@@ -39,6 +39,8 @@ public:
 
 private:
     void CreateInitialPopulation();
+    void Mutate();
+    void Reproduce();
 
     bool finished = false;
     const unsigned short index = 0;
@@ -46,6 +48,9 @@ private:
     unsigned long popSize = 0;
     std::vector< mt::Solution* > population;
     const mt::Problem * const problem = nullptr;
+    const unsigned long mutationGeneQuantity = 0;   //! How many of a chromosome's genes shall be mutated
+    const unsigned long mutationsQuantity = 0;      //! How many chromosomes shall be mutated per iteration
+    const unsigned long reproductionQuantity = 0;   //! How many reproductions shall happen per iteration
     std::mutex &tsReferenceSetMutex;
     mt::TSReferenceSet &referenceSet;
 };

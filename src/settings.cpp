@@ -26,10 +26,13 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const unsigned int
                         const unsigned short &argTSInstances ) :
     gaInstances{ new unsigned short{ argGAInstances } },
     maxFailures{ new unsigned int{ argMaxFailures } },
+    mutationImpact{ new double{ 0.1 } },
+    mutationRate{ new double{ 0.2 } },
     outputFile{ new std::string{ argOutputFile } },
     problemFiles{ new std::vector< std::string >{ argProblemFiles } },
     randomizedTabooTenures{ new bool{ argRandomizedTabooTenures } },
     randomKeys{ new bool{ argRandomKeys } },
+    reproductionRate{ new double{ 0.5 } },
     tabooTenureDeviation{ new double { argTabooTenureDeviation } },
     tabooTenuresFac{ new unsigned short{ argTabooTenureFac } },
     tsInstances{ new unsigned short{ argTSInstances } }
@@ -50,10 +53,13 @@ mt::Settings::~Settings() {
     std::cout << " Settings destructor" << std::endl;
     delete gaInstances;
     delete maxFailures;
+    delete mutationImpact;
+    delete mutationRate;
     delete outputFile;
     delete problemFiles;
     delete randomizedTabooTenures;
     delete randomKeys;
+    delete reproductionRate;
     delete tabooTenureDeviation;
     delete tabooTenuresFac;
     delete tsInstances;
