@@ -22,11 +22,31 @@
 mt::GAThread::GAThread( const unsigned short &argIndex, std::mutex &argMutex,
                         const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet ) :
     index{ argIndex },
+    popSize{ argProblem->size * argProblem->size > 100 ? 100 : argProblem->size * argProblem->size },
+    population{ popSize, nullptr },
     problem{ argProblem },
     tsReferenceSetMutex{ argMutex },
     referenceSet{ argReferenceSet }
 {
     std::cout << "      Constructing GAThread with id " << index << std::endl;
+
+    CreateInitialPopulation();
+}
+
+mt::GAThread::~GAThread() {
+    for ( auto &s: population ) {
+        delete s;
+    }
+}
+
+void mt::GAThread::CreateInitialPopulation() {
+    for ( unsigned long i = 0; i < popSize; ++i ) {
+        if ( *settings->randomKeys ) {
+            population[ i ] = new mt::RandomKeySolution{ problem->size };
+        } else {
+            population[ i ] = new mt::QAPSolution{ problem->size };
+        }
+    }
 }
 
 void mt::GAThread::Iteration() {

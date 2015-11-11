@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <mutex>
+#include <vector>
 
 namespace mt {
 
@@ -31,14 +32,19 @@ class GAThread {
 public:
     GAThread( const unsigned short &argIndex, std::mutex &argMutex,
               const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet );
+    ~GAThread();
 
     bool IsFinished() const { return finished; }
     void Iteration();
 
 private:
+    void CreateInitialPopulation();
+
     bool finished = false;
     const unsigned short index = 0;
     unsigned int iterationCount = 0;
+    unsigned long popSize = 0;
+    std::vector< mt::Solution* > population;
     const mt::Problem * const problem = nullptr;
     std::mutex &tsReferenceSetMutex;
     mt::TSReferenceSet &referenceSet;
