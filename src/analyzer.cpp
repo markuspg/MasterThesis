@@ -30,7 +30,8 @@ void mt::Analyzer::Analyze() {
     std::cout << "     Analyzing ..." << std::endl;
 
     for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-        tsThreadObjects.emplace_back( i, tsThreadsMutex, problem, tsReferenceSet );
+        gaThreadObjects.emplace_back( i, tsReferenceSetMutex, problem, tsReferenceSet );
+        tsThreadObjects.emplace_back( i, tsReferenceSetMutex, problem, tsReferenceSet );
     }
 
     // Do the initialization run
@@ -54,7 +55,12 @@ void mt::Analyzer::Run() {
         std::vector< std::thread > gaThreads;
         std::vector< std::thread > tsThreads;
         for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
-            gaThreads.emplace_back( mt::GeneticAlgorithmCycle, i );
+            if ( !gaThreadObjects[ i ].IsFinished() ) {
+                gaThreads.emplace_back( &mt::GAThread::Iteration, &gaThreadObjects[ i ] );
+            } else {
+                ++finishedThreads;
+                gaThreads.emplace_back();
+            }
         }
         for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
             if ( !tsThreadObjects[ i ].IsFinished() ) {

@@ -20,7 +20,7 @@
 #ifndef ANALYZER_H
 #define ANALYZER_H
 
-#include "geneticalgorithm.h"
+#include "gathread.h"
 #include "problem.h"
 #include "settings.h"
 #include "tsreferenceset.h"
@@ -46,9 +46,10 @@ public:
     void Run();
 
 private:
-    std::mutex tsThreadsMutex;
+    std::vector< mt::GAThread > gaThreadObjects;
     const mt::Problem * const problem;
     mt::TSReferenceSet tsReferenceSet;
+    std::mutex tsReferenceSetMutex;
     std::vector< mt::TSThread > tsThreadObjects;
 };
 

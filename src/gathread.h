@@ -17,15 +17,33 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GENETICALGORITHM_H
-#define GENETICALGORITHM_H
+#ifndef GATHREAD_H
+#define GATHREAD_H
+
+#include "tsreferenceset.h"
 
 #include <iostream>
+#include <mutex>
 
 namespace mt {
 
-void GeneticAlgorithmCycle( const unsigned short argIndex );
+class GAThread {
+public:
+    GAThread( const unsigned short &argIndex, std::mutex &argMutex,
+              const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet );
+
+    bool IsFinished() const { return finished; }
+    void Iteration();
+
+private:
+    bool finished = false;
+    const unsigned short index = 0;
+    unsigned int iterationCount = 0;
+    const mt::Problem * const problem = nullptr;
+    std::mutex &tsReferenceSetMutex;
+    mt::TSReferenceSet &referenceSet;
+};
 
 }
 
-#endif // GENETICALGORITHM_H
+#endif // GATHREAD_H

@@ -13,7 +13,7 @@ TEMPLATE = app
 
 SOURCES += src/main.cpp \
     src/analyzer.cpp \
-    src/geneticalgorithm.cpp \
+    src/gathread.cpp \
     src/helper_functions.cpp \
     src/matrix.cpp \
     src/problem.cpp \
@@ -27,7 +27,7 @@ SOURCES += src/main.cpp \
 
 HEADERS += \
     src/analyzer.h \
-    src/geneticalgorithm.h \
+    src/gathread.h \
     src/helper_functions.h \
     src/matrix.h \
     src/problem.h \

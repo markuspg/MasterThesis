@@ -17,8 +17,18 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "geneticalgorithm.h"
+#include "gathread.h"
 
-void mt::GeneticAlgorithmCycle( const unsigned short argIndex ) {
-    std::cout << "      Running GeneticAlgorithmCycle in thread " << argIndex << std::endl;
+mt::GAThread::GAThread( const unsigned short &argIndex, std::mutex &argMutex,
+                        const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet ) :
+    index{ argIndex },
+    problem{ argProblem },
+    tsReferenceSetMutex{ argMutex },
+    referenceSet{ argReferenceSet }
+{
+    std::cout << "      Constructing GAThread with id " << index << std::endl;
+}
+
+void mt::GAThread::Iteration() {
+    ++iterationCount;
 }
