@@ -41,11 +41,7 @@ mt::GAThread::~GAThread() {
 
 void mt::GAThread::CreateInitialPopulation() {
     for ( unsigned long i = 0; i < popSize; ++i ) {
-        if ( *settings->randomKeys ) {
-            population[ i ] = new mt::RandomKeySolution{ problem->size };
-        } else {
-            population[ i ] = new mt::QAPSolution{ problem->size };
-        }
+        population[ i ] = problem->GenerateRandomSolution( problem->size );
     }
 }
 
