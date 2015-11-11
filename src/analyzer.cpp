@@ -29,8 +29,12 @@ mt::Analyzer::Analyzer( const mt::Problem *argProblem ) :
 void mt::Analyzer::Analyze() {
     std::cout << "     Analyzing ..." << std::endl;
 
-    for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
+    gaThreadObjects.reserve( *settings->gaInstances );
+    for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
         gaThreadObjects.emplace_back( i, tsReferenceSetMutex, problem, tsReferenceSet );
+    }
+    tsThreadObjects.reserve( *settings->tsInstances );
+    for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
         tsThreadObjects.emplace_back( i, tsReferenceSetMutex, problem, tsReferenceSet );
     }
 

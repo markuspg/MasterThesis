@@ -23,7 +23,7 @@ mt::GAThread::GAThread( const unsigned short &argIndex, std::mutex &argMutex,
                         const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet ) :
     index{ argIndex },
     popSize{ argProblem->size * argProblem->size > 100 ? 100 : argProblem->size * argProblem->size },
-    population{ popSize, nullptr },
+    population{ popSize, { 0.0, nullptr } },
     problem{ argProblem },
     mutationGeneQuantity{ *settings->mutationImpact * problem->size < 1.0 ?
             1 : static_cast< unsigned long >( *settings->mutationImpact * problem->size ) },
@@ -41,13 +41,14 @@ mt::GAThread::GAThread( const unsigned short &argIndex, std::mutex &argMutex,
 
 mt::GAThread::~GAThread() {
     for ( auto &s: population ) {
-        delete s;
+        delete s.second;
     }
 }
 
 void mt::GAThread::CreateInitialPopulation() {
     for ( unsigned long i = 0; i < popSize; ++i ) {
-        population[ i ] = problem->GenerateRandomSolution( problem->size );
+        population[ i ].second = problem->GenerateRandomSolution( problem->size );
+        population[ i ].first = problem->GetOFV( population[ i ].second );
     }
 }
 
