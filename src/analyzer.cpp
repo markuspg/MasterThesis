@@ -30,7 +30,7 @@ void mt::Analyzer::Analyze() {
     std::cout << "     Analyzing ..." << std::endl;
 
     for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-        tsThreadObjects.emplace_back( i, tsThreadsMutex, tsReferenceSet );
+        tsThreadObjects.emplace_back( i, tsThreadsMutex, problem, tsReferenceSet );
     }
 
     // Do the initialization run

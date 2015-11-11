@@ -33,7 +33,7 @@ namespace mt {
 class TSThread {
 public:
     TSThread( const unsigned short &argIndex, std::mutex &argMutex,
-              mt::TSReferenceSet &argReferenceSet );
+              const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet );
 
     void CleanUpMatrix( mt::Matrix< dSol > *argMatrix ) const;
     mt::Solution *GetBestNeigh( double &argBestNeighV,
@@ -50,6 +50,7 @@ private:
     unsigned int iterationCount = 0;
     unsigned int maxFailures = 0;
     std::mutex &mutex;
+    const mt::Problem * const problem = nullptr;
     mt::TSReferenceSet &referenceSet;
     unsigned int tabooTenure = 0;
     mt::Matrix< unsigned long > tabooTenures;

@@ -55,3 +55,14 @@ double mt::QAP::GetOFV( const mt::Solution * const argSolution ) const {
 
     return ofv;
 }
+
+void mt::QAP::UpdateTabooTenures( const mt::Solution * const argNewSolution,
+                                  const long &argSwapI, const long &argSwapJ,
+                                  const unsigned long &argTabooTenure,
+                                  mt::Matrix<unsigned long> &argTTMatrix ) const {
+    const mt::QAPSolution * const tempSol = argNewSolution->GetQAPSolution();
+    // Forbid the  re-assignment of the swapped units to the locations
+    argTTMatrix( ( *tempSol->assignment )[ argSwapI ], argSwapI ) = argTabooTenure;
+    argTTMatrix( ( *tempSol->assignment )[ argSwapJ ], argSwapJ ) = argTabooTenure;
+    delete tempSol;
+}

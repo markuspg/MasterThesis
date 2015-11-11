@@ -20,6 +20,7 @@
 #ifndef PROBLEM_H
 #define PROBLEM_H
 
+#include "matrix.h"
 #include "solution/randomkeysolution.h"
 #include "solution/solution.h"
 
@@ -42,6 +43,10 @@ public:
 
     virtual Solution *GenerateRandomSolution( const std::size_t &argSize ) const = 0;
     virtual double GetOFV( const Solution * const argSolution ) const = 0;
+    virtual void UpdateTabooTenures( const mt::Solution * const argNewSolution,
+                                     const long &argSwapI, const long &argSwapJ,
+                                     const unsigned long &argTabooTenure,
+                                     mt::Matrix< unsigned long > &argTTMatrix ) const = 0;
 
     const std::string name;
     const unsigned long size = 0;

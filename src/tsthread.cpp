@@ -20,10 +20,11 @@
 #include "tsthread.h"
 
 mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
-                        mt::TSReferenceSet &argReferenceSet ) :
+                        const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet ) :
     index{ argIndex },
     maxFailures{ *settings->maxFailures / 100 },
     mutex{ argMutex },
+    problem{ argProblem },
     referenceSet{ argReferenceSet },
     tabooTenure{ mt::GetTabooTenure( referenceSet.problem->size ) },
     tabooTenures{ referenceSet.problem->size, 0 }
@@ -66,9 +67,11 @@ mt::Solution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
             costs( swapI, swapJ ).first = std::numeric_limits< double >::max();
         } else {
             // Taillard's taboo evaluation => constant time
-            tabooTenures( swapI, swapJ ) = iterationCount + tabooTenure;
+            mt::Solution *bestNeigh = argTempSol->GetSwappedVariant( swapI, swapJ );
             CleanUpMatrix( &costs );
-            return argTempSol->GetSwappedVariant( swapI, swapJ );
+            unsigned int tabooFinish = iterationCount + tabooTenure;
+            problem->UpdateTabooTenures( bestNeigh, swapI, swapJ, tabooFinish, tabooTenures );
+            return bestNeigh;
         }
     }
 }
