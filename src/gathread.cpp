@@ -50,6 +50,8 @@ void mt::GAThread::CreateInitialPopulation() {
         population[ i ].second = problem->GenerateRandomSolution( problem->size );
         population[ i ].first = problem->GetOFV( population[ i ].second );
     }
+    std::sort( population.begin(), population.end(),
+            []( const dSol &a, const dSol &b ){ return a.first < b.first; } );
 }
 
 void mt::GAThread::Iteration() {
@@ -58,6 +60,10 @@ void mt::GAThread::Iteration() {
     Reproduce();
 
     Mutate();
+
+    // Re-sort the population for the next iteration
+    std::sort( population.begin(), population.end(),
+            []( const dSol &a, const dSol &b ){ return a.first < b.first; } );
 }
 
 void mt::GAThread::Mutate() {
@@ -65,5 +71,46 @@ void mt::GAThread::Mutate() {
 }
 
 void mt::GAThread::Reproduce() {
+    for ( unsigned long i = 0; i < reproductionQuantity; ++i ) {
+        std::pair< unsigned long, unsigned long > parentIndices;
+        SelectParentsMonteCarlo( parentIndices );
+    }
+}
 
+void mt::GAThread::SelectParentsMonteCarlo( std::pair< unsigned long , unsigned long > &argParentIndices ) {
+    std::vector< double > probabilities;
+    probabilities.resize( popSize, 0.0 );
+    double sum = 0.0;
+    // Use the inverted values as probabilities, since smaller values should be chosen more likely
+    for ( unsigned long i = 0; i < popSize; ++i ) {
+        probabilities[ i ] = 1 / population[ i ].first;
+        sum += probabilities[ i ];
+    }
+    std::random_device randomDevice;
+#ifdef Q_PROCESSOR_X86_64
+    std::mt19937_64 engine{ randomDevice() };
+#else
+    std::mt19937 engine{ randomDevice() };
+#endif
+    std::uniform_real_distribution<> distribution{ 0.0, sum };
+    // Turn the roulette wheel
+    double parentAValue = distribution( engine );
+    double parentBValue = distribution( engine );
+    // Find the corresponding solutions
+    double accum = 0.0;
+    for ( unsigned long i = 0; i < popSize; ++i ) {
+        accum += probabilities[ i ];
+        if ( accum > parentAValue ) {
+            argParentIndices.first = i;
+            break;
+        }
+    }
+    accum = 0.0;
+    for ( unsigned long i = 0; i < popSize; ++i ) {
+        accum += probabilities[ i ];
+        if ( accum > parentBValue ) {
+            argParentIndices.second = i;
+            break;
+        }
+    }
 }

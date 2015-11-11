@@ -43,6 +43,7 @@ private:
     void CreateInitialPopulation();
     void Mutate();
     void Reproduce();
+    void SelectParentsMonteCarlo( std::pair< unsigned long, unsigned long > &argParents );
 
     bool finished = false;
     const unsigned short index = 0;
