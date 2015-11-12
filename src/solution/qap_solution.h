@@ -41,9 +41,8 @@ public:
     QAPSolution( QAPSolution &&argQAPSolution );
     virtual ~QAPSolution();
 
-    static std::vector< unsigned long > *ComputeFromRandomKeys( const RandomKeySolution *argSol );
+    static QAPSolution *ComputeFromRandomKeys( const RandomKeySolution *argSol );
     virtual Solution *Copy() const;
-    static std::vector< unsigned long > *GenerateRandomSolution( const std::size_t &argSize );
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const;
     virtual QAPSolution *GetQAPSolution() const;
     virtual std::vector< double > *GetSolutionVectorCopy() const { return nullptr; }

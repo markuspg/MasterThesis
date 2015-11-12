@@ -72,7 +72,7 @@ std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const std:
 }
 
 mt::QAPSolution *mt::RandomKeySolution::GetQAPSolution() const {
-    return new QAPSolution{ QAPSolution::ComputeFromRandomKeys( this ) };
+    return QAPSolution::ComputeFromRandomKeys( this );
 }
 
 std::vector< double > *mt::RandomKeySolution::GetSolutionVectorCopy() const {

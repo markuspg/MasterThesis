@@ -21,8 +21,18 @@
 
 mt::QAPSolution::QAPSolution( const std::size_t &argSize ) :
     Solution{},
-    assignment{ GenerateRandomSolution( argSize ) }
+    assignment{ new std::vector< unsigned long > }
 {
+    assignment->resize( argSize, 0 );
+    std::iota( assignment->begin(), assignment->end(), 0 );
+
+    std::random_device randomDevice;
+#ifdef Q_PROCESSOR_X86_64
+    std::mt19937_64 engine{ randomDevice() };
+#else
+    std::mt19937 engine{ randomDevice() };
+#endif
+    std::shuffle( assignment->begin(), assignment->end(), engine );
 }
 
 mt::QAPSolution::QAPSolution( std::vector< unsigned long > * const argSolution ) :
@@ -48,7 +58,7 @@ mt::QAPSolution::~QAPSolution() {
     delete assignment;
 }
 
-std::vector< unsigned long > *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolution *argSol ) {
+mt::QAPSolution *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolution *argSol ) {
     // The solution to be converted and calculated
     std::vector< double > * solution = argSol->GetSolutionVectorCopy();
     // Stores the converted solution
@@ -65,27 +75,11 @@ std::vector< unsigned long > *mt::QAPSolution::ComputeFromRandomKeys( const mt::
     delete solution;
     solution = nullptr;
 
-    return tempAssignment;
+    return new mt::QAPSolution{ tempAssignment };
 }
 
 mt::Solution *mt::QAPSolution::Copy() const {
     return new mt::QAPSolution{ new std::vector< unsigned long >{ *assignment } };
-}
-
-std::vector< unsigned long > *mt::QAPSolution::GenerateRandomSolution( const std::size_t &argSize ) {
-    std::vector< unsigned long > * tempSolution = new std::vector< unsigned long >;
-    tempSolution->resize( argSize );
-    std::iota( tempSolution->begin(), tempSolution->end(), 0 );
-
-    std::random_device randomDevice;
-#ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() };
-#else
-    std::mt19937 engine{ randomDevice() };
-#endif
-    std::shuffle( tempSolution->begin(), tempSolution->end(), engine );
-
-    return tempSolution;
 }
 
 std::vector< unsigned long > *mt::QAPSolution::GetAssignmentVectorCopy() const {
