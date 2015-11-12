@@ -36,7 +36,7 @@ class QAPSolution : public Solution
 {
 public:
     QAPSolution( const std::size_t &argSize );
-    QAPSolution( const std::vector< unsigned long > * const argSolution );
+    QAPSolution( std::vector< unsigned long > * const argSolution );
     QAPSolution( const QAPSolution &argQAPSolution );
     QAPSolution( QAPSolution &&argQAPSolution );
     virtual ~QAPSolution();
@@ -52,7 +52,10 @@ public:
     virtual mt::Solution *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
                                                     const mt::Solution * const argOtherParent ) const;
 
-    const std::vector< unsigned long > * assignment = nullptr;
+    unsigned long &operator() ( const unsigned long &argIndex ) { return ( *assignment )[ argIndex ]; }
+
+private:
+    std::vector< unsigned long > * assignment = nullptr;
 };
 
 }

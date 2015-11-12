@@ -48,6 +48,7 @@ public:
     virtual mt::Solution *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
                                                     const mt::Solution * const argOtherParent ) const;
 
+private:
     const std::vector< double > * solutionVec = nullptr;
 };
 

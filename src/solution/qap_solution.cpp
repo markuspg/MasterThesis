@@ -25,7 +25,7 @@ mt::QAPSolution::QAPSolution( const std::size_t &argSize ) :
 {
 }
 
-mt::QAPSolution::QAPSolution( const std::vector< unsigned long > * const argSolution ) :
+mt::QAPSolution::QAPSolution( std::vector< unsigned long > * const argSolution ) :
     Solution{},
     assignment{ argSolution }
 {
@@ -50,7 +50,7 @@ mt::QAPSolution::~QAPSolution() {
 
 std::vector< unsigned long > *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolution *argSol ) {
     // The solution to be converted and calculated
-    std::vector< double > * solution = new std::vector< double >{ *argSol->solutionVec };
+    std::vector< double > * solution = argSol->GetSolutionVectorCopy();
     // Stores the converted solution
     std::vector< unsigned long > *tempAssignment = new std::vector< unsigned long >;
     tempAssignment->resize( solution->size() );
