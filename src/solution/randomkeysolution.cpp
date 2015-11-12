@@ -21,11 +21,24 @@
 
 mt::RandomKeySolution::RandomKeySolution( const std::size_t &argSize ) :
     Solution{},
-    solutionVec{ GenerateRandomSolution( argSize ) }
+    solutionVec{ new std::vector< double > }
 {
+    solutionVec->resize( argSize );
+
+    std::random_device randomDevice;
+#ifdef Q_PROCESSOR_X86_64
+    std::mt19937_64 engine{ randomDevice() };
+#else
+    std::mt19937 engine{ randomDevice() };
+#endif
+    std::uniform_real_distribution< double > distribution{ 0.0, 1.0 };
+
+    for ( std::size_t i = 0; i < argSize; ++i ) {
+        ( *solutionVec )[ i ] =  distribution( engine );
+    }
 }
 
-mt::RandomKeySolution::RandomKeySolution( const std::vector<double> * const argSolution ) :
+mt::RandomKeySolution::RandomKeySolution( std::vector<double> * const argSolution ) :
     Solution{},
     solutionVec{ argSolution }
 {
@@ -50,25 +63,6 @@ mt::RandomKeySolution::~RandomKeySolution() {
 
 mt::Solution *mt::RandomKeySolution::Copy() const {
     return new mt::RandomKeySolution{ new std::vector< double >{ *solutionVec } };
-}
-
-std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const std::size_t &argSize ) {
-    std::vector< double > * tempSolution = new std::vector< double >;
-    tempSolution->resize( argSize );
-
-    std::random_device randomDevice;
-#ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() };
-#else
-    std::mt19937 engine{ randomDevice() };
-#endif
-    std::uniform_real_distribution< double > distribution{ 0.0, 1.0 };
-
-    for ( std::size_t i = 0; i < argSize; ++i ) {
-        ( *tempSolution )[ i ] =  distribution( engine );
-    }
-
-    return tempSolution;
 }
 
 mt::QAPSolution *mt::RandomKeySolution::GetQAPSolution() const {

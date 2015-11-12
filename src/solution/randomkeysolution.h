@@ -33,13 +33,12 @@ class RandomKeySolution : public Solution
 {
 public:
     RandomKeySolution( const std::size_t &argSize );
-    RandomKeySolution( const std::vector< double > * const argSolution );
+    RandomKeySolution( std::vector< double > * const argSolution );
     RandomKeySolution( const RandomKeySolution &argRandomKeySolution );
     RandomKeySolution( RandomKeySolution &&argRandomKeySolution );
     ~RandomKeySolution();
 
     virtual Solution *Copy() const;
-    static std::vector< double > *GenerateRandomSolution( const std::size_t &argSize );
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const { return nullptr; }
     virtual mt::QAPSolution *GetQAPSolution() const;
     virtual std::vector< double > *GetSolutionVectorCopy() const;
@@ -48,8 +47,10 @@ public:
     virtual mt::Solution *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
                                                     const mt::Solution * const argOtherParent ) const;
 
+    double &operator() ( const unsigned long &argIndex ) { return ( *solutionVec )[ argIndex ]; }
+
 private:
-    const std::vector< double > * solutionVec = nullptr;
+    std::vector< double > * solutionVec = nullptr;
 };
 
 }
