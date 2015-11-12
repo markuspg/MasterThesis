@@ -35,9 +35,13 @@ public:
     virtual ~Solution();
 
     virtual Solution *Copy() const = 0;
+    virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const = 0;
     virtual mt::QAPSolution *GetQAPSolution() const = 0;
+    virtual std::vector< double > *GetSolutionVectorCopy() const = 0;
     virtual Solution *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                          const unsigned long &argSwapIndexJ ) const = 0;
+    virtual mt::Solution *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
+                                                    const mt::Solution * const argOtherParent ) const = 0;
 };
 
 }

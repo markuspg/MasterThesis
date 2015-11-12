@@ -75,6 +75,10 @@ mt::QAPSolution *mt::RandomKeySolution::GetQAPSolution() const {
     return new QAPSolution{ QAPSolution::ComputeFromRandomKeys( this ) };
 }
 
+std::vector< double > *mt::RandomKeySolution::GetSolutionVectorCopy() const {
+    return new std::vector< double >{ *solutionVec };
+}
+
 mt::Solution *mt::RandomKeySolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
                                                         const unsigned long &argSwapIndexJ ) const {
     std::vector< double > *temp = new std::vector< double >{ *solutionVec };
@@ -82,4 +86,26 @@ mt::Solution *mt::RandomKeySolution::GetSwappedVariant( const unsigned long &arg
     ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
     ( *temp )[ argSwapIndexJ ] = tempD;
     return new RandomKeySolution{ temp };
+}
+
+mt::Solution *mt::RandomKeySolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
+                                                               const mt::Solution
+                                                               * const argOtherParent ) const {
+    const unsigned long newSolutionVecSize = solutionVec->size();
+    std::vector< double > * const newSolutionVec = new std::vector< double >;
+    newSolutionVec->resize( newSolutionVecSize, 0.0 );
+
+    std::vector< double > *otherParentsAssignment = argOtherParent->GetSolutionVectorCopy();
+
+    for ( unsigned long i = 0; i < newSolutionVecSize; ++i ) {
+        if ( i < argCrossoverPoint ) {
+            newSolutionVec->at( i ) = ( *solutionVec )[ i ];
+        } else {
+            newSolutionVec->at( i ) = ( *otherParentsAssignment )[ i ];
+        }
+    }
+
+    delete otherParentsAssignment;
+
+    return new mt::RandomKeySolution{ newSolutionVec };
 }

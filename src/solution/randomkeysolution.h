@@ -40,9 +40,13 @@ public:
 
     virtual Solution *Copy() const;
     static std::vector< double > *GenerateRandomSolution( const std::size_t &argSize );
+    virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const { return nullptr; }
     virtual mt::QAPSolution *GetQAPSolution() const;
+    virtual std::vector< double > *GetSolutionVectorCopy() const;
     virtual Solution *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                          const unsigned long &argSwapIndexJ ) const;
+    virtual mt::Solution *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
+                                                    const mt::Solution * const argOtherParent ) const;
 
     const std::vector< double > * solutionVec = nullptr;
 };

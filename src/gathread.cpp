@@ -74,6 +74,25 @@ void mt::GAThread::Reproduce() {
     for ( unsigned long i = 0; i < reproductionQuantity; ++i ) {
         std::pair< unsigned long, unsigned long > parentIndices;
         SelectParentsMonteCarlo( parentIndices );
+
+        std::random_device randomDevice;
+#ifdef Q_PROCESSOR_X86_64
+        std::mt19937_64 engine{ randomDevice() };
+#else
+        std::mt19937 engine{ randomDevice() };
+#endif
+        std::uniform_int_distribution<> distribution{ 0, static_cast< int >( problem->size ) };
+        const unsigned long crossoverPoint = distribution( engine );
+        mt::Solution *childA = population[ parentIndices.first ].second->ReproduceWithOtherParent(
+                crossoverPoint, population[ parentIndices.second ].second );
+        mt::Solution *childB = population[ parentIndices.second ].second->ReproduceWithOtherParent(
+                crossoverPoint, population[ parentIndices.first ].second );
+        delete population[ parentIndices.first ].second;
+        population[ parentIndices.first ].second = childA;
+        population[ parentIndices.first ].first = problem->GetOFV( population[ parentIndices.first ].second );
+        delete population[ parentIndices.second ].second;
+        population[ parentIndices.second ].second = childB;
+        population[ parentIndices.second ].first = problem->GetOFV( population[ parentIndices.second ].second );
     }
 }
 

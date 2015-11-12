@@ -44,9 +44,13 @@ public:
     static std::vector< unsigned long > *ComputeFromRandomKeys( const RandomKeySolution *argSol );
     virtual Solution *Copy() const;
     static std::vector< unsigned long > *GenerateRandomSolution( const std::size_t &argSize );
+    virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const;
     virtual QAPSolution *GetQAPSolution() const;
+    virtual std::vector< double > *GetSolutionVectorCopy() const { return nullptr; }
     virtual Solution *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                          const unsigned long &argSwapIndexJ ) const;
+    virtual mt::Solution *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
+                                                    const mt::Solution * const argOtherParent ) const;
 
     const std::vector< unsigned long > * assignment = nullptr;
 };
