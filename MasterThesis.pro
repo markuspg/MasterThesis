@@ -20,6 +20,7 @@ SOURCES += src/main.cpp \
     src/qap.cpp \
     src/salbp.cpp \
     src/settings.cpp \
+    src/task.cpp \
     src/tsreferenceset.cpp \
     src/tsthread.cpp \
     src/solution/qap_solution.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     src/qap.h \
     src/salbp.h \
     src/settings.h \
+    src/task.h \
     src/tsreferenceset.h \
     src/tsthread.h \
     src/solution/qap_solution.h \

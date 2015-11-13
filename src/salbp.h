@@ -22,6 +22,7 @@
 
 #include "problem.h"
 #include "solution/solution.h"
+#include "task.h"
 
 namespace mt {
 
@@ -38,6 +39,9 @@ public:
                                      const long &argSwapI, const long &argSwapJ,
                                      const unsigned long &argTabooTenure,
                                      mt::Matrix< unsigned long > &argTTMatrix ) const override;
+
+private:
+    std::vector< Task* > tasks;
 };
 
 }
