@@ -42,14 +42,14 @@ public:
     virtual ~QAPSolution();
 
     static QAPSolution *ComputeFromRandomKeys( const RandomKeySolution *argSol );
-    virtual Solution *Copy() const;
+    virtual SolutionBase *Copy() const;
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const;
-    virtual QAPSolution *GetQAPSolution() const;
+    virtual SolutionBase *GetQAPSolution() const;
     virtual std::vector< double > *GetSolutionVectorCopy() const { return nullptr; }
-    virtual Solution *GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                         const unsigned long &argSwapIndexJ ) const;
-    virtual mt::Solution *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
-                                                    const mt::Solution * const argOtherParent ) const;
+    virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                             const unsigned long &argSwapIndexJ ) const;
+    virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
+                                                    const SolutionBase * const argOtherParent ) const;
 
     unsigned long &operator() ( const unsigned long &argIndex ) { return ( *assignment )[ argIndex ]; }
 

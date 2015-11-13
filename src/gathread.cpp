@@ -83,9 +83,9 @@ void mt::GAThread::Reproduce() {
 #endif
         std::uniform_int_distribution<> distribution{ 0, static_cast< int >( problem->size ) };
         const unsigned long crossoverPoint = distribution( engine );
-        mt::Solution *childA = population[ parentIndices.first ].second->ReproduceWithOtherParent(
+        mt::SolutionBase *childA = population[ parentIndices.first ].second->ReproduceWithOtherParent(
                 crossoverPoint, population[ parentIndices.second ].second );
-        mt::Solution *childB = population[ parentIndices.second ].second->ReproduceWithOtherParent(
+        mt::SolutionBase *childB = population[ parentIndices.second ].second->ReproduceWithOtherParent(
                 crossoverPoint, population[ parentIndices.first ].second );
         delete population[ parentIndices.first ].second;
         population[ parentIndices.first ].second = childA;

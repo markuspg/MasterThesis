@@ -38,14 +38,14 @@ public:
     RandomKeySolution( RandomKeySolution &&argRandomKeySolution );
     ~RandomKeySolution();
 
-    virtual Solution *Copy() const;
+    virtual SolutionBase *Copy() const;
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const { return nullptr; }
-    virtual mt::QAPSolution *GetQAPSolution() const;
+    virtual mt::SolutionBase *GetQAPSolution() const;
     virtual std::vector< double > *GetSolutionVectorCopy() const;
-    virtual Solution *GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                         const unsigned long &argSwapIndexJ ) const;
-    virtual mt::Solution *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
-                                                    const mt::Solution * const argOtherParent ) const;
+    virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                             const unsigned long &argSwapIndexJ ) const;
+    virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
+                                                    const SolutionBase * const argOtherParent ) const;
 
     double &operator() ( const unsigned long &argIndex ) { return ( *solutionVec )[ argIndex ]; }
 

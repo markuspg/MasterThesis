@@ -39,8 +39,8 @@ public:
     ~QAP();
 
     virtual mt::Solution *GenerateRandomSolution( const std::size_t &argSize ) const;
-    virtual double GetOFV( const mt::Solution * const argSolution ) const;
-    virtual void UpdateTabooTenures( const mt::Solution * const argNewSolution,
+    virtual double GetOFV( const SolutionBase * const argSolution ) const;
+    virtual void UpdateTabooTenures( const SolutionBase * const argNewSolution,
                                      const long &argSwapI, const long &argSwapJ,
                                      const unsigned long &argTabooTenure,
                                      mt::Matrix< unsigned long > &argTTMatrix ) const;

@@ -75,7 +75,7 @@ void mt::TSReferenceSet::RotateSolutions() {
 }
 
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
-                                      mt::Solution *argSolution ) {
+                                      mt::SolutionBase *argSolution ) {
     if ( argSolution == solutions[ argIndex ] ) {
         return;
     }

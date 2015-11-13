@@ -78,7 +78,7 @@ mt::QAPSolution *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolu
     return new mt::QAPSolution{ tempAssignment };
 }
 
-mt::Solution *mt::QAPSolution::Copy() const {
+mt::SolutionBase *mt::QAPSolution::Copy() const {
     return new mt::QAPSolution{ new std::vector< unsigned long >{ *assignment } };
 }
 
@@ -86,12 +86,12 @@ std::vector< unsigned long > *mt::QAPSolution::GetAssignmentVectorCopy() const {
     return new std::vector< unsigned long >{ *assignment };
 }
 
-mt::QAPSolution *mt::QAPSolution::GetQAPSolution() const {
-    return dynamic_cast< mt::QAPSolution* >( Copy() );
+mt::SolutionBase *mt::QAPSolution::GetQAPSolution() const {
+    return Copy();
 }
 
-mt::Solution *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                                  const unsigned long &argSwapIndexJ ) const {
+mt::SolutionBase *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                                      const unsigned long &argSwapIndexJ ) const {
     std::vector< unsigned long > *temp = new std::vector< unsigned long >{ *assignment };
     double tempD = ( *temp )[ argSwapIndexI ];
     ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
@@ -99,8 +99,8 @@ mt::Solution *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSwapIn
     return new QAPSolution{ temp };
 }
 
-mt::Solution *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
-                                                         const mt::Solution * const argOtherParent ) const {
+mt::SolutionBase *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
+            const mt::SolutionBase * const argOtherParent ) const {
     const unsigned long newAssignmentSize = assignment->size();
     std::vector< unsigned long > * const newAssignment = new std::vector< unsigned long >;
     newAssignment->resize( newAssignmentSize, 0 );

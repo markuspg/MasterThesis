@@ -17,17 +17,14 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "solution.h"
+#include "solutionbase.h"
 
-mt::Solution::Solution() :
-    SolutionBase{}
-{
+mt::SolutionBase::SolutionBase() {
 }
 
-mt::Solution::Solution( const Solution &argSolution ) :
-    SolutionBase{ argSolution }
-{
+mt::SolutionBase::SolutionBase( const SolutionBase &argSolutionBase ) {
+    ( void )argSolutionBase;
 }
 
-mt::Solution::~Solution() {
+mt::SolutionBase::~SolutionBase() {
 }

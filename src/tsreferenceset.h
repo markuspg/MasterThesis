@@ -23,7 +23,7 @@
 #include "helper_functions.h"
 #include "matrix.h"
 #include "problem.h"
-#include "solution/solution.h"
+#include "solution/solutionbase.h"
 
 #include <algorithm>
 #include <iostream>
@@ -41,14 +41,14 @@ public:
     double GetGlobalMinimumSolV() const { return *std::min_element( bestSolutionValues.begin(),
                                                                     bestSolutionValues.end() ); }
     unsigned int GetIterationCount() const { return iterationCounter; }
-    Solution *GetStartSolution( const unsigned short &argIndex ) const
+    SolutionBase *GetStartSolution( const unsigned short &argIndex ) const
         { return solutions[ argIndex ]; }
     double GetStartSolutionValue( const unsigned short &argIndex ) const
         { return solutionValues[ argIndex ]; }
     void PromoteBestSolution( const unsigned short &argIndex );
     void ResetIterationCounter() { iterationCounter = 0; }
     void RotateSolutions();
-    void SetSolution( const unsigned short &argIndex, Solution *argSolution );
+    void SetSolution( const unsigned short &argIndex, SolutionBase *argSolution );
     void SetSolutionValue( const unsigned short &argIndex, const double &argSolutionValue )
         { solutionValues[ argIndex ] = argSolutionValue; }
 
@@ -57,12 +57,12 @@ public:
     const mt::Problem * const problem;
 
 private:
-    std::vector< Solution* > bestSolutions;
+    std::vector< SolutionBase* > bestSolutions;
     std::vector< double > bestSolutionValues;
-    std::unique_ptr< mt::Solution > globalBestSolution = nullptr;
+    std::unique_ptr< SolutionBase > globalBestSolution = nullptr;
     double globalBestSolutionV = std::numeric_limits< double >::max();
     unsigned int iterationCounter = 0;
-    std::vector< Solution* > solutions;
+    std::vector< SolutionBase* > solutions;
     std::vector< double > solutionValues;
     const unsigned short &tsInstanceQuantity;
     bool updatedGlobalBestSolution = false;

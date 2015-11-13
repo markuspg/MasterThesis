@@ -26,7 +26,7 @@
 #include <iostream>
 #include <mutex>
 
-typedef std::pair< double, mt::Solution* > dSol;
+typedef std::pair< double, mt::SolutionBase* > dSol;
 
 namespace mt {
 
@@ -36,8 +36,8 @@ public:
               const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet );
 
     void CleanUpMatrix( mt::Matrix< dSol > *argMatrix ) const;
-    mt::Solution *GetBestNeigh( double &argBestNeighV,
-                                mt::Solution *argTempSol );
+    SolutionBase *GetBestNeigh( double &argBestNeighV,
+                                SolutionBase *argTempSol );
     bool IsFinished() const { return finished; }
     void Iteration();
     void PrepareSecondTSRun();

@@ -40,15 +40,15 @@ void mt::TSThread::CleanUpMatrix( mt::Matrix< dSol > *argMatrix ) const {
     }
 }
 
-mt::Solution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
-                                          mt::Solution *argTempSol ) {
+mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
+                                              mt::SolutionBase *argTempSol ) {
     mt::Matrix< dSol >costs =
             { referenceSet.problem->size, dSol{ std::numeric_limits< double >::max(), nullptr } };
     // Iterate over all lines
     for ( unsigned long i = 0; i < referenceSet.problem->size; ++i ) {
         // Iterate over all columns above the main diagonal (because swaps are symmetrical)
         for ( unsigned long j = i + 1; j < referenceSet.problem->size; ++j ) {
-            mt::Solution *tempSolution =  argTempSol->GetSwappedVariant( i, j );
+            mt::SolutionBase *tempSolution =  argTempSol->GetSwappedVariant( i, j );
             costs( i, j ) = dSol{ referenceSet.problem->GetOFV( tempSolution ), tempSolution };
         }
     }
@@ -67,7 +67,7 @@ mt::Solution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
             costs( swapI, swapJ ).first = std::numeric_limits< double >::max();
         } else {
             // Taillard's taboo evaluation => constant time
-            mt::Solution *bestNeigh = argTempSol->GetSwappedVariant( swapI, swapJ );
+            mt::SolutionBase *bestNeigh = argTempSol->GetSwappedVariant( swapI, swapJ );
             CleanUpMatrix( &costs );
             unsigned int tabooFinish = iterationCount + tabooTenure;
             problem->UpdateTabooTenures( bestNeigh, swapI, swapJ, tabooFinish, tabooTenures );
@@ -78,7 +78,7 @@ mt::Solution *mt::TSThread::GetBestNeigh( double &argBestNeighV,
 
 void mt::TSThread::Iteration() {
     ++iterationCount;
-    mt::Solution *tempSol = nullptr;
+    mt::SolutionBase *tempSol = nullptr;
     double tempSolV = 0.0;
     {
         std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
@@ -87,7 +87,7 @@ void mt::TSThread::Iteration() {
     }
 
     double bestNeighV = std::numeric_limits< double >::max();
-    mt::Solution *bestNeigh = GetBestNeigh( bestNeighV, tempSol );
+    mt::SolutionBase *bestNeigh = GetBestNeigh( bestNeighV, tempSol );
 
     if ( !bestNeigh ) {
         ++failures;

@@ -26,7 +26,7 @@
 #include <mutex>
 #include <vector>
 
-typedef std::pair< double, mt::Solution* > dSol;
+typedef std::pair< double, mt::SolutionBase* > dSol;
 
 namespace mt {
 
