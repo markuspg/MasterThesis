@@ -39,9 +39,13 @@ int main( int argc, char *argv[] ) {
         inputFile.open( *cit, std::ios::in );
         for ( std::string line; std::getline( inputFile, line ); ) {
             const mt::Problem * const problem = mt::LoadProblem( line );
-            mt::Analyzer analyzer{ problem };
-            analyzer.Analyze();
-            delete problem;
+            if ( problem ) {
+                mt::Analyzer analyzer{ problem };
+                analyzer.Analyze();
+                delete problem;
+            } else {
+                std::cout << "  Unknown problem type encountered, skipping line " << line << std::endl;
+            }
         }
     }
     
