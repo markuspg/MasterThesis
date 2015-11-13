@@ -27,7 +27,7 @@
 
 namespace mt {
 
-class Settings {
+class Settings final {
 public:
     Settings( const unsigned short &argGAInstances, const unsigned int &argMaxFailures,
               const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,

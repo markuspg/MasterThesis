@@ -32,7 +32,7 @@ namespace mt {
 
 class RandomKeySolution;
 
-class QAPSolution : public Solution< unsigned long >
+class QAPSolution final : public Solution< unsigned long >
 {
 public:
     QAPSolution( const std::size_t &argSize );
@@ -42,13 +42,13 @@ public:
     virtual ~QAPSolution();
 
     static QAPSolution *ComputeFromRandomKeys( const RandomKeySolution *argSol );
-    virtual SolutionBase *Copy() const;
-    virtual std::vector< unsigned long > *GenerateRandomSolution( const std::size_t &argSize ) const;
-    virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const;
-    virtual SolutionBase *GetQAPSolution() const;
-    virtual std::vector< double > *GetSolutionVectorCopy() const { return nullptr; }
+    virtual SolutionBase *Copy() const override;
+    virtual std::vector< unsigned long > *GenerateRandomSolution( const std::size_t &argSize ) const override;
+    virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const override;
+    virtual QAPSolution *GetQAPSolution() const override;
+    virtual std::vector< double > *GetSolutionVectorCopy() const override { return nullptr; }
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                             const unsigned long &argSwapIndexJ ) const;
+                                             const unsigned long &argSwapIndexJ ) const override;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
                                                     const SolutionBase * const argOtherParent ) const;
 };

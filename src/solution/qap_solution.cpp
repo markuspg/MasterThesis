@@ -86,8 +86,8 @@ std::vector< unsigned long > *mt::QAPSolution::GetAssignmentVectorCopy() const {
     return new std::vector< unsigned long >{ *solutionVec };
 }
 
-mt::SolutionBase *mt::QAPSolution::GetQAPSolution() const {
-    return Copy();
+mt::QAPSolution *mt::QAPSolution::GetQAPSolution() const {
+    return dynamic_cast< mt::QAPSolution* >( Copy() );
 }
 
 mt::SolutionBase *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,

@@ -36,7 +36,7 @@ extern mt::Settings *settings;
 
 namespace mt {
 
-class Analyzer {
+class Analyzer final {
 public:
     Analyzer( const mt::Problem *argProblem );
     Analyzer( const Analyzer &argAnalyzer ) = delete;

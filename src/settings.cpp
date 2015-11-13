@@ -43,7 +43,7 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const unsigned int
               << "\n   outputFile:\t\t\t" << *outputFile
               << "\n   problemFiles:\t\t" << CreateStringOfProblemFiles()
               << "\n   randomizedTabooTenures:\t" << *randomizedTabooTenures
-              << "\n   randomKeys:\t" << *randomKeys
+              << "\n   randomKeys:\t\t\t" << *randomKeys
               << "\n   tabooTenureDeviation:\t" << *tabooTenureDeviation
               << "\n   tabooTenuresFac:\t\t" << *tabooTenuresFac
               << "\n   tsInstances:\t\t\t" << *tsInstances << std::endl;

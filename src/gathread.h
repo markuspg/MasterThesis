@@ -30,7 +30,7 @@ typedef std::pair< double, mt::SolutionBase* > dSol;
 
 namespace mt {
 
-class GAThread {
+class GAThread final {
 public:
     GAThread( const unsigned short &argIndex, std::mutex &argMutex,
               const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet );

@@ -30,7 +30,7 @@
 namespace mt {
 
 template< typename T>
-class Matrix
+class Matrix final
 {
 public:
     Matrix() = delete;

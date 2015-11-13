@@ -64,7 +64,7 @@ std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const std:
     return tempVec;
 }
 
-mt::SolutionBase *mt::RandomKeySolution::GetQAPSolution() const {
+mt::QAPSolution *mt::RandomKeySolution::GetQAPSolution() const {
     return QAPSolution::ComputeFromRandomKeys( this );
 }
 

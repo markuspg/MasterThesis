@@ -31,19 +31,19 @@
 
 namespace mt {
 
-class QAP : public Problem {
+class QAP final : public Problem {
 public:
     QAP( const std::vector<std::string> &argTokens );
     QAP( const Problem &argProblem ) = delete;
     QAP( Problem &&argProblem ) = delete;
     ~QAP();
 
-    virtual SolutionBase *GenerateRandomSolution( const std::size_t &argSize ) const;
-    virtual double GetOFV( const SolutionBase * const argSolution ) const;
+    virtual SolutionBase *GenerateRandomSolution( const std::size_t &argSize ) const override;
+    virtual double GetOFV( const SolutionBase * const argSolution ) const override;
     virtual void UpdateTabooTenures( const SolutionBase * const argNewSolution,
                                      const long &argSwapI, const long &argSwapJ,
                                      const unsigned long &argTabooTenure,
-                                     mt::Matrix< unsigned long > &argTTMatrix ) const;
+                                     mt::Matrix< unsigned long > &argTTMatrix ) const override;
 
     const mt::Matrix< int > distances;  //! From location to location
     const mt::Matrix< int > flows;      //! From unit to unit

@@ -32,7 +32,7 @@
 
 namespace mt {
 
-class TSReferenceSet {
+class TSReferenceSet final {
 public:
     TSReferenceSet( const Problem * const argProblem,
                     const unsigned short &argTSInstanceAmount );
