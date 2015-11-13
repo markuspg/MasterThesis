@@ -20,10 +20,35 @@
 #include "randomkeysolution.h"
 
 mt::RandomKeySolution::RandomKeySolution( const std::size_t &argSize ) :
-    Solution{},
-    solutionVec{ new std::vector< double > }
+    Solution{ GenerateRandomSolution( argSize ) }
 {
-    solutionVec->resize( argSize );
+}
+
+mt::RandomKeySolution::RandomKeySolution( std::vector<double> * const argSolution ) :
+    Solution{ argSolution }
+{
+}
+
+mt::RandomKeySolution::RandomKeySolution( const mt::RandomKeySolution &argRandomKeySolution ) :
+    Solution{ argRandomKeySolution }
+{
+}
+
+mt::RandomKeySolution::RandomKeySolution( mt::RandomKeySolution &&argRandomKeySolution ) :
+    Solution{ argRandomKeySolution }
+{
+}
+
+mt::RandomKeySolution::~RandomKeySolution() {
+}
+
+mt::SolutionBase *mt::RandomKeySolution::Copy() const {
+    return new mt::RandomKeySolution{ new std::vector< double >{ *solutionVec } };
+}
+
+std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const std::size_t &argSize ) const {
+    std::vector< double > *tempVec = new std::vector< double >;
+    tempVec->resize( argSize, 0.0 );
 
     std::random_device randomDevice;
 #ifdef Q_PROCESSOR_X86_64
@@ -31,38 +56,12 @@ mt::RandomKeySolution::RandomKeySolution( const std::size_t &argSize ) :
 #else
     std::mt19937 engine{ randomDevice() };
 #endif
-    std::uniform_real_distribution< double > distribution{ 0.0, 1.0 };
-
-    for ( std::size_t i = 0; i < argSize; ++i ) {
-        ( *solutionVec )[ i ] =  distribution( engine );
+    std::uniform_real_distribution<> distribution{ 0.0, 1.0 };
+    for ( unsigned long i = 0; i < argSize; ++i ) {
+        ( *tempVec )[ i ] = distribution( engine );
     }
-}
 
-mt::RandomKeySolution::RandomKeySolution( std::vector<double> * const argSolution ) :
-    Solution{},
-    solutionVec{ argSolution }
-{
-}
-
-mt::RandomKeySolution::RandomKeySolution( const mt::RandomKeySolution &argRandomKeySolution ) :
-    Solution{ argRandomKeySolution },
-    solutionVec{ new std::vector< double >{ *argRandomKeySolution.solutionVec } }
-{
-}
-
-mt::RandomKeySolution::RandomKeySolution( mt::RandomKeySolution &&argRandomKeySolution ) :
-    Solution{},
-    solutionVec{ argRandomKeySolution.solutionVec }
-{
-    argRandomKeySolution.solutionVec = nullptr;
-}
-
-mt::RandomKeySolution::~RandomKeySolution() {
-    delete solutionVec;
-}
-
-mt::SolutionBase *mt::RandomKeySolution::Copy() const {
-    return new mt::RandomKeySolution{ new std::vector< double >{ *solutionVec } };
+    return tempVec;
 }
 
 mt::SolutionBase *mt::RandomKeySolution::GetQAPSolution() const {

@@ -43,6 +43,7 @@ public:
 
     static QAPSolution *ComputeFromRandomKeys( const RandomKeySolution *argSol );
     virtual SolutionBase *Copy() const;
+    virtual std::vector< unsigned long > *GenerateRandomSolution( const std::size_t &argSize ) const;
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const;
     virtual SolutionBase *GetQAPSolution() const;
     virtual std::vector< double > *GetSolutionVectorCopy() const { return nullptr; }
@@ -50,11 +51,6 @@ public:
                                              const unsigned long &argSwapIndexJ ) const;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
                                                     const SolutionBase * const argOtherParent ) const;
-
-    unsigned long &operator() ( const unsigned long &argIndex ) { return ( *assignment )[ argIndex ]; }
-
-private:
-    std::vector< unsigned long > * assignment = nullptr;
 };
 
 }

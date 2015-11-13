@@ -34,8 +34,16 @@ class Solution : public SolutionBase
 public:
     Solution();
     Solution( const Solution &argSolution );
-    Solution( Solution &&argSolution ) = delete;
+    Solution( Solution &&argSolution );
+    Solution( std::vector< T > * const argSolution );
     virtual ~Solution();
+
+    T& operator() ( const unsigned long &argIndex ) { return ( *solutionVec )[ argIndex ]; }
+
+    virtual std::vector< T > *GenerateRandomSolution( const std::size_t &argSize ) const = 0;
+
+protected:
+    std::vector< T > * solutionVec = nullptr;
 };
 
 }
@@ -48,12 +56,29 @@ mt::Solution< T >::Solution() :
 
 template < typename T >
 mt::Solution< T >::Solution( const Solution &argSolution ) :
-    SolutionBase{ argSolution }
+    SolutionBase{ argSolution },
+    solutionVec{ new std::vector< T >{ *argSolution.solutionVec } }
+{
+}
+
+template < typename T >
+mt::Solution< T >::Solution( Solution &&argSolution ) :
+    SolutionBase{ argSolution },
+    solutionVec{ argSolution.solutionVec }
+{
+    argSolution.solutionVec = nullptr;
+}
+
+template < typename T >
+mt::Solution< T >::Solution( std::vector< T > * const argSolution ) :
+    SolutionBase{},
+    solutionVec{ argSolution }
 {
 }
 
 template < typename T >
 mt::Solution< T >::~Solution() {
+    delete solutionVec;
 }
 
 #endif // SOLUTION_H

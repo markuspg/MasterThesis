@@ -20,42 +20,26 @@
 #include "qap_solution.h"
 
 mt::QAPSolution::QAPSolution( const std::size_t &argSize ) :
-    Solution{},
-    assignment{ new std::vector< unsigned long > }
+    Solution{ GenerateRandomSolution( argSize ) }
 {
-    assignment->resize( argSize, 0 );
-    std::iota( assignment->begin(), assignment->end(), 0 );
-
-    std::random_device randomDevice;
-#ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() };
-#else
-    std::mt19937 engine{ randomDevice() };
-#endif
-    std::shuffle( assignment->begin(), assignment->end(), engine );
 }
 
 mt::QAPSolution::QAPSolution( std::vector< unsigned long > * const argSolution ) :
-    Solution{},
-    assignment{ argSolution }
+    Solution{ argSolution }
 {
 }
 
 mt::QAPSolution::QAPSolution( const mt::QAPSolution &argQAPSolution ) :
-    Solution{ argQAPSolution },
-    assignment{ new std::vector< unsigned long >{ *argQAPSolution.assignment } }
+    Solution{ argQAPSolution }
 {
 }
 
 mt::QAPSolution::QAPSolution( mt::QAPSolution &&argQAPSolution ) :
-    Solution{},
-    assignment{ argQAPSolution.assignment }
+    Solution{ argQAPSolution }
 {
-    argQAPSolution.assignment = nullptr;
 }
 
 mt::QAPSolution::~QAPSolution() {
-    delete assignment;
 }
 
 mt::QAPSolution *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolution *argSol ) {
@@ -79,11 +63,27 @@ mt::QAPSolution *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolu
 }
 
 mt::SolutionBase *mt::QAPSolution::Copy() const {
-    return new mt::QAPSolution{ new std::vector< unsigned long >{ *assignment } };
+    return new mt::QAPSolution{ new std::vector< unsigned long >{ *solutionVec } };
+}
+
+std::vector< unsigned long > *mt::QAPSolution::GenerateRandomSolution( const std::size_t &argSize ) const {
+    std::vector< unsigned long > *tempVec = new std::vector< unsigned long >;
+    tempVec->resize( argSize, 0 );
+    std::iota( tempVec->begin(), tempVec->end(), 0 );
+
+    std::random_device randomDevice;
+#ifdef Q_PROCESSOR_X86_64
+    std::mt19937_64 engine{ randomDevice() };
+#else
+    std::mt19937 engine{ randomDevice() };
+#endif
+    std::shuffle( tempVec->begin(), tempVec->end(), engine );
+
+    return tempVec;
 }
 
 std::vector< unsigned long > *mt::QAPSolution::GetAssignmentVectorCopy() const {
-    return new std::vector< unsigned long >{ *assignment };
+    return new std::vector< unsigned long >{ *solutionVec };
 }
 
 mt::SolutionBase *mt::QAPSolution::GetQAPSolution() const {
@@ -92,7 +92,7 @@ mt::SolutionBase *mt::QAPSolution::GetQAPSolution() const {
 
 mt::SolutionBase *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
                                                       const unsigned long &argSwapIndexJ ) const {
-    std::vector< unsigned long > *temp = new std::vector< unsigned long >{ *assignment };
+    std::vector< unsigned long > *temp = new std::vector< unsigned long >{ *solutionVec };
     double tempD = ( *temp )[ argSwapIndexI ];
     ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
     ( *temp )[ argSwapIndexJ ] = tempD;
@@ -101,7 +101,7 @@ mt::SolutionBase *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSw
 
 mt::SolutionBase *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const mt::SolutionBase * const argOtherParent ) const {
-    const unsigned long newAssignmentSize = assignment->size();
+    const unsigned long newAssignmentSize = solutionVec->size();
     std::vector< unsigned long > * const newAssignment = new std::vector< unsigned long >;
     newAssignment->resize( newAssignmentSize, 0 );
 
@@ -109,7 +109,7 @@ mt::SolutionBase *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long
 
     for ( unsigned long i = 0; i < newAssignmentSize; ++i ) {
         if ( i < argCrossoverPoint ) {
-            newAssignment->at( i ) = ( *assignment )[ i ];
+            newAssignment->at( i ) = ( *solutionVec )[ i ];
         } else {
             newAssignment->at( i ) = ( *otherParentsAssignment )[ i ];
         }

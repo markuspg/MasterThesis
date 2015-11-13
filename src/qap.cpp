@@ -40,7 +40,7 @@ mt::SolutionBase *mt::QAP::GenerateRandomSolution( const std::size_t &argSize ) 
 
 double mt::QAP::GetOFV( const mt::SolutionBase * const argSolution ) const {
     // Stores the converted solution
-    mt::QAPSolution * const tempSol = dynamic_cast< mt::QAPSolution* >( argSolution->Copy() );
+    mt::QAPSolution * const tempSol = dynamic_cast< mt::QAPSolution* >( argSolution->GetQAPSolution() );
     const std::vector< unsigned long > * const assignmentVec = tempSol->GetAssignmentVectorCopy();
     delete tempSol;
 
@@ -61,7 +61,7 @@ void mt::QAP::UpdateTabooTenures( const mt::SolutionBase * const argNewSolution,
                                   const long &argSwapI, const long &argSwapJ,
                                   const unsigned long &argTabooTenure,
                                   mt::Matrix<unsigned long> &argTTMatrix ) const {
-    mt::QAPSolution * const tempSol = dynamic_cast< mt::QAPSolution* >( argNewSolution->Copy() );
+    mt::QAPSolution * const tempSol = dynamic_cast< mt::QAPSolution* >( argNewSolution->GetQAPSolution() );
     // Forbid the  re-assignment of the swapped units to the locations
     argTTMatrix( ( *tempSol )( argSwapI ), argSwapI ) = argTabooTenure;
     argTTMatrix( ( *tempSol )( argSwapJ ), argSwapJ ) = argTabooTenure;
