@@ -38,7 +38,7 @@ public:
     QAP( Problem &&argProblem ) = delete;
     ~QAP();
 
-    virtual mt::Solution *GenerateRandomSolution( const std::size_t &argSize ) const;
+    virtual SolutionBase *GenerateRandomSolution( const std::size_t &argSize ) const;
     virtual double GetOFV( const SolutionBase * const argSolution ) const;
     virtual void UpdateTabooTenures( const SolutionBase * const argNewSolution,
                                      const long &argSwapI, const long &argSwapJ,

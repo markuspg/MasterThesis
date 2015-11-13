@@ -29,14 +29,14 @@
 
 namespace mt {
 
-class RandomKeySolution : public Solution
+class RandomKeySolution : public Solution< double >
 {
 public:
     RandomKeySolution( const std::size_t &argSize );
     RandomKeySolution( std::vector< double > * const argSolution );
     RandomKeySolution( const RandomKeySolution &argRandomKeySolution );
     RandomKeySolution( RandomKeySolution &&argRandomKeySolution );
-    ~RandomKeySolution();
+    virtual ~RandomKeySolution();
 
     virtual SolutionBase *Copy() const;
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const { return nullptr; }

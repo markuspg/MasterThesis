@@ -30,7 +30,7 @@ mt::QAP::QAP( const std::vector<std::string> &argTokens ) :
 mt::QAP::~QAP() {
 }
 
-mt::Solution *mt::QAP::GenerateRandomSolution( const std::size_t &argSize ) const {
+mt::SolutionBase *mt::QAP::GenerateRandomSolution( const std::size_t &argSize ) const {
     if ( *settings->randomKeys ) {
         return new mt::RandomKeySolution{ argSize };
     } else {

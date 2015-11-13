@@ -28,6 +28,7 @@ namespace mt {
 
 class QAPSolution;
 
+template < typename T >
 class Solution : public SolutionBase
 {
 public:
@@ -37,6 +38,22 @@ public:
     virtual ~Solution();
 };
 
+}
+
+template < typename T >
+mt::Solution< T >::Solution() :
+    SolutionBase{}
+{
+}
+
+template < typename T >
+mt::Solution< T >::Solution( const Solution &argSolution ) :
+    SolutionBase{ argSolution }
+{
+}
+
+template < typename T >
+mt::Solution< T >::~Solution() {
 }
 
 #endif // SOLUTION_H

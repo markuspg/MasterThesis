@@ -18,16 +18,3 @@
  */
 
 #include "solution.h"
-
-mt::Solution::Solution() :
-    SolutionBase{}
-{
-}
-
-mt::Solution::Solution( const Solution &argSolution ) :
-    SolutionBase{ argSolution }
-{
-}
-
-mt::Solution::~Solution() {
-}

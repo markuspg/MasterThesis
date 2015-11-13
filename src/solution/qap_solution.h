@@ -32,7 +32,7 @@ namespace mt {
 
 class RandomKeySolution;
 
-class QAPSolution : public Solution
+class QAPSolution : public Solution< unsigned long >
 {
 public:
     QAPSolution( const std::size_t &argSize );
