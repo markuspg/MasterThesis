@@ -20,11 +20,38 @@
 #include "salbp.h"
 
 mt::SALBP::SALBP( const std::vector<std::string> &argTokens ) :
-    Problem{ problemTypes_t::SALBP, argTokens }
+    Problem{ problemTypes_t::SALBP, argTokens },
+    tasks{ size, nullptr }
 {
+    // Split the tokens for their usage whilst the Tasks' construction
+    std::vector< std::string > durationStrings = Split( argTokens[ 3 ], ';' );
+    std::vector< std::string > precedenceStrings = Split( argTokens[ 4 ], ';' );
+
+    // Construct all tasks, one after another
+    for ( unsigned long i = 0; i < size; ++i ) {
+        // First declare and initialize the needed variables
+        std::vector< Task* > *predecessors = new std::vector< Task* >;
+        unsigned long taskDuration = 0;
+        unsigned long taskID = 0;
+
+        // Then convert the string values to the needed data items
+        taskDuration = std::stoul( durationStrings[ i ] );
+        std::vector< std::string > precedenceString = Split( precedenceStrings[ i ], ':' );
+        taskID = std::stoul( precedenceString[ 0 ] );
+        if ( precedenceString.size() > 1 ) {
+            std::vector< std::string > predecessorIndicesString = Split( precedenceString[ 1 ], ',' );
+            for ( std::size_t j = 0; j < predecessorIndicesString.size(); ++j ) {
+                predecessors->emplace_back( tasks[ std::stoul( predecessorIndicesString[ j ] ) - 1 ] );
+            }
+        }
+        tasks[ i ] = new Task{ taskDuration, taskID, predecessors };
+    }
 }
 
 mt::SALBP::~SALBP() {
+    for ( auto &s: tasks ) {
+        delete s;
+    }
 }
 
 mt::SolutionBase *mt::SALBP::GenerateRandomSolution( const std::size_t &argSize ) const {

@@ -26,16 +26,18 @@ namespace mt {
 
 class Task final {
 public:
-    Task();
+    Task( const unsigned long &argDuration, const unsigned long &argIndex,
+          const std::vector< Task* > *argPredecessors );
     Task( const Task &argTask ) = delete;
     Task( Task &&argTask ) = delete;
+    ~Task();
 
     bool AllPredecessorsScheduled() const { return allPredecessorsScheduled; }
     bool IsScheduled() const { return isScheduled; }
 
-    const unsigned int taskDuration = 0;
-    const unsigned int taskID = 0;
-    const std::vector< Task* > predecessors;
+    const unsigned long duration = 0;
+    const unsigned long index = 0;
+    const std::vector< Task* > * const predecessors = nullptr;
 
 private:
     bool allPredecessorsScheduled = false;

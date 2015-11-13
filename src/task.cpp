@@ -19,6 +19,17 @@
 
 #include "task.h"
 
-mt::Task::Task() {
+mt::Task::Task( const unsigned long &argDuration, const unsigned long &argIndex,
+                const std::vector< Task* > * argPredecessors ) :
+    duration{ argDuration },
+    index{ argIndex },
+    predecessors{ argPredecessors }
+{
+    if ( predecessors->empty() ) {
+        allPredecessorsScheduled = true;
+    }
 }
 
+mt::Task::~Task() {
+    delete predecessors;
+}

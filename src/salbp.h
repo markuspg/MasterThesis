@@ -20,6 +20,7 @@
 #ifndef SALBP_H
 #define SALBP_H
 
+#include "helper_functions.h"
 #include "problem.h"
 #include "solution/solution.h"
 #include "task.h"
