@@ -18,6 +18,7 @@ SOURCES += src/main.cpp \
     src/matrix.cpp \
     src/problem.cpp \
     src/qap.cpp \
+    src/salbp.cpp \
     src/settings.cpp \
     src/tsreferenceset.cpp \
     src/tsthread.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     src/matrix.h \
     src/problem.h \
     src/qap.h \
+    src/salbp.h \
     src/settings.h \
     src/tsreferenceset.h \
     src/tsthread.h \

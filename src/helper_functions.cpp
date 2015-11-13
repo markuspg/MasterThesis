@@ -48,6 +48,7 @@ mt::Problem *mt::LoadProblem( const std::string &argLine ) {
         return new mt::QAP{ problemTokens };
     }
     if ( problemTokens[ 1 ] == "SALBP" ) {
+        return new mt::SALBP{ problemTokens };
     }
     return nullptr;
 }

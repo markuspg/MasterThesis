@@ -17,26 +17,20 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QAP_H
-#define QAP_H
+#ifndef SALBP_H
+#define SALBP_H
 
-#include "helper_functions.h"
-#include "matrix.h"
 #include "problem.h"
-#include "solution/qap_solution.h"
 #include "solution/solution.h"
-
-#include <iostream>
-#include <vector>
 
 namespace mt {
 
-class QAP final : public Problem {
+class SALBP final : public Problem {
 public:
-    QAP( const std::vector<std::string> &argTokens );
-    QAP( const Problem &argProblem ) = delete;
-    QAP( Problem &&argProblem ) = delete;
-    virtual ~QAP();
+    SALBP( const std::vector<std::string> &argTokens );
+    SALBP( const SALBP &argSALBP ) = delete;
+    SALBP( SALBP &&argSALBP ) = delete;
+    virtual ~SALBP();
 
     virtual SolutionBase *GenerateRandomSolution( const std::size_t &argSize ) const override;
     virtual double GetOFV( const SolutionBase * const argSolution ) const override;
@@ -44,11 +38,8 @@ public:
                                      const long &argSwapI, const long &argSwapJ,
                                      const unsigned long &argTabooTenure,
                                      mt::Matrix< unsigned long > &argTTMatrix ) const override;
-
-    const mt::Matrix< int > distances;  //! From location to location
-    const mt::Matrix< int > flows;      //! From unit to unit
 };
 
 }
 
-#endif // QAP_H
+#endif // SALBP_H

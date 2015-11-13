@@ -23,6 +23,7 @@
 #include "matrix.h"
 #include "problem.h"
 #include "qap.h"
+#include "salbp.h"
 #include "settings.h"
 
 #include <iostream>
