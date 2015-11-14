@@ -33,3 +33,17 @@ mt::Task::Task( const unsigned long &argDuration, const unsigned long &argIndex,
 mt::Task::~Task() {
     delete predecessors;
 }
+
+bool mt::Task::AllPredecessorsScheduled() {
+    if ( allPredecessorsScheduled ) {
+        return true;
+    } else {
+        for ( auto cit = predecessors->cbegin(); cit != predecessors->cend(); ++cit ) {
+            if ( !( *cit )->IsScheduled() ) {
+                return false;
+            }
+        }
+    }
+    allPredecessorsScheduled = true;
+    return true;
+}

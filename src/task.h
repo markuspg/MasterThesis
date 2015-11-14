@@ -32,7 +32,7 @@ public:
     Task( Task &&argTask ) = delete;
     ~Task();
 
-    bool AllPredecessorsScheduled() const { return allPredecessorsScheduled; }
+    bool AllPredecessorsScheduled();
     bool IsScheduled() const { return isScheduled; }
 
     const unsigned long duration = 0;
