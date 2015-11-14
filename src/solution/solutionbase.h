@@ -25,6 +25,7 @@
 namespace mt {
 
 class QAPSolution;
+class SALBPSolution;
 
 class SolutionBase
 {
@@ -37,6 +38,7 @@ public:
     virtual SolutionBase *Copy() const = 0;
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const = 0;
     virtual QAPSolution *GetQAPSolution() const = 0;
+    virtual SALBPSolution *GetSALBPSolution() const = 0;
     virtual std::vector< double > *GetSolutionVectorCopy() const = 0;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const = 0;

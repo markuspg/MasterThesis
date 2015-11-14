@@ -17,40 +17,42 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RANDOMKEYSOLUTION_H
-#define RANDOMKEYSOLUTION_H
+#ifndef SALBPSOLUTION_H
+#define SALBPSOLUTION_H
 
 #include "solution.h"
-#include "qap_solution.h"
-#include "salbp_solution.h"
+#include "randomkeysolution.h"
 
+#include <algorithm>
 #include <memory>
 #include <random>
 #include <vector>
 
 namespace mt {
 
-class RandomKeySolution final : public Solution< double >
-{
-public:
-    RandomKeySolution( const std::size_t &argSize );
-    RandomKeySolution( std::vector< double > * const argSolution );
-    RandomKeySolution( const RandomKeySolution &argRandomKeySolution );
-    RandomKeySolution( RandomKeySolution &&argRandomKeySolution );
-    virtual ~RandomKeySolution();
+class RandomKeySolution;
 
+class SALBPSolution final : public Solution< unsigned long > {
+public:
+    SALBPSolution( const std::size_t &argSize );
+    SALBPSolution( std::vector< unsigned long > * const argSolution );
+    SALBPSolution( const SALBPSolution &argSALBPSolution );
+    SALBPSolution( SALBPSolution &&argSALBPSolution );
+    virtual ~SALBPSolution();
+
+    static SALBPSolution *ComputeFromRandomKeys( const RandomKeySolution *argSol );
     virtual SolutionBase *Copy() const override;
-    virtual std::vector< double > *GenerateRandomSolution( const std::size_t &argSize ) const override;
-    virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const override { return nullptr; }
+    virtual std::vector< unsigned long > *GenerateRandomSolution( const std::size_t &argSize ) const override;
+    virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const override;
     virtual QAPSolution *GetQAPSolution() const override;
     virtual SALBPSolution *GetSALBPSolution() const override;
     virtual std::vector< double > *GetSolutionVectorCopy() const override;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const override;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
-            const SolutionBase * const argOtherParent ) const override;
+                                                    const SolutionBase * const argOtherParent ) const;
 };
 
 }
 
-#endif // RANDOMKEYSOLUTION_H
+#endif // SALBPSOLUTION_H

@@ -25,6 +25,7 @@ SOURCES += src/main.cpp \
     src/tsthread.cpp \
     src/solution/qap_solution.cpp \
     src/solution/randomkeysolution.cpp \
+    src/solution/salbp_solution.cpp \
     src/solution/solution.cpp \
     src/solution/solutionbase.cpp
 
@@ -42,6 +43,7 @@ HEADERS += \
     src/tsthread.h \
     src/solution/qap_solution.h \
     src/solution/randomkeysolution.h \
+    src/solution/salbp_solution.h \
     src/solution/solution.h \
     src/solution/solutionbase.h
 

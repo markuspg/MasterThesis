@@ -68,6 +68,10 @@ mt::QAPSolution *mt::RandomKeySolution::GetQAPSolution() const {
     return QAPSolution::ComputeFromRandomKeys( this );
 }
 
+mt::SALBPSolution *mt::RandomKeySolution::GetSALBPSolution() const {
+    return SALBPSolution::ComputeFromRandomKeys( this );
+}
+
 std::vector< double > *mt::RandomKeySolution::GetSolutionVectorCopy() const {
     return new std::vector< double >{ *solutionVec };
 }

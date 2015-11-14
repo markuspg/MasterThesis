@@ -17,32 +17,32 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "qap_solution.h"
+#include "salbp_solution.h"
 
-mt::QAPSolution::QAPSolution( const std::size_t &argSize ) :
+mt::SALBPSolution::SALBPSolution( const std::size_t &argSize ) :
     Solution{ GenerateRandomSolution( argSize ) }
 {
 }
 
-mt::QAPSolution::QAPSolution( std::vector< unsigned long > * const argSolution ) :
+mt::SALBPSolution::SALBPSolution( std::vector< unsigned long > * const argSolution ) :
     Solution{ argSolution }
 {
 }
 
-mt::QAPSolution::QAPSolution( const mt::QAPSolution &argQAPSolution ) :
-    Solution{ argQAPSolution }
+mt::SALBPSolution::SALBPSolution( const mt::SALBPSolution &argSALBPSolution ) :
+    Solution{ argSALBPSolution }
 {
 }
 
-mt::QAPSolution::QAPSolution( mt::QAPSolution &&argQAPSolution ) :
-    Solution{ argQAPSolution }
+mt::SALBPSolution::SALBPSolution( mt::SALBPSolution &&argSALBPSolution ) :
+    Solution{ argSALBPSolution }
 {
 }
 
-mt::QAPSolution::~QAPSolution() {
+mt::SALBPSolution::~SALBPSolution() {
 }
 
-mt::QAPSolution *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolution *argSol ) {
+mt::SALBPSolution *mt::SALBPSolution::ComputeFromRandomKeys( const mt::RandomKeySolution *argSol ) {
     // The solution to be converted and calculated
     std::vector< double > * solution = argSol->GetSolutionVectorCopy();
     // Stores the converted solution
@@ -59,14 +59,14 @@ mt::QAPSolution *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolu
     delete solution;
     solution = nullptr;
 
-    return new mt::QAPSolution{ tempAssignment };
+    return new mt::SALBPSolution{ tempAssignment };
 }
 
-mt::SolutionBase *mt::QAPSolution::Copy() const {
-    return new mt::QAPSolution{ new std::vector< unsigned long >{ *solutionVec } };
+mt::SolutionBase *mt::SALBPSolution::Copy() const {
+    return new mt::SALBPSolution{ new std::vector< unsigned long >{ *solutionVec } };
 }
 
-std::vector< unsigned long > *mt::QAPSolution::GenerateRandomSolution( const std::size_t &argSize ) const {
+std::vector< unsigned long > *mt::SALBPSolution::GenerateRandomSolution( const std::size_t &argSize ) const {
     std::vector< unsigned long > *tempVec = new std::vector< unsigned long >;
     tempVec->resize( argSize, 0 );
     std::iota( tempVec->begin(), tempVec->end(), 0 );
@@ -82,28 +82,32 @@ std::vector< unsigned long > *mt::QAPSolution::GenerateRandomSolution( const std
     return tempVec;
 }
 
-std::vector< unsigned long > *mt::QAPSolution::GetAssignmentVectorCopy() const {
+std::vector< unsigned long > *mt::SALBPSolution::GetAssignmentVectorCopy() const {
     return new std::vector< unsigned long >{ *solutionVec };
 }
 
-mt::QAPSolution *mt::QAPSolution::GetQAPSolution() const {
-    return dynamic_cast< mt::QAPSolution* >( Copy() );
-}
-
-mt::SALBPSolution *mt::QAPSolution::GetSALBPSolution() const {
+mt::QAPSolution *mt::SALBPSolution::GetQAPSolution() const {
     return nullptr;
 }
 
-mt::SolutionBase *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                                      const unsigned long &argSwapIndexJ ) const {
+mt::SALBPSolution *mt::SALBPSolution::GetSALBPSolution() const {
+    return dynamic_cast< mt::SALBPSolution* >( Copy() );
+}
+
+std::vector< double > *mt::SALBPSolution::GetSolutionVectorCopy() const {
+    return nullptr;
+}
+
+mt::SolutionBase *mt::SALBPSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                                        const unsigned long &argSwapIndexJ ) const {
     std::vector< unsigned long > *temp = new std::vector< unsigned long >{ *solutionVec };
     double tempD = ( *temp )[ argSwapIndexI ];
     ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
     ( *temp )[ argSwapIndexJ ] = tempD;
-    return new QAPSolution{ temp };
+    return new SALBPSolution{ temp };
 }
 
-mt::SolutionBase *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
+mt::SolutionBase *mt::SALBPSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const mt::SolutionBase * const argOtherParent ) const {
     const unsigned long newAssignmentSize = solutionVec->size();
     std::vector< unsigned long > * const newAssignment = new std::vector< unsigned long >;
@@ -121,5 +125,5 @@ mt::SolutionBase *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long
 
     delete otherParentsAssignment;
 
-    return new mt::QAPSolution{ newAssignment };
+    return new mt::SALBPSolution{ newAssignment };
 }

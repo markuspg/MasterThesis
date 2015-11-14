@@ -22,6 +22,7 @@
 
 #include "helper_functions.h"
 #include "problem.h"
+#include "solution/salbp_solution.h"
 #include "solution/solution.h"
 #include "task.h"
 
