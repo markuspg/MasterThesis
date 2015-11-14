@@ -55,8 +55,11 @@ mt::SALBP::~SALBP() {
 }
 
 mt::SolutionBase *mt::SALBP::GenerateRandomSolution( const std::size_t &argSize ) const {
-    ( void )argSize;
-    return nullptr;
+    if ( *settings->randomKeys ) {
+        return new mt::RandomKeySolution{ argSize };
+    } else {
+        return new mt::SALBPSolution{ argSize };
+    }
 }
 
 double mt::SALBP::GetOFV( const SolutionBase * const argSolution ) const {
