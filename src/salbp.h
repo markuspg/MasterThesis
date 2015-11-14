@@ -42,6 +42,8 @@ public:
                                      const unsigned long &argTabooTenure,
                                      mt::Matrix< unsigned long > &argTTMatrix ) const override;
 
+    const unsigned long cycleTime = 0;
+
 private:
     std::vector< Task* > tasks;
 };

@@ -21,6 +21,7 @@
 
 mt::SALBP::SALBP( const std::vector<std::string> &argTokens ) :
     Problem{ problemTypes_t::SALBP, argTokens },
+    cycleTime{ std::stoul( argTokens[ 5 ] ) },
     tasks{ size, nullptr }
 {
     // Split the tokens for their usage whilst the Tasks' construction
