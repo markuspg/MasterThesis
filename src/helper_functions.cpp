@@ -44,6 +44,9 @@ unsigned int mt::GetTabooTenure( const unsigned int &argPS ) {
 
 mt::Problem *mt::LoadProblem( const std::string &argLine ) {
     std::vector< std::string > problemTokens = mt::Split( argLine, '|' );
+    if ( problemTokens.size() < 2 ) {
+        return nullptr;
+    }
     if ( problemTokens[ 1 ] == "QAP" ) {
         return new mt::QAP{ problemTokens };
     }
