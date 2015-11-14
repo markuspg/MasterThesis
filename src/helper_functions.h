@@ -26,6 +26,7 @@
 #include "salbp.h"
 #include "settings.h"
 
+#include <exception>
 #include <iostream>
 #include <sstream>
 #include <string>

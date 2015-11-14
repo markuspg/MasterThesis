@@ -48,9 +48,15 @@ mt::Problem *mt::LoadProblem( const std::string &argLine ) {
         return nullptr;
     }
     if ( problemTokens[ 1 ] == "QAP" ) {
+        if ( problemTokens.size() < 5 ) {
+            throw std::runtime_error{ "The QAP " + problemTokens[ 0 ] + " is malformed" };
+        }
         return new mt::QAP{ problemTokens };
     }
     if ( problemTokens[ 1 ] == "SALBP" ) {
+        if ( problemTokens.size() < 6 ) {
+            throw std::runtime_error{ "The SALBP " + problemTokens[ 0 ] + " is malformed" };
+        }
         return new mt::SALBP{ problemTokens };
     }
     return nullptr;

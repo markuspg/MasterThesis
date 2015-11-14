@@ -21,6 +21,7 @@
 #include "helper_functions.h"
 #include "settings.h"
 
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <istream>
@@ -44,7 +45,7 @@ int main( int argc, char *argv[] ) {
                 analyzer.Analyze();
                 delete problem;
             } else {
-                std::cout << "  Unknown problem type encountered, skipping line " << line << std::endl;
+                throw std::runtime_error{ "  Invalid problem type encountered in line '" + line + "'" };
             }
         }
     }
