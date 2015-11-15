@@ -64,8 +64,46 @@ mt::SolutionBase *mt::SALBP::GenerateRandomSolution( const std::size_t &argSize 
 }
 
 double mt::SALBP::GetOFV( const SolutionBase * const argSolution ) const {
-    ( void )argSolution;
-    return 0.0;
+    // Storage for the converted solution and its objective function value
+    mt::SALBPSolution * tempSol = dynamic_cast< mt::SALBPSolution* >( argSolution->GetSALBPSolution() );
+
+    std::list< Task* > tasksToBeScheduled;
+    std::vector< unsigned long > stationTimes;
+    stationTimes.resize( size, 0 );
+    // Sort the tasks according to their priorities in the list of the to be assigned tasks
+    for ( unsigned long i = 0; i < size; ++i ) {
+        tasksToBeScheduled.emplace_back( tasks[ ( *tempSol )( i ) ] );
+    }
+
+    std::list< Task* >::iterator *deleteIt = nullptr;
+    for ( unsigned long i = 0; i < size; ++i ) {
+        auto it = tasksToBeScheduled.begin();
+        while ( it != tasksToBeScheduled.end() ) {
+            if ( deleteIt ) {
+                tasksToBeScheduled.erase( *deleteIt );
+                delete deleteIt;
+                deleteIt = nullptr;
+                it = tasksToBeScheduled.begin();
+                continue;
+            }
+            // First check for task, if it is available for scheduling (all predecessors scheduled)
+            if ( ( *it )->AllPredecessorsScheduled() ) {
+                // Check, if the task fits into the current station
+                if ( stationTimes[ i ] + ( *it )->duration <= cycleTime ) {
+                    // If yes, schedule it there, ...
+                    stationTimes[ i ] += ( *it )->duration;
+                    ( *it )->TaskGotScheduled();
+                    deleteIt = new std::list< Task* >::iterator{ it };
+                    continue;
+                }
+            }
+            ++it;
+        }
+    }
+
+    delete tempSol;
+
+    return std::distance( stationTimes.begin(), std::find( stationTimes.begin(), stationTimes.end(), 0 ) );
 }
 
 void mt::SALBP::UpdateTabooTenures( const SolutionBase * const argNewSolution,

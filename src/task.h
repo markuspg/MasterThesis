@@ -34,6 +34,7 @@ public:
 
     bool AllPredecessorsScheduled();
     bool IsScheduled() const { return isScheduled; }
+    void TaskGotScheduled() { isScheduled = true; }
 
     const unsigned long duration = 0;
     const unsigned long index = 0;

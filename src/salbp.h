@@ -26,6 +26,8 @@
 #include "solution/solution.h"
 #include "task.h"
 
+#include <list>
+
 namespace mt {
 
 class SALBP final : public Problem {
