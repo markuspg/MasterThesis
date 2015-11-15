@@ -110,9 +110,9 @@ void mt::SALBP::UpdateTabooTenures( const SolutionBase * const argNewSolution,
                                     const long &argSwapI, const long &argSwapJ,
                                     const unsigned long &argTabooTenure,
                                     mt::Matrix<unsigned long> &argTTMatrix ) const {
-    ( void )argNewSolution;
-    ( void )argSwapI;
-    ( void )argSwapJ;
-    ( void )argTabooTenure;
-    ( void )argTTMatrix;
+    SALBPSolution * const tempSol = dynamic_cast< SALBPSolution* >( argNewSolution->GetSALBPSolution() );
+    // Forbid the  re-assignment of the swapped tasks to the same priority list positions
+    argTTMatrix( ( *tempSol )( argSwapI ), argSwapI ) = argTabooTenure;
+    argTTMatrix( ( *tempSol )( argSwapJ ), argSwapJ ) = argTabooTenure;
+    delete tempSol;
 }
