@@ -22,6 +22,14 @@
 mt::Measure::Measure() {
 }
 
+void mt::Measure::AddTSThreadIterations( std::string &argIterationsString ) {
+    tsThreadIterations.emplace_back( argIterationsString );
+}
+
+void mt::Measure::SetOverallIterationCount( const unsigned long &argIterationCount ) {
+    analyzerIterations = argIterationCount;
+}
+
 void mt::Measure::SetProblemParameters( const std::string &argName,
                                         const unsigned long &argSize,
                                         const std::string &argType ) {
@@ -52,14 +60,26 @@ void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
     tabooTenureDeviation = argTabooTenureDeviation;
     tabooTenuresFac = argTabooTenuresFac;
     tsInstances = argTSInstances;
+
+    tsThreadIterations.reserve( tsInstances );
 }
 
 void mt::Measure::WriteToDisk() {
+    std::stringstream threadIterationsStream;
+    threadIterationsStream << tsThreadIterations.front();
+    for ( auto cit = tsThreadIterations.cbegin() + 1; cit != tsThreadIterations.cend(); ++cit ) {
+        threadIterationsStream << ';' << *cit;
+    }
+    std::string threadIterations = threadIterationsStream.str();
     std::ofstream outputStream;
     outputStream.open( outputFile.c_str(), std::ios::app | std::ios::out );
-    outputStream << problemName << ';' << problemType << ';' << problemSize << ';' << gaInstances << ';'
-                 << maxFailures << ';' << mutationImpact << ';' << mutationRate << ';'
-                 << randomizedTabooTenures << ';' << randomKeys << ';' << reproductionRate << ';'
-                 << tabooTenureDeviation << ';' << tabooTenuresFac << ';'  << tsInstances << "\n";
+    outputStream << problemName << '|' << problemType << '|' << problemSize << '|' << gaInstances << '|'
+                 << maxFailures << '|' << mutationImpact << '|' << mutationRate << '|'
+                 << randomizedTabooTenures << '|' << randomKeys << '|' << reproductionRate << '|'
+                 << tabooTenureDeviation << '|' << tabooTenuresFac << '|'  << tsInstances << '|'
+                 << analyzerIterations << '|' << threadIterations << "\n";
     outputStream.close();
+
+    // Clean up any data which will not be automatically overwritten in the next run
+    tsThreadIterations.clear();
 }

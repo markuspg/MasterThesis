@@ -22,11 +22,15 @@
 
 #include "tsreferenceset.h"
 #include "../helper_functions.h"
+#include "../measure.h"
 
 #include <iostream>
 #include <mutex>
 
 typedef std::pair< double, mt::SolutionBase* > dSol;
+
+extern mt::Measure measure;
+extern std::mutex measureMutex;
 
 namespace mt {
 

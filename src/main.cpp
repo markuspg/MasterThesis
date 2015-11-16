@@ -48,10 +48,10 @@ int main( int argc, char *argv[] ) {
                 analyzer.Analyze();
                 delete problem;
                 std::lock_guard< std::mutex > lockMeasure{ measureMutex };
-                measure.WriteToDisk();
             } else {
                 throw std::runtime_error{ "  Invalid problem type encountered in line '" + line + "'" };
             }
+            measure.WriteToDisk();
         }
     }
     

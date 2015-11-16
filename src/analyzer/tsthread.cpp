@@ -108,6 +108,12 @@ void mt::TSThread::Iteration() {
 
     if ( failures >= maxFailures ) {
         finished = true;
+
+        std::stringstream measureStream;
+        measureStream << index << ':' << iterationCount;
+        std::string measureString = measureStream.str();
+        std::lock_guard< std::mutex > lockMeasure{ measureMutex };
+        measure.AddTSThreadIterations( measureString );
     }
 }
 

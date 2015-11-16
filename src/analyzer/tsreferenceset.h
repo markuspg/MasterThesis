@@ -22,13 +22,18 @@
 
 #include "../helper_functions.h"
 #include "../matrix.h"
+#include "../measure.h"
 #include "../problem/problem.h"
 #include "../solution/solutionbase.h"
 
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <vector>
+
+extern mt::Measure measure;
+extern std::mutex measureMutex;
 
 namespace mt {
 

@@ -42,6 +42,9 @@ mt::TSReferenceSet::~TSReferenceSet() {
     for ( auto it = solutions.begin(); it != solutions.end(); ++it) {
         delete *it;
     }
+
+    std::lock_guard< std::mutex > lockMeasure{ measureMutex };
+    measure.SetOverallIterationCount( iterationCounter );
 }
 
 void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {

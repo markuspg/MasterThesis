@@ -21,6 +21,7 @@
 #define MEASURE_H
 
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -33,6 +34,8 @@ public:
     Measure( const Measure &argMeasure ) = delete;
     Measure( Measure &argMeasure ) = delete;
 
+    void AddTSThreadIterations( std::string &argIterationsString );
+    void SetOverallIterationCount( const unsigned long &argIterationCount );
     void SetProblemParameters( const std::string &argName,
                                const unsigned long &argSize,
                                const std::string &argType );
@@ -50,6 +53,7 @@ public:
     void WriteToDisk();
 
 private:
+    unsigned long analyzerIterations;
     unsigned short gaInstances = 1;
     unsigned int maxFailures = 1000000;
     double mutationImpact = 0.1;
@@ -63,6 +67,7 @@ private:
     double reproductionRate = 0.5;
     double tabooTenureDeviation = 0.1;
     unsigned short tabooTenuresFac = 1;
+    std::vector< std::string > tsThreadIterations;
     unsigned short tsInstances = 1;
 };
 
