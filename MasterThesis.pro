@@ -12,17 +12,17 @@ CONFIG   -= app_bundle console
 TEMPLATE = app
 
 SOURCES += src/main.cpp \
-    src/analyzer.cpp \
-    src/gathread.cpp \
     src/helper_functions.cpp \
     src/matrix.cpp \
-    src/problem.cpp \
-    src/qap.cpp \
-    src/salbp.cpp \
     src/settings.cpp \
-    src/task.cpp \
-    src/tsreferenceset.cpp \
-    src/tsthread.cpp \
+    src/analyzer/analyzer.cpp \
+    src/analyzer/gathread.cpp \
+    src/analyzer/tsreferenceset.cpp \
+    src/analyzer/tsthread.cpp \
+    src/problem/problem.cpp \
+    src/problem/qap.cpp \
+    src/problem/salbp.cpp \
+    src/problem/task.cpp \
     src/solution/qap_solution.cpp \
     src/solution/randomkeysolution.cpp \
     src/solution/salbp_solution.cpp \
@@ -30,17 +30,17 @@ SOURCES += src/main.cpp \
     src/solution/solutionbase.cpp
 
 HEADERS += \
-    src/analyzer.h \
-    src/gathread.h \
     src/helper_functions.h \
     src/matrix.h \
-    src/problem.h \
-    src/qap.h \
-    src/salbp.h \
     src/settings.h \
-    src/task.h \
-    src/tsreferenceset.h \
-    src/tsthread.h \
+    src/analyzer/analyzer.h \
+    src/analyzer/gathread.h \
+    src/analyzer/tsreferenceset.h \
+    src/analyzer/tsthread.h \
+    src/problem/problem.h \
+    src/problem/qap.h \
+    src/problem/salbp.h \
+    src/problem/task.h \
     src/solution/qap_solution.h \
     src/solution/randomkeysolution.h \
     src/solution/salbp_solution.h \

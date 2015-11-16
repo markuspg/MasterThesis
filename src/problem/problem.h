@@ -17,43 +17,48 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QAP_H
-#define QAP_H
+#ifndef PROBLEM_H
+#define PROBLEM_H
 
-#include "helper_functions.h"
-#include "matrix.h"
-#include "problem.h"
-#include "solution/qap_solution.h"
-#include "solution/solution.h"
+#include "../matrix.h"
+#include "../solution/randomkeysolution.h"
+#include "../solution/solution.h"
 
 #include <iostream>
 #include <vector>
 
+enum class problemTypes_t : unsigned short {
+    QAP,
+    SALBP
+};
+
 namespace mt {
 
-class QAP final : public Problem {
+class Problem {
 public:
-    QAP( const std::vector<std::string> &argTokens );
-    QAP( const Problem &argProblem ) = delete;
-    QAP( Problem &&argProblem ) = delete;
-    virtual ~QAP();
+    Problem( const problemTypes_t &argType, const std::vector<std::string> &argTokens );
+    Problem( const Problem &argProblem ) = delete;
+    Problem( Problem &&argProblem ) = delete;
+    virtual ~Problem();
 
+    // The taboo argument of this function is from 'taillard1991robust', p. 447
     virtual bool CheckIfTaboo( const unsigned int &argIterationCount,
                                const SolutionBase * const argSolution,
                                const unsigned long &argSwapIndexI,
                                const unsigned long &argSwapIndexJ,
-                               const Matrix< unsigned long > &argTTMatrix ) const override;
-    virtual SolutionBase *GenerateRandomSolution() const override;
-    virtual double GetOFV( const SolutionBase * const argSolution ) const override;
+                               const Matrix< unsigned long > &argTTMatrix ) const = 0;
+    virtual SolutionBase *GenerateRandomSolution() const = 0;
+    virtual double GetOFV( const SolutionBase * const argSolution ) const = 0;
     virtual void UpdateTabooTenures( const SolutionBase * const argNewSolution,
                                      const long &argSwapI, const long &argSwapJ,
                                      const unsigned long &argTabooTenure,
-                                     mt::Matrix< unsigned long > &argTTMatrix ) const override;
+                                     mt::Matrix< unsigned long > &argTTMatrix ) const = 0;
 
-    const mt::Matrix< int > distances;  //! From location to location
-    const mt::Matrix< int > flows;      //! From unit to unit
+    const std::string name;
+    const unsigned long size = 0;
+    const problemTypes_t type;
 };
 
 }
 
-#endif // QAP_H
+#endif // PROBLEM_H

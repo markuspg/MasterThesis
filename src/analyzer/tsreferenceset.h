@@ -20,10 +20,10 @@
 #ifndef TABOOSEARCHREFERENCESET_H
 #define TABOOSEARCHREFERENCESET_H
 
-#include "helper_functions.h"
-#include "matrix.h"
-#include "problem.h"
-#include "solution/solutionbase.h"
+#include "../helper_functions.h"
+#include "../matrix.h"
+#include "../problem/problem.h"
+#include "../solution/solutionbase.h"
 
 #include <algorithm>
 #include <iostream>

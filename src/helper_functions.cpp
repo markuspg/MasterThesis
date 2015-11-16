@@ -62,7 +62,7 @@ mt::Problem *mt::LoadProblem( const std::string &argLine ) {
     return nullptr;
 }
 
-int mt::ParseCommandLine( int argC, char *argV[] ) {
+int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
     // A temporary storage for the extracted strings
     std::vector< std::string > commandLineArguments{};
     commandLineArguments.reserve( argC );

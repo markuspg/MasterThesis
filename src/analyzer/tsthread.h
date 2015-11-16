@@ -20,8 +20,8 @@
 #ifndef TSTHREAD_H
 #define TSTHREAD_H
 
-#include "helper_functions.h"
 #include "tsreferenceset.h"
+#include "../helper_functions.h"
 
 #include <iostream>
 #include <mutex>

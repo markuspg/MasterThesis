@@ -17,25 +17,26 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SALBP_H
-#define SALBP_H
+#ifndef QAP_H
+#define QAP_H
 
-#include "helper_functions.h"
 #include "problem.h"
-#include "solution/salbp_solution.h"
-#include "solution/solution.h"
-#include "task.h"
+#include "../helper_functions.h"
+#include "../matrix.h"
+#include "../solution/qap_solution.h"
+#include "../solution/solution.h"
 
-#include <list>
+#include <iostream>
+#include <vector>
 
 namespace mt {
 
-class SALBP final : public Problem {
+class QAP final : public Problem {
 public:
-    SALBP( const std::vector<std::string> &argTokens );
-    SALBP( const SALBP &argSALBP ) = delete;
-    SALBP( SALBP &&argSALBP ) = delete;
-    virtual ~SALBP();
+    QAP( const std::vector<std::string> &argTokens );
+    QAP( const Problem &argProblem ) = delete;
+    QAP( Problem &&argProblem ) = delete;
+    virtual ~QAP();
 
     virtual bool CheckIfTaboo( const unsigned int &argIterationCount,
                                const SolutionBase * const argSolution,
@@ -49,12 +50,10 @@ public:
                                      const unsigned long &argTabooTenure,
                                      mt::Matrix< unsigned long > &argTTMatrix ) const override;
 
-    const unsigned long cycleTime = 0;
-
-private:
-    std::vector< Task* > tasks;
+    const mt::Matrix< int > distances;  //! From location to location
+    const mt::Matrix< int > flows;      //! From unit to unit
 };
 
 }
 
-#endif // SALBP_H
+#endif // QAP_H

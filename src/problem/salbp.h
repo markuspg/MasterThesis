@@ -17,48 +17,44 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PROBLEM_H
-#define PROBLEM_H
+#ifndef SALBP_H
+#define SALBP_H
 
-#include "matrix.h"
-#include "solution/randomkeysolution.h"
-#include "solution/solution.h"
+#include "problem.h"
+#include "task.h"
+#include "../helper_functions.h"
+#include "../solution/salbp_solution.h"
+#include "../solution/solution.h"
 
-#include <iostream>
-#include <vector>
-
-enum class problemTypes_t : unsigned short {
-    QAP,
-    SALBP
-};
+#include <list>
 
 namespace mt {
 
-class Problem {
+class SALBP final : public Problem {
 public:
-    Problem( const problemTypes_t &argType, const std::vector<std::string> &argTokens );
-    Problem( const Problem &argProblem ) = delete;
-    Problem( Problem &&argProblem ) = delete;
-    virtual ~Problem();
+    SALBP( const std::vector<std::string> &argTokens );
+    SALBP( const SALBP &argSALBP ) = delete;
+    SALBP( SALBP &&argSALBP ) = delete;
+    virtual ~SALBP();
 
-    // The taboo argument of this function is from 'taillard1991robust', p. 447
     virtual bool CheckIfTaboo( const unsigned int &argIterationCount,
                                const SolutionBase * const argSolution,
                                const unsigned long &argSwapIndexI,
                                const unsigned long &argSwapIndexJ,
-                               const Matrix< unsigned long > &argTTMatrix ) const = 0;
-    virtual SolutionBase *GenerateRandomSolution() const = 0;
-    virtual double GetOFV( const SolutionBase * const argSolution ) const = 0;
+                               const Matrix< unsigned long > &argTTMatrix ) const override;
+    virtual SolutionBase *GenerateRandomSolution() const override;
+    virtual double GetOFV( const SolutionBase * const argSolution ) const override;
     virtual void UpdateTabooTenures( const SolutionBase * const argNewSolution,
                                      const long &argSwapI, const long &argSwapJ,
                                      const unsigned long &argTabooTenure,
-                                     mt::Matrix< unsigned long > &argTTMatrix ) const = 0;
+                                     mt::Matrix< unsigned long > &argTTMatrix ) const override;
 
-    const std::string name;
-    const unsigned long size = 0;
-    const problemTypes_t type;
+    const unsigned long cycleTime = 0;
+
+private:
+    std::vector< Task* > tasks;
 };
 
 }
 
-#endif // PROBLEM_H
+#endif // SALBP_H

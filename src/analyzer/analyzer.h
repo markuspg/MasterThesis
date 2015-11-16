@@ -21,10 +21,10 @@
 #define ANALYZER_H
 
 #include "gathread.h"
-#include "problem.h"
-#include "settings.h"
 #include "tsreferenceset.h"
 #include "tsthread.h"
+#include "../problem/problem.h"
+#include "../settings.h"
 
 #include <functional>
 #include <iostream>

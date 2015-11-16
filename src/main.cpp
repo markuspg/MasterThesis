@@ -17,9 +17,9 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "analyzer.h"
 #include "helper_functions.h"
 #include "settings.h"
+#include "analyzer/analyzer.h"
 
 #include <exception>
 #include <fstream>

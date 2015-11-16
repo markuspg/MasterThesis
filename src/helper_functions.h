@@ -21,10 +21,10 @@
 #define HELPER_FUNCTIONS_H
 
 #include "matrix.h"
-#include "problem.h"
-#include "qap.h"
-#include "salbp.h"
 #include "settings.h"
+#include "problem/problem.h"
+#include "problem/qap.h"
+#include "problem/salbp.h"
 
 #include <exception>
 #include <iostream>
@@ -38,7 +38,7 @@ namespace mt {
 
 unsigned int GetTabooTenure( const unsigned int &argPS );
 mt::Problem *LoadProblem( const std::string &argLine );
-int ParseCommandLine( int argC, char *argV[] );
+int ParseCommandLine( const int &argC, const char * const argV[] );
 std::vector<std::string> Split( const std::string &argString, char argDelim );
 void Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements );
 
