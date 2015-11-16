@@ -45,11 +45,11 @@ bool mt::QAP::CheckIfTaboo( const unsigned int &argIterationCount,
     return false;
 }
 
-mt::SolutionBase *mt::QAP::GenerateRandomSolution( const std::size_t &argSize ) const {
+mt::SolutionBase *mt::QAP::GenerateRandomSolution() const {
     if ( *settings->randomKeys ) {
-        return new mt::RandomKeySolution{ argSize };
+        return new mt::RandomKeySolution{ size };
     } else {
-        return new mt::QAPSolution{ argSize };
+        return new mt::QAPSolution{ size };
     }
 }
 

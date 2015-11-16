@@ -47,7 +47,7 @@ mt::GAThread::~GAThread() {
 
 void mt::GAThread::CreateInitialPopulation() {
     for ( unsigned long i = 0; i < popSize; ++i ) {
-        population[ i ].second = problem->GenerateRandomSolution( problem->size );
+        population[ i ].second = problem->GenerateRandomSolution();
         population[ i ].first = problem->GetOFV( population[ i ].second );
     }
     std::sort( population.begin(), population.end(),
