@@ -93,7 +93,7 @@ void mt::TSThread::Iteration() {
         ++failures;
         ++invalidSolutions;
     } else {
-        if ( bestNeighV > tempSolV ) {
+        if ( bestNeighV >= tempSolV ) {
             ++failures;
         }
 
