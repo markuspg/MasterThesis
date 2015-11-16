@@ -167,7 +167,7 @@ std::vector<std::string> mt::Split( const std::string &argString, char argDelim 
 void mt::Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements ) {
     std::stringstream stringStream{ argString };
     std::string item;
-    while (std::getline( stringStream, item, argDelim ) ) {
+    while ( std::getline( stringStream, item, argDelim ) ) {
         argElements.push_back( item );
     }
 }

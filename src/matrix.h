@@ -21,6 +21,7 @@
 #define MATRIX_H
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <cstdlib>
 #include <stdexcept>
@@ -69,15 +70,13 @@ mt::Matrix< T >::Matrix( const std::vector< T > &argItems ) :
     dimension{ static_cast< unsigned int >( std::round( std::sqrt( argItems.size() ) ) ) },
     A{ new std::vector< T > }
 {
-    A->resize( dimension * dimension );
-    for ( std::size_t i = 0; i < argItems.size(); i++ ) {
-        ( *A )[ i ] = argItems.at( i );
+    A->resize( dimension * dimension, 0 );
+    typename std::vector< T >::size_type size = argItems.size();
+    for ( std::size_t i = 0; i < size; i++ ) {
+        ( *A ).at( i ) = argItems[ i ];
     }
-    A->shrink_to_fit();
 
-    if ( A->size() != dimension * dimension ) {
-        throw std::runtime_error{ "Quantity of Matrix items does not fit its dimensionality" };
-    }
+    assert ( argItems.size() == A->size() );
 }
 
 template< typename T>
@@ -95,22 +94,24 @@ mt::Matrix< T >::~Matrix() {
 
 template< typename T >
 std::vector< int > mt::Matrix< T >::ConvertStringVecToIntVec
-( const std::vector< std::string > &argStrList ) {
-    std::vector< int > intList;
+        ( const std::vector< std::string > &argStrList ) {
+    std::vector< int > intVec;
+    intVec.reserve( argStrList.size() );
     for ( auto cit = argStrList.cbegin(); cit != argStrList.cend(); ++cit ) {
-        intList.emplace_back( std::stoi( *cit ) );
+        intVec.emplace_back( std::stoi( *cit ) );
     }
-    return intList;
+    return intVec;
 }
 
 template< typename T >
 std::vector< unsigned long > mt::Matrix< T >::ConvertStringVecToULongVec
-    ( const std::vector< std::string > &argStrList ) {
-    std::vector< unsigned long > uLongList;
+        ( const std::vector< std::string > &argStrList ) {
+    std::vector< unsigned long > uLongVec;
+    uLongVec.reserve( argStrList.size() );
     for ( auto cit = argStrList.cbegin(); cit != argStrList.cend(); ++cit ) {
-        uLongList.emplace_back( std::stoul( *cit ) );
+        uLongVec.emplace_back( std::stoul( *cit ) );
     }
-    return uLongList;
+    return uLongVec;
 }
 
 template< typename T >
