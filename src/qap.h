@@ -38,6 +38,11 @@ public:
     QAP( Problem &&argProblem ) = delete;
     virtual ~QAP();
 
+    virtual bool CheckIfTaboo( const unsigned int &argIterationCount,
+                               const SolutionBase * const argSolution,
+                               const unsigned long &argSwapIndexI,
+                               const unsigned long &argSwapIndexJ,
+                               const Matrix< unsigned long > &argTTMatrix ) const override;
     virtual SolutionBase *GenerateRandomSolution( const std::size_t &argSize ) const override;
     virtual double GetOFV( const SolutionBase * const argSolution ) const override;
     virtual void UpdateTabooTenures( const SolutionBase * const argNewSolution,

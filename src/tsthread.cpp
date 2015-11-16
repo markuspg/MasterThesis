@@ -61,7 +61,7 @@ mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
             return nullptr;
         }
         // If a swap is taboo, exclude it from consideration by settings its cost to the maximum double value
-        if ( tabooTenures( swapI, swapJ ) >= iterationCount
+        if ( problem->CheckIfTaboo( iterationCount, costs( swapI, swapJ ).second, swapI, swapJ, tabooTenures )
              // New global optimum as aspiration criterion
              && argBestNeighV > referenceSet.GetGlobalMinimumSolV() ) {
             costs( swapI, swapJ ).first = std::numeric_limits< double >::max();

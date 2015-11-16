@@ -30,6 +30,21 @@ mt::QAP::QAP( const std::vector<std::string> &argTokens ) :
 mt::QAP::~QAP() {
 }
 
+bool mt::QAP::CheckIfTaboo( const unsigned int &argIterationCount,
+                            const SolutionBase * const argSolution,
+                            const unsigned long &argSwapIndexI,
+                            const unsigned long &argSwapIndexJ,
+                            const Matrix< unsigned long > &argTTMatrix ) const {
+    QAPSolution * const tempSol = dynamic_cast< QAPSolution* >( argSolution->GetQAPSolution() );
+    if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) > argIterationCount
+         && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) > argIterationCount ) {
+        delete tempSol;
+        return true;
+    }
+    delete tempSol;
+    return false;
+}
+
 mt::SolutionBase *mt::QAP::GenerateRandomSolution( const std::size_t &argSize ) const {
     if ( *settings->randomKeys ) {
         return new mt::RandomKeySolution{ argSize };

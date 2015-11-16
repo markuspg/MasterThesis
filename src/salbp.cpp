@@ -55,6 +55,21 @@ mt::SALBP::~SALBP() {
     }
 }
 
+bool mt::SALBP::CheckIfTaboo( const unsigned int &argIterationCount,
+                              const SolutionBase * const argSolution,
+                              const unsigned long &argSwapIndexI,
+                              const unsigned long &argSwapIndexJ,
+                              const Matrix< unsigned long > &argTTMatrix ) const {
+    SALBPSolution * const tempSol = dynamic_cast< SALBPSolution* >( argSolution->GetSALBPSolution() );
+    if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) > argIterationCount
+         && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) > argIterationCount ) {
+        delete tempSol;
+        return true;
+    }
+    delete tempSol;
+    return false;
+}
+
 mt::SolutionBase *mt::SALBP::GenerateRandomSolution( const std::size_t &argSize ) const {
     if ( *settings->randomKeys ) {
         return new mt::RandomKeySolution{ argSize };
