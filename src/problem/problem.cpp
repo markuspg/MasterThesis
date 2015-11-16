@@ -25,6 +25,9 @@ mt::Problem::Problem( const problemTypes_t &argType, const std::vector<std::stri
     type{ argType }
 {
     std::cout << "      Constructing Problem " << argTokens[ 0 ] << std::endl;
+
+    std::lock_guard< std::mutex > lockMeasure{ measureMutex };
+    measure.SetProblemParameters( name, size, argTokens[ 1 ] );
 }
 
 mt::Problem::~Problem() {

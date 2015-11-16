@@ -14,6 +14,7 @@ TEMPLATE = app
 SOURCES += src/main.cpp \
     src/helper_functions.cpp \
     src/matrix.cpp \
+    src/measure.cpp \
     src/settings.cpp \
     src/analyzer/analyzer.cpp \
     src/analyzer/gathread.cpp \
@@ -32,6 +33,7 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/helper_functions.h \
     src/matrix.h \
+    src/measure.h \
     src/settings.h \
     src/analyzer/analyzer.h \
     src/analyzer/gathread.h \

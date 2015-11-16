@@ -20,10 +20,16 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "measure.h"
+
 #include <iostream>
 #include <list>
+#include <mutex>
 #include <string>
 #include <vector>
+
+extern mt::Measure measure;
+extern std::mutex measureMutex;
 
 namespace mt {
 

@@ -21,11 +21,16 @@
 #define PROBLEM_H
 
 #include "../matrix.h"
+#include "../measure.h"
 #include "../solution/randomkeysolution.h"
 #include "../solution/solution.h"
 
 #include <iostream>
+#include <mutex>
 #include <vector>
+
+extern mt::Measure measure;
+extern std::mutex measureMutex;
 
 enum class problemTypes_t : unsigned short {
     QAP,

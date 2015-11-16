@@ -18,6 +18,7 @@
  */
 
 #include "helper_functions.h"
+#include "measure.h"
 #include "settings.h"
 #include "analyzer/analyzer.h"
 
@@ -26,6 +27,8 @@
 #include <iostream>
 #include <istream>
 
+std::mutex measureMutex;
+mt::Measure measure;
 mt::Settings *settings = nullptr;
 
 int main( int argc, char *argv[] ) {
@@ -44,6 +47,8 @@ int main( int argc, char *argv[] ) {
                 mt::Analyzer analyzer{ problem };
                 analyzer.Analyze();
                 delete problem;
+                std::lock_guard< std::mutex > lockMeasure{ measureMutex };
+                measure.WriteToDisk();
             } else {
                 throw std::runtime_error{ "  Invalid problem type encountered in line '" + line + "'" };
             }

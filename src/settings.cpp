@@ -47,6 +47,11 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const unsigned int
               << "\n   tabooTenureDeviation:\t" << *tabooTenureDeviation
               << "\n   tabooTenuresFac:\t\t" << *tabooTenuresFac
               << "\n   tsInstances:\t\t\t" << *tsInstances << std::endl;
+
+    std::lock_guard< std::mutex > lockMeasure{ measureMutex };
+    measure.SetSettingsParameters( *gaInstances, *maxFailures, *mutationImpact, *mutationRate,
+                                   *outputFile, *randomizedTabooTenures, *randomKeys, *reproductionRate,
+                                   *tabooTenureDeviation, *tabooTenuresFac, *tsInstances );
 }
 
 mt::Settings::~Settings() {
