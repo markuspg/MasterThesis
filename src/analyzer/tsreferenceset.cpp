@@ -77,6 +77,10 @@ void mt::TSReferenceSet::RotateSolutions() {
         }
     }
 
+    // Reference set rotation according to 'james2009cooperative' p. 817
+    std::rotate( solutions.begin(), solutions.begin() + 1, solutions.end() );
+    std::rotate( solutionValues.begin(), solutionValues.begin() + 1, solutionValues.end() );
+
     // Reset the inidicator for the next iteration
     updatedGlobalBestSolution = false;
 }
