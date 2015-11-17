@@ -34,7 +34,7 @@ class RandomKeySolution;
 
 class SALBPSolution final : public Solution< unsigned long > {
 public:
-    SALBPSolution( const std::size_t &argSize );
+    SALBPSolution( const unsigned int &argSeed, const std::size_t &argSize );
     SALBPSolution( std::vector< unsigned long > * const argSolution );
     SALBPSolution( const SALBPSolution &argSALBPSolution );
     SALBPSolution( SALBPSolution &&argSALBPSolution );
@@ -42,7 +42,8 @@ public:
 
     static SALBPSolution *ComputeFromRandomKeys( const RandomKeySolution *argSol );
     virtual SolutionBase *Copy() const override;
-    virtual std::vector< unsigned long > *GenerateRandomSolution( const std::size_t &argSize ) const override;
+    virtual std::vector< unsigned long > *GenerateRandomSolution( const unsigned int &argSeed,
+                                                                  const std::size_t &argSize ) const override;
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const override;
     virtual QAPSolution *GetQAPSolution() const override;
     virtual SALBPSolution *GetSALBPSolution() const override;

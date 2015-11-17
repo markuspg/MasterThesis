@@ -19,8 +19,8 @@
 
 #include "qap_solution.h"
 
-mt::QAPSolution::QAPSolution( const std::size_t &argSize ) :
-    Solution{ GenerateRandomSolution( argSize ) }
+mt::QAPSolution::QAPSolution( const unsigned int &argSeed, const std::size_t &argSize ) :
+    Solution{ GenerateRandomSolution( argSeed, argSize ) }
 {
 }
 
@@ -66,16 +66,17 @@ mt::SolutionBase *mt::QAPSolution::Copy() const {
     return new mt::QAPSolution{ new std::vector< unsigned long >{ *solutionVec } };
 }
 
-std::vector< unsigned long > *mt::QAPSolution::GenerateRandomSolution( const std::size_t &argSize ) const {
+std::vector< unsigned long > *mt::QAPSolution::GenerateRandomSolution( const unsigned int &argSeed,
+                                                                       const std::size_t &argSize ) const {
     std::vector< unsigned long > *tempVec = new std::vector< unsigned long >;
     tempVec->resize( argSize, 0 );
     std::iota( tempVec->begin(), tempVec->end(), 0 );
 
     std::random_device randomDevice;
 #ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() };
+    std::mt19937_64 engine{ randomDevice() + argSeed };
 #else
-    std::mt19937 engine{ randomDevice() };
+    std::mt19937 engine{ randomDevice() + argSeed };
 #endif
     std::shuffle( tempVec->begin(), tempVec->end(), engine );
 

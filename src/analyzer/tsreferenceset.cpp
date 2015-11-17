@@ -30,7 +30,7 @@ mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem,
     solutionValues.resize( tsInstanceQuantity, std::numeric_limits< double >::max() );
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
     for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
-        solutions[ i ] = problem->GenerateRandomSolution();
+        solutions[ i ] = problem->GenerateRandomSolution( i );
         solutionValues[ i ] = problem->GetOFV( solutions[ i ] );
     }
 }

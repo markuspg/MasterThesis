@@ -52,7 +52,7 @@ public:
                                const unsigned long &argSwapIndexI,
                                const unsigned long &argSwapIndexJ,
                                const Matrix< unsigned long > &argTTMatrix ) const = 0;
-    virtual SolutionBase *GenerateRandomSolution() const = 0;
+    virtual SolutionBase *GenerateRandomSolution( const unsigned int &argSeed ) const = 0;
     virtual double GetOFV( const SolutionBase * const argSolution ) const = 0;
     virtual void UpdateTabooTenures( const SolutionBase * const argNewSolution,
                                      const long &argSwapI, const long &argSwapJ,

@@ -70,11 +70,11 @@ bool mt::SALBP::CheckIfTaboo( const unsigned int &argIterationCount,
     return false;
 }
 
-mt::SolutionBase *mt::SALBP::GenerateRandomSolution() const {
+mt::SolutionBase *mt::SALBP::GenerateRandomSolution( const unsigned int &argSeed ) const {
     if ( *settings->randomKeys ) {
-        return new mt::RandomKeySolution{ size };
+        return new mt::RandomKeySolution{ argSeed, size };
     } else {
-        return new mt::SALBPSolution{ size };
+        return new mt::SALBPSolution{ argSeed, size };
     }
 }
 

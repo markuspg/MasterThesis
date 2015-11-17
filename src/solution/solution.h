@@ -40,7 +40,8 @@ public:
 
     T& operator() ( const unsigned long &argIndex ) { return ( *solutionVec )[ argIndex ]; }
 
-    virtual std::vector< T > *GenerateRandomSolution( const std::size_t &argSize ) const = 0;
+    virtual std::vector< T > *GenerateRandomSolution( const unsigned int &argSeed,
+                                                      const std::size_t &argSize ) const = 0;
 
 protected:
     std::vector< T > * solutionVec = nullptr;

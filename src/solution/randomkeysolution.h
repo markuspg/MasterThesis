@@ -33,14 +33,15 @@ namespace mt {
 class RandomKeySolution final : public Solution< double >
 {
 public:
-    RandomKeySolution( const std::size_t &argSize );
+    RandomKeySolution( const unsigned int &argSeed, const std::size_t &argSize );
     RandomKeySolution( std::vector< double > * const argSolution );
     RandomKeySolution( const RandomKeySolution &argRandomKeySolution );
     RandomKeySolution( RandomKeySolution &&argRandomKeySolution );
     virtual ~RandomKeySolution();
 
     virtual SolutionBase *Copy() const override;
-    virtual std::vector< double > *GenerateRandomSolution( const std::size_t &argSize ) const override;
+    virtual std::vector< double > *GenerateRandomSolution( const unsigned int &argSeed,
+                                                           const std::size_t &argSize ) const override;
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const override { return nullptr; }
     virtual QAPSolution *GetQAPSolution() const override;
     virtual SALBPSolution *GetSALBPSolution() const override;

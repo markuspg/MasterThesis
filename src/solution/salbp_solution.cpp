@@ -19,8 +19,8 @@
 
 #include "salbp_solution.h"
 
-mt::SALBPSolution::SALBPSolution( const std::size_t &argSize ) :
-    Solution{ GenerateRandomSolution( argSize ) }
+mt::SALBPSolution::SALBPSolution( const unsigned int &argSeed, const std::size_t &argSize ) :
+    Solution{ GenerateRandomSolution( argSeed, argSize ) }
 {
 }
 
@@ -66,16 +66,17 @@ mt::SolutionBase *mt::SALBPSolution::Copy() const {
     return new mt::SALBPSolution{ new std::vector< unsigned long >{ *solutionVec } };
 }
 
-std::vector< unsigned long > *mt::SALBPSolution::GenerateRandomSolution( const std::size_t &argSize ) const {
+std::vector< unsigned long > *mt::SALBPSolution::GenerateRandomSolution( const unsigned int &argSeed,
+                                                                         const std::size_t &argSize ) const {
     std::vector< unsigned long > *tempVec = new std::vector< unsigned long >;
     tempVec->resize( argSize, 0 );
     std::iota( tempVec->begin(), tempVec->end(), 0 );
 
     std::random_device randomDevice;
 #ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() };
+    std::mt19937_64 engine{ randomDevice() + argSeed };
 #else
-    std::mt19937 engine{ randomDevice() };
+    std::mt19937 engine{ randomDevice() + argSeed };
 #endif
     std::shuffle( tempVec->begin(), tempVec->end(), engine );
 

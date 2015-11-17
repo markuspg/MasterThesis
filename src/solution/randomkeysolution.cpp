@@ -19,8 +19,8 @@
 
 #include "randomkeysolution.h"
 
-mt::RandomKeySolution::RandomKeySolution( const std::size_t &argSize ) :
-    Solution{ GenerateRandomSolution( argSize ) }
+mt::RandomKeySolution::RandomKeySolution( const unsigned int &argSeed, const std::size_t &argSize ) :
+    Solution{ GenerateRandomSolution( argSeed, argSize ) }
 {
 }
 
@@ -46,15 +46,16 @@ mt::SolutionBase *mt::RandomKeySolution::Copy() const {
     return new mt::RandomKeySolution{ new std::vector< double >{ *solutionVec } };
 }
 
-std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const std::size_t &argSize ) const {
+std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const unsigned int &argSeed,
+                                                                      const std::size_t &argSize ) const {
     std::vector< double > *tempVec = new std::vector< double >;
     tempVec->resize( argSize, 0.0 );
 
     std::random_device randomDevice;
 #ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() };
+    std::mt19937_64 engine{ randomDevice() + argSeed };
 #else
-    std::mt19937 engine{ randomDevice() };
+    std::mt19937 engine{ randomDevice() + argSeed };
 #endif
     std::uniform_real_distribution<> distribution{ 0.0, 1.0 };
     for ( unsigned long i = 0; i < argSize; ++i ) {
