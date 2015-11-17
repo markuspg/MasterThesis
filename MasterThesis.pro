@@ -50,8 +50,10 @@ HEADERS += \
     src/solution/solutionbase.h
 
 OTHER_FILES += \
+    CMakeLists.txt \
     .gitignore \
     LICENSE \
+    MasterThesis.kdev4 \
     README.md
 
 QMAKE_CXXFLAGS += -std=c++11
