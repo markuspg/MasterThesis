@@ -93,6 +93,9 @@ void mt::TSThread::Iteration() {
     if ( !bestNeigh ) {
         ++failures;
         ++invalidSolutions;
+
+        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
+        referenceSet.SetSolution( index, nullptr, 0.0 );
     } else {
         if ( bestNeighV >= tempSolV ) {
             ++failures;
@@ -101,8 +104,6 @@ void mt::TSThread::Iteration() {
         {
             std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
             referenceSet.SetSolution( index, bestNeigh, bestNeighV );
-
-            referenceSet.PromoteBestSolution( index );
         }
     }
 

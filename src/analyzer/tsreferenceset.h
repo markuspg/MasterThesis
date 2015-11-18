@@ -52,7 +52,6 @@ public:
     unsigned int GetIterationCount() const { return iterationCounter; }
     SolutionBase *GetStartSolution( const unsigned short &argIndex ) const;
     double GetStartSolutionValue( const unsigned short &argIndex ) const;
-    void PromoteBestSolution( const unsigned short &argIndex );
     void ResetIterationCounter() { iterationCounter = 0; }
     void RotateSolutions();
     void SetSolution( const unsigned short &argIndex, SolutionBase *argSolution, const double &argV );
@@ -62,6 +61,8 @@ public:
     const mt::Problem * const problem;
 
 private:
+    void PromoteBestSolution( const unsigned short &argIndex );
+
     std::vector< SolutionBase* > bestSolutions;
     std::vector< double > bestSolutionValues;
     std::unique_ptr< SolutionBase > globalBestSolution = nullptr;

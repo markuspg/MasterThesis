@@ -74,7 +74,7 @@ void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
 void mt::TSReferenceSet::RotateSolutions() {
     // If whilst the last iteration a new global best solution was found, ...
     if ( updatedGlobalBestSolution ) {
-        // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 814)
+        // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 816)
         for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
             if ( i % 2 == 1 ) {
                 delete std::get< 0 >( solutions[ i ] );
@@ -93,9 +93,18 @@ void mt::TSReferenceSet::RotateSolutions() {
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
                                       mt::SolutionBase *argSolution,
                                       const double &argV ) {
+    // If no valid solution could be found, just set the 'updated' flag to false
+    if ( !argSolution ) {
+        std::get< 2 >( solutions[ argIndex ] ) = false;
+        return;
+    }
+    // Check if the solution changed and replace if so, otherwise set 'updated' flag to false
     if ( argSolution == std::get< 0 >( solutions[ argIndex ] ) ) {
+        std::get< 2 >( solutions[ argIndex ] ) = false;
         return;
     }
     delete std::get< 0 >( solutions[ argIndex ] );
     solutions[ argIndex ] = solTup{ argSolution, argV, true };
+
+    PromoteBestSolution( argIndex );
 }
