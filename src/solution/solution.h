@@ -22,6 +22,7 @@
 
 #include "solutionbase.h"
 
+#include <list>
 #include <vector>
 
 namespace mt {
@@ -40,6 +41,8 @@ public:
 
     T& operator() ( const unsigned long &argIndex ) { return ( *solutionVec )[ argIndex ]; }
 
+    // Solution diversification operator (james2009cooperative, p. 816)
+    void Diversify( const unsigned short &argIndex );
     virtual std::vector< T > *GenerateRandomSolution( const unsigned int &argSeed,
                                                       const std::size_t &argSize ) const = 0;
 
@@ -80,6 +83,27 @@ mt::Solution< T >::Solution( std::vector< T > * const argSolution ) :
 template < typename T >
 mt::Solution< T >::~Solution() {
     delete solutionVec;
+}
+
+template< typename T >
+void mt::Solution< T >::Diversify( const unsigned short &argIndex ) {
+    std::list< T > vecCopy{ solutionVec->begin(), solutionVec->end() };
+    solutionVec->clear();
+    for ( unsigned short step = argIndex + 1; step > 0; --step ) {
+        std::list< typename std::list< T >::iterator > iteratorList;
+        // Collect iterators to all items to be moved
+        typename std::list< T >::size_type size = vecCopy.size();
+        for ( unsigned long index = step - 1; index < size; index += step ) {
+            auto it = vecCopy.begin();
+            std::advance( it, index );
+            iteratorList.emplace_back( it );
+        }
+        // Move the referenced items to the vector and delete them from the vector copy list
+        for ( auto it = iteratorList.begin(); it != iteratorList.end(); ++it ) {
+            solutionVec->emplace_back( *( *it ) );
+            vecCopy.erase( *it );
+        }
+    }
 }
 
 #endif // SOLUTION_H

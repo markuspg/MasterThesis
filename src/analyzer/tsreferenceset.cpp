@@ -83,6 +83,15 @@ void mt::TSReferenceSet::RotateSolutions() {
         }
     }
 
+    // Diversify all solutions not being updated in the preceding iteration (james2009cooperative, p. 816)
+    for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
+        if ( std::get< 2 >( solutions[ i ] ) == false ) {
+            std::get< 0 >( solutions[ i ] )->Diversify( i );
+            std::get< 1 >( solutions[ i ] ) = problem->GetOFV( std::get< 0 >( solutions[ i ] ) );
+            std::get< 2 >( solutions[ i ] ) = true;
+        }
+    }
+
     // Reference set rotation according to 'james2009cooperative' p. 817
     std::rotate( solutions.begin(), solutions.begin() + 1, solutions.end() );
 
