@@ -118,8 +118,8 @@ void mt::TSThread::Iteration() {
     }
 }
 
-void mt::TSThread::PrepareSecondTSRun() {
-    // These options are for the second run (after the initialization run)
+void mt::TSThread::PrepareOptimizationRun() {
+    // These settings are for the optimization run (after the initialization run)
     failures = 0;
     finished = false;
     invalidSolutions = 0;

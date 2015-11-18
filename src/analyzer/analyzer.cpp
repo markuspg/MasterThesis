@@ -41,9 +41,9 @@ void mt::Analyzer::Analyze() {
     // Do the initialization run
     Run();
 
-    tsReferenceSet.ResetIterationCounter();
+    tsReferenceSet.PrepareOptimizationRun();
     for ( auto it = tsThreadObjects.begin(); it != tsThreadObjects.end(); ++it ) {
-        ( *it ).PrepareSecondTSRun();
+        ( *it ).PrepareOptimizationRun();
     }
 
     // Do the optimization run

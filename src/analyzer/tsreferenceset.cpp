@@ -54,6 +54,11 @@ double mt::TSReferenceSet::GetStartSolutionValue( const unsigned short &argIndex
     return std::get< 1 >( solutions[ argIndex ] );
 }
 
+void mt::TSReferenceSet::PrepareOptimizationRun() {
+    initializationRun = false;
+    iterationCounter = 0;
+}
+
 void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
     // Check, if the previously set new solution is better than the best one found by this thread
     if ( std::get< 1 >( solutions[ argIndex ] ) < bestSolutionValues[ argIndex ] ) {
@@ -72,6 +77,9 @@ void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
 }
 
 void mt::TSReferenceSet::RotateSolutions() {
+    if ( initializationRun ) {
+        return;
+    }
     // If whilst the last iteration a new global best solution was found, ...
     if ( updatedGlobalBestSolution ) {
         // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 816)

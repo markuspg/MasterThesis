@@ -44,7 +44,7 @@ public:
                                 SolutionBase *argTempSol );
     bool IsFinished() const { return finished; }
     void Iteration();
-    void PrepareSecondTSRun();
+    void PrepareOptimizationRun();
 
 private:
     unsigned int failures = 0;
