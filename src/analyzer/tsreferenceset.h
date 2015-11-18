@@ -30,7 +30,10 @@
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <tuple>
 #include <vector>
+
+typedef std::tuple< mt::SolutionBase*, double, bool > solTup;
 
 extern mt::Measure measure;
 extern std::mutex measureMutex;
@@ -47,16 +50,12 @@ public:
     double GetGlobalMinimumSolV() const { return *std::min_element( bestSolutionValues.begin(),
                                                                     bestSolutionValues.end() ); }
     unsigned int GetIterationCount() const { return iterationCounter; }
-    SolutionBase *GetStartSolution( const unsigned short &argIndex ) const
-        { return solutions[ argIndex ]; }
-    double GetStartSolutionValue( const unsigned short &argIndex ) const
-        { return solutionValues[ argIndex ]; }
+    SolutionBase *GetStartSolution( const unsigned short &argIndex ) const;
+    double GetStartSolutionValue( const unsigned short &argIndex ) const;
     void PromoteBestSolution( const unsigned short &argIndex );
     void ResetIterationCounter() { iterationCounter = 0; }
     void RotateSolutions();
-    void SetSolution( const unsigned short &argIndex, SolutionBase *argSolution );
-    void SetSolutionValue( const unsigned short &argIndex, const double &argSolutionValue )
-        { solutionValues[ argIndex ] = argSolutionValue; }
+    void SetSolution( const unsigned short &argIndex, SolutionBase *argSolution, const double &argV );
 
     TSReferenceSet &operator++() { ++iterationCounter; return *this; }
 
@@ -68,8 +67,8 @@ private:
     std::unique_ptr< SolutionBase > globalBestSolution = nullptr;
     double globalBestSolutionV = std::numeric_limits< double >::max();
     unsigned int iterationCounter = 0;
-    std::vector< SolutionBase* > solutions;
-    std::vector< double > solutionValues;
+    // Store solutions, their OFV and their update status (james2009cooperative, p.816)
+    std::vector< solTup > solutions;
     const unsigned short &tsInstanceQuantity;
     bool updatedGlobalBestSolution = false;
 };

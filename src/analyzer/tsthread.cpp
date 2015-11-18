@@ -100,8 +100,7 @@ void mt::TSThread::Iteration() {
 
         {
             std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
-            referenceSet.SetSolution( index, bestNeigh );
-            referenceSet.SetSolutionValue( index, bestNeighV );
+            referenceSet.SetSolution( index, bestNeigh, bestNeighV );
 
             referenceSet.PromoteBestSolution( index );
         }

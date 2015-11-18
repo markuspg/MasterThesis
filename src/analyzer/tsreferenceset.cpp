@@ -26,12 +26,11 @@ mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem,
 {
     bestSolutions.resize( tsInstanceQuantity, nullptr );
     bestSolutionValues.resize( tsInstanceQuantity, std::numeric_limits< double >::max() );
-    solutions.resize( tsInstanceQuantity, nullptr );
-    solutionValues.resize( tsInstanceQuantity, std::numeric_limits< double >::max() );
+    solutions.resize( tsInstanceQuantity, solTup{ nullptr, 0.0, true } );
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
     for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
-        solutions[ i ] = problem->GenerateRandomSolution( i );
-        solutionValues[ i ] = problem->GetOFV( solutions[ i ] );
+        std::get< 0 >( solutions[ i ] ) = problem->GenerateRandomSolution( i );
+        std::get< 1 >( solutions[ i ] ) = problem->GetOFV( std::get< 0 >( solutions[ i ] ) );
     }
 }
 
@@ -40,25 +39,33 @@ mt::TSReferenceSet::~TSReferenceSet() {
         delete *it;
     }
     for ( auto it = solutions.begin(); it != solutions.end(); ++it) {
-        delete *it;
+        delete std::get< 0 >( *it );
     }
 
     std::lock_guard< std::mutex > lockMeasure{ measureMutex };
     measure.SetOverallIterationCount( iterationCounter );
 }
 
+mt::SolutionBase *mt::TSReferenceSet::GetStartSolution( const unsigned short &argIndex ) const {
+    return std::get< 0 >( solutions[ argIndex ] );
+}
+
+double mt::TSReferenceSet::GetStartSolutionValue( const unsigned short &argIndex ) const {
+    return std::get< 1 >( solutions[ argIndex ] );
+}
+
 void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
     // Check, if the previously set new solution is better than the best one found by this thread
-    if ( solutionValues[ argIndex ] < bestSolutionValues[ argIndex ] ) {
+    if ( std::get< 1 >( solutions[ argIndex ] ) < bestSolutionValues[ argIndex ] ) {
         // If yes, update the best solution for this thread
         delete bestSolutions[ argIndex ];
-        bestSolutions[ argIndex ] = solutions[ argIndex ]->Copy();
-        bestSolutionValues[ argIndex ] = solutionValues[ argIndex ];
+        bestSolutions[ argIndex ] = std::get< 0 >( solutions[ argIndex ] )->Copy();
+        bestSolutionValues[ argIndex ] = std::get< 1 >( solutions[ argIndex ] );
 
         // Check if and update, if a new global optimum (accross all threads) was found
         if ( bestSolutionValues[ argIndex ] < globalBestSolutionV ) {
             updatedGlobalBestSolution = true;
-            globalBestSolution.reset( solutions[ argIndex ]->Copy() );
+            globalBestSolution.reset( std::get< 0 >( solutions[ argIndex ] )->Copy() );
             globalBestSolutionV = bestSolutionValues[ argIndex ];
         }
     }
@@ -70,26 +77,25 @@ void mt::TSReferenceSet::RotateSolutions() {
         // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 814)
         for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
             if ( i % 2 == 1 ) {
-                delete solutions[ i ];
-                solutions[ i ] = globalBestSolution->Copy();
-                solutionValues[ i ] = globalBestSolutionV;
+                delete std::get< 0 >( solutions[ i ] );
+                solutions[ i ] = solTup{ globalBestSolution->Copy(), globalBestSolutionV, true };
             }
         }
     }
 
     // Reference set rotation according to 'james2009cooperative' p. 817
     std::rotate( solutions.begin(), solutions.begin() + 1, solutions.end() );
-    std::rotate( solutionValues.begin(), solutionValues.begin() + 1, solutionValues.end() );
 
     // Reset the inidicator for the next iteration
     updatedGlobalBestSolution = false;
 }
 
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
-                                      mt::SolutionBase *argSolution ) {
-    if ( argSolution == solutions[ argIndex ] ) {
+                                      mt::SolutionBase *argSolution,
+                                      const double &argV ) {
+    if ( argSolution == std::get< 0 >( solutions[ argIndex ] ) ) {
         return;
     }
-    delete solutions[ argIndex ];
-    solutions[ argIndex ] = argSolution;
+    delete std::get< 0 >( solutions[ argIndex ] );
+    solutions[ argIndex ] = solTup{ argSolution, argV, true };
 }
