@@ -35,6 +35,7 @@ bool mt::QAP::CheckIfTaboo( const unsigned int &argIterationCount,
                             const unsigned long &argSwapIndexI,
                             const unsigned long &argSwapIndexJ,
                             const Matrix< unsigned long > &argTTMatrix ) const {
+    // taillard1991robust, p. 447
     QAPSolution * const tempSol = dynamic_cast< QAPSolution* >( argSolution->GetQAPSolution() );
     if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) > argIterationCount
          && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) > argIterationCount ) {

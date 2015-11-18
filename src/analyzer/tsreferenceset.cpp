@@ -67,7 +67,7 @@ void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
 void mt::TSReferenceSet::RotateSolutions() {
     // If whilst the last iteration a new global best solution was found, ...
     if ( updatedGlobalBestSolution ) {
-        // promote it to all odd taboo search thread start solutions
+        // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 814)
         for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
             if ( i % 2 == 1 ) {
                 delete solutions[ i ];

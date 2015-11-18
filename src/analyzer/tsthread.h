@@ -56,6 +56,7 @@ private:
     std::mutex &mutex;
     const mt::Problem * const problem = nullptr;
     mt::TSReferenceSet &referenceSet;
+    // taboo tenures and aspiration criterion local to each thread (james2009cooperative, p. 814)
     unsigned int tabooTenure = 0;
     mt::Matrix< unsigned long > tabooTenures;
 };

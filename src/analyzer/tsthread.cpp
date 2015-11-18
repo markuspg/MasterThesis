@@ -55,6 +55,7 @@ mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
     // Analyze all swaps
     long swapI = 0, swapJ = 0;
     while ( true ) {
+        // taillard1991robust, p. 445
         argBestNeighV = costs.GetMinimumValueIndizes( swapI, swapJ, []( dSol a, dSol b ){ return a.first < b.first; } ).first;
         // If no improvement could be achieved, leave with false, indicating improvement failure
         if ( argBestNeighV == std::numeric_limits< double >::max() ) {

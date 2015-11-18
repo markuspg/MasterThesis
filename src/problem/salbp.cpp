@@ -60,6 +60,7 @@ bool mt::SALBP::CheckIfTaboo( const unsigned int &argIterationCount,
                               const unsigned long &argSwapIndexI,
                               const unsigned long &argSwapIndexJ,
                               const Matrix< unsigned long > &argTTMatrix ) const {
+    // taillard1991robust, p. 447
     SALBPSolution * const tempSol = dynamic_cast< SALBPSolution* >( argSolution->GetSALBPSolution() );
     if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) > argIterationCount
          && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) > argIterationCount ) {

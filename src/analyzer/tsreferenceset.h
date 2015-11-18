@@ -37,6 +37,7 @@ extern std::mutex measureMutex;
 
 namespace mt {
 
+// For diversification and intensification (james2009cooperative, p. 814)
 class TSReferenceSet final {
 public:
     TSReferenceSet( const Problem * const argProblem,
