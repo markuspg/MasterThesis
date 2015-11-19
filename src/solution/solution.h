@@ -42,7 +42,7 @@ public:
     T& operator() ( const unsigned long &argIndex ) { return ( *solutionVec )[ argIndex ]; }
 
     // Solution diversification operator (james2009cooperative, p. 816)
-    void Diversify( const unsigned short &argIndex );
+    void Diversify( const unsigned long &argStepWidthBase ) override;
     virtual std::vector< T > *GenerateRandomSolution( const unsigned int &argSeed,
                                                       const std::size_t &argSize ) const = 0;
 
@@ -86,10 +86,13 @@ mt::Solution< T >::~Solution() {
 }
 
 template< typename T >
-void mt::Solution< T >::Diversify( const unsigned short &argIndex ) {
+void mt::Solution< T >::Diversify( const unsigned long &argStepWidthBase ) {
+    // This ensures that the diversification step size always starts with 2 (james2009cooperative, p. 816)
+    unsigned long stepWidth = argStepWidthBase % ( solutionVec->size() - 1 );
+    ++stepWidth;
     std::list< T > vecCopy{ solutionVec->begin(), solutionVec->end() };
     solutionVec->clear();
-    for ( unsigned short step = argIndex + 1; step > 0; --step ) {
+    for ( unsigned long step = stepWidth + 1; step > 0; --step ) {
         std::list< typename std::list< T >::iterator > iteratorList;
         // Collect iterators to all items to be moved
         typename std::list< T >::size_type size = vecCopy.size();

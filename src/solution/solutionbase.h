@@ -37,7 +37,7 @@ public:
 
     virtual SolutionBase *Copy() const = 0;
     // Solution diversification operator (james2009cooperative, p. 816)
-    virtual void Diversify( const unsigned short &argIndex ) = 0;
+    virtual void Diversify( const unsigned long &argStepWidthBase ) = 0;
     virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const = 0;
     virtual QAPSolution *GetQAPSolution() const = 0;
     virtual SALBPSolution *GetSALBPSolution() const = 0;
