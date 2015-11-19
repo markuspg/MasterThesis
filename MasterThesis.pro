@@ -56,4 +56,4 @@ OTHER_FILES += \
     MasterThesis.kdev4 \
     README.md
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++14
