@@ -26,11 +26,11 @@ mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem,
 {
     bestSolutions.resize( tsInstanceQuantity, nullptr );
     bestSolutionValues.resize( tsInstanceQuantity, std::numeric_limits< double >::max() );
-    solutions.resize( tsInstanceQuantity, solTup{ nullptr, 0.0, true } );
+    solutions.resize( tsInstanceQuantity, solTup{ nullptr, 0.0, 0, true } );
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
     for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
-        std::get< 0 >( solutions[ i ] ) = problem->GenerateRandomSolution( i );
-        std::get< 1 >( solutions[ i ] ) = problem->GetOFV( std::get< 0 >( solutions[ i ] ) );
+        std::get< SolutionBase* >( solutions[ i ] ) = problem->GenerateRandomSolution( i );
+        std::get< double >( solutions[ i ] ) = problem->GetOFV( std::get< SolutionBase* >( solutions[ i ] ) );
     }
 }
 
@@ -39,7 +39,7 @@ mt::TSReferenceSet::~TSReferenceSet() {
         delete *it;
     }
     for ( auto it = solutions.begin(); it != solutions.end(); ++it) {
-        delete std::get< 0 >( *it );
+        delete std::get< SolutionBase* >( *it );
     }
 
     std::lock_guard< std::mutex > lockMeasure{ measureMutex };
@@ -47,11 +47,11 @@ mt::TSReferenceSet::~TSReferenceSet() {
 }
 
 mt::SolutionBase *mt::TSReferenceSet::GetStartSolution( const unsigned short &argIndex ) const {
-    return std::get< 0 >( solutions[ argIndex ] );
+    return std::get< SolutionBase* >( solutions[ argIndex ] );
 }
 
 double mt::TSReferenceSet::GetStartSolutionValue( const unsigned short &argIndex ) const {
-    return std::get< 1 >( solutions[ argIndex ] );
+    return std::get< double >( solutions[ argIndex ] );
 }
 
 void mt::TSReferenceSet::PrepareOptimizationRun() {
@@ -61,16 +61,16 @@ void mt::TSReferenceSet::PrepareOptimizationRun() {
 
 void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
     // Check, if the previously set new solution is better than the best one found by this thread
-    if ( std::get< 1 >( solutions[ argIndex ] ) < bestSolutionValues[ argIndex ] ) {
+    if ( std::get< double >( solutions[ argIndex ] ) < bestSolutionValues[ argIndex ] ) {
         // If yes, update the best solution for this thread
         delete bestSolutions[ argIndex ];
-        bestSolutions[ argIndex ] = std::get< 0 >( solutions[ argIndex ] )->Copy();
-        bestSolutionValues[ argIndex ] = std::get< 1 >( solutions[ argIndex ] );
+        bestSolutions[ argIndex ] = std::get< SolutionBase* >( solutions[ argIndex ] )->Copy();
+        bestSolutionValues[ argIndex ] = std::get< double >( solutions[ argIndex ] );
 
         // Check if and update, if a new global optimum (accross all threads) was found
         if ( bestSolutionValues[ argIndex ] < globalBestSolutionV ) {
             updatedGlobalBestSolution = true;
-            globalBestSolution.reset( std::get< 0 >( solutions[ argIndex ] )->Copy() );
+            globalBestSolution.reset( std::get< SolutionBase* >( solutions[ argIndex ] )->Copy() );
             globalBestSolutionV = bestSolutionValues[ argIndex ];
         }
     }
@@ -78,6 +78,8 @@ void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
 
 void mt::TSReferenceSet::RotateSolutions() {
     if ( initializationRun ) {
+        // Deacitivate solution circulation and promotion whilst the initialization run
+        // (james2009cooperative, p. 814)
         return;
     }
     // If whilst the last iteration a new global best solution was found, ...
@@ -85,18 +87,25 @@ void mt::TSReferenceSet::RotateSolutions() {
         // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 816)
         for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
             if ( i % 2 == 1 ) {
-                delete std::get< 0 >( solutions[ i ] );
-                solutions[ i ] = solTup{ globalBestSolution->Copy(), globalBestSolutionV, true };
+                unsigned long tempStepWidth = std::get< unsigned long >( solutions[ i ] );
+                delete std::get< SolutionBase* >( solutions[ i ] );
+                solutions[ i ] = solTup{ globalBestSolution->Copy(),
+                                         globalBestSolutionV,
+                                         tempStepWidth,
+                                         true };
             }
         }
     }
 
     // Diversify all solutions not being updated in the preceding iteration (james2009cooperative, p. 816)
     for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
-        if ( std::get< 2 >( solutions[ i ] ) == false ) {
-            std::get< 0 >( solutions[ i ] )->Diversify( i );
-            std::get< 1 >( solutions[ i ] ) = problem->GetOFV( std::get< 0 >( solutions[ i ] ) );
-            std::get< 2 >( solutions[ i ] ) = true;
+        if ( std::get< bool >( solutions[ i ] ) == false ) {
+            std::get< SolutionBase* >( solutions[ i ] )->Diversify( std::get< unsigned long >(
+                                                                            solutions[ i ] ) );
+            std::get< double >( solutions[ i ] ) = problem->GetOFV( std::get< SolutionBase* >(
+                                                                            solutions[ i ] ) );
+            std::get< unsigned long >( solutions[ i ] ) += 1;
+            std::get< bool >( solutions[ i ] ) = true;
         }
     }
 
@@ -112,16 +121,17 @@ void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
                                       const double &argV ) {
     // If no valid solution could be found, just set the 'updated' flag to false
     if ( !argSolution ) {
-        std::get< 2 >( solutions[ argIndex ] ) = false;
+        std::get< bool >( solutions[ argIndex ] ) = false;
         return;
     }
     // Check if the solution changed and replace if so, otherwise set 'updated' flag to false
-    if ( argSolution == std::get< 0 >( solutions[ argIndex ] ) ) {
-        std::get< 2 >( solutions[ argIndex ] ) = false;
+    if ( argSolution == std::get< SolutionBase* >( solutions[ argIndex ] ) ) {
+        std::get< bool >( solutions[ argIndex ] ) = false;
         return;
     }
-    delete std::get< 0 >( solutions[ argIndex ] );
-    solutions[ argIndex ] = solTup{ argSolution, argV, true };
+    unsigned long tempStepWidth = std::get< unsigned long >( solutions[ argIndex ] );
+    delete std::get< SolutionBase* >( solutions[ argIndex ] );
+    solutions[ argIndex ] = solTup{ argSolution, argV, tempStepWidth, true };
 
     PromoteBestSolution( argIndex );
 }

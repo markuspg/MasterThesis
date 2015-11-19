@@ -22,6 +22,7 @@
 mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
                         const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet ) :
     index{ argIndex },
+    // Tighter stopping criterion in the initialization run (james2009cooperative, p. 814)
     maxFailures{ *settings->maxFailures / 100 },
     mutex{ argMutex },
     problem{ argProblem },
@@ -124,6 +125,7 @@ void mt::TSThread::PrepareOptimizationRun() {
     finished = false;
     invalidSolutions = 0;
     iterationCount = 0;
+    // Tighter stopping criterion in the initialization run (james2009cooperative, p. 814)
     maxFailures *= 100;
     tabooTenures.ResetWithValue( 0 );
 }

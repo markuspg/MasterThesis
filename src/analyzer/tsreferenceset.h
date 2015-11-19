@@ -33,7 +33,7 @@
 #include <tuple>
 #include <vector>
 
-typedef std::tuple< mt::SolutionBase*, double, bool > solTup;
+typedef std::tuple< mt::SolutionBase*, double, unsigned long, bool > solTup;
 
 extern mt::Measure measure;
 extern std::mutex measureMutex;
