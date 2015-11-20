@@ -40,6 +40,7 @@ public:
     virtual ~Solution();
 
     T& operator() ( const unsigned long &argIndex ) { return ( *solutionVec )[ argIndex ]; }
+    T& operator() ( const unsigned long &argIndex ) const { return ( *solutionVec )[ argIndex ]; }
 
     // Solution diversification operator (james2009cooperative, p. 816)
     void Diversify( const unsigned long &argStepWidthBase ) override;
