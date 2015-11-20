@@ -40,26 +40,7 @@ mt::RandomKeySolution::RandomKeySolution( mt::RandomKeySolution &&argRandomKeySo
 }
 
 mt::RandomKeySolution::~RandomKeySolution() {
-}
-
-std::vector< unsigned long > *mt::RandomKeySolution::ConvertToPermutation() const {
-    // The solution to be converted and calculated
-    std::vector< double > * solution = new std::vector< double >{ *solutionVec };
-    // Stores the converted solution
-    std::vector< unsigned long > *tempAssignment = new std::vector< unsigned long >;
-    tempAssignment->resize( size );
-
-    // Query for 'solution-size' iterations the minimum element and set the index in the assigment vector
-    for ( unsigned long i = 0; i < size; ++i ) {
-        std::vector< double >::iterator minElem = std::min_element( solution->begin(), solution->end() );
-        auto offset = std::distance( solution->begin(), minElem) ;
-        ( *tempAssignment )[ i ] = offset;
-        *minElem = std::numeric_limits< double >::max();
-    }
-    delete solution;
-    solution = nullptr;
-
-    return tempAssignment;
+    delete permutationVec;
 }
 
 mt::SolutionBase *mt::RandomKeySolution::Copy() const {
@@ -85,8 +66,11 @@ std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const unsi
     return tempVec;
 }
 
-mt::PermSolution *mt::RandomKeySolution::GetPermSolution() const {
-    return new PermSolution{ ConvertToPermutation() };
+mt::PermSolution *mt::RandomKeySolution::GetPermSolution() {
+    if ( solVecChanged ) {
+        UpdatePermutationVector();
+    }
+    return new PermSolution{ new std::vector< unsigned long >{ *permutationVec } };
 }
 
 mt::SolutionBase *mt::RandomKeySolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
@@ -115,4 +99,25 @@ mt::SolutionBase *mt::RandomKeySolution::ReproduceWithOtherParent( const unsigne
     }
 
     return new mt::RandomKeySolution{ newSolutionVec };
+}
+
+void mt::RandomKeySolution::UpdatePermutationVector() {
+    delete permutationVec;
+    // The solution to be converted and calculated
+    std::vector< double > * solution = new std::vector< double >{ *solutionVec };
+    // Stores the converted solution
+    std::vector< unsigned long > *tempAssignment = new std::vector< unsigned long >;
+    tempAssignment->resize( size );
+
+    // Query for 'solution-size' iterations the minimum element and set the index in the assigment vector
+    for ( unsigned long i = 0; i < size; ++i ) {
+        std::vector< double >::iterator minElem = std::min_element( solution->begin(), solution->end() );
+        auto offset = std::distance( solution->begin(), minElem) ;
+        ( *tempAssignment )[ i ] = offset;
+        *minElem = std::numeric_limits< double >::max();
+    }
+    delete solution;
+    solution = nullptr;
+
+    permutationVec = tempAssignment;
 }

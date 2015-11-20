@@ -48,13 +48,13 @@ public:
 
     // The taboo argument of this function is from 'taillard1991robust', p. 447
     virtual bool CheckIfTaboo( const unsigned int &argIterationCount,
-                               const SolutionBase * const argSolution,
+                               SolutionBase * const argSolution,
                                const unsigned long &argSwapIndexI,
                                const unsigned long &argSwapIndexJ,
                                const Matrix< unsigned long > &argTTMatrix ) const = 0;
     virtual SolutionBase *GenerateRandomSolution( const unsigned int &argSeed ) const = 0;
-    virtual double GetOFV( const SolutionBase * const argSolution ) const = 0;
-    virtual void UpdateTabooTenures( const SolutionBase * const argNewSolution,
+    virtual double GetOFV( SolutionBase * const argSolution ) const = 0;
+    virtual void UpdateTabooTenures( SolutionBase * const argNewSolution,
                                      const long &argSwapI, const long &argSwapJ,
                                      const unsigned long &argTabooTenure,
                                      mt::Matrix< unsigned long > &argTTMatrix ) const = 0;

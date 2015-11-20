@@ -31,7 +31,7 @@ mt::QAP::~QAP() {
 }
 
 bool mt::QAP::CheckIfTaboo( const unsigned int &argIterationCount,
-                            const SolutionBase * const argSolution,
+                            SolutionBase * const argSolution,
                             const unsigned long &argSwapIndexI,
                             const unsigned long &argSwapIndexJ,
                             const Matrix< unsigned long > &argTTMatrix ) const {
@@ -54,7 +54,7 @@ mt::SolutionBase *mt::QAP::GenerateRandomSolution( const unsigned int &argSeed )
     }
 }
 
-double mt::QAP::GetOFV( const mt::SolutionBase * const argSolution ) const {
+double mt::QAP::GetOFV( mt::SolutionBase * const argSolution ) const {
     // Stores the converted solution
     mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argSolution->GetPermSolution() );
 
@@ -73,7 +73,7 @@ double mt::QAP::GetOFV( const mt::SolutionBase * const argSolution ) const {
     return ofv;
 }
 
-void mt::QAP::UpdateTabooTenures( const mt::SolutionBase * const argNewSolution,
+void mt::QAP::UpdateTabooTenures( mt::SolutionBase * const argNewSolution,
                                   const long &argSwapI, const long &argSwapJ,
                                   const unsigned long &argTabooTenure,
                                   mt::Matrix<unsigned long> &argTTMatrix ) const {

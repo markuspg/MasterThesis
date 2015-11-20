@@ -47,7 +47,7 @@ public:
     virtual SolutionBase *Copy() const = 0;
     // Solution diversification operator (james2009cooperative, p. 816)
     virtual void Diversify( const unsigned long &argStepWidthBase ) = 0;
-    virtual PermSolution *GetPermSolution() const = 0;
+    virtual PermSolution *GetPermSolution() = 0;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const = 0;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,

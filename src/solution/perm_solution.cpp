@@ -63,7 +63,7 @@ std::vector< unsigned long > *mt::PermSolution::GenerateRandomSolution( const un
     return tempVec;
 }
 
-mt::PermSolution *mt::PermSolution::GetPermSolution() const {
+mt::PermSolution *mt::PermSolution::GetPermSolution() {
     return dynamic_cast< PermSolution* >( Copy() );
 }
 

@@ -40,13 +40,13 @@ public:
     virtual ~QAP();
 
     virtual bool CheckIfTaboo( const unsigned int &argIterationCount,
-                               const SolutionBase * const argSolution,
+                               SolutionBase * const argSolution,
                                const unsigned long &argSwapIndexI,
                                const unsigned long &argSwapIndexJ,
                                const Matrix< unsigned long > &argTTMatrix ) const override;
     virtual SolutionBase *GenerateRandomSolution( const unsigned int &argSeed ) const override;
-    virtual double GetOFV( const SolutionBase * const argSolution ) const override;
-    virtual void UpdateTabooTenures( const SolutionBase * const argNewSolution,
+    virtual double GetOFV( SolutionBase * const argSolution ) const override;
+    virtual void UpdateTabooTenures( SolutionBase * const argNewSolution,
                                      const long &argSwapI, const long &argSwapJ,
                                      const unsigned long &argTabooTenure,
                                      mt::Matrix< unsigned long > &argTTMatrix ) const override;

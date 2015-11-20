@@ -41,14 +41,16 @@ public:
     virtual SolutionBase *Copy() const override;
     virtual std::vector< double > *GenerateRandomSolution( const unsigned int &argSeed,
                                                            const std::size_t &argSize ) const override;
-    virtual PermSolution *GetPermSolution() const override;
+    virtual PermSolution *GetPermSolution() override;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const override;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const SolutionBase * const argOtherParent ) const override;
 
 private:
-    std::vector< unsigned long > *ConvertToPermutation() const;
+    void UpdatePermutationVector();
+
+    std::vector< unsigned long > *permutationVec = nullptr;
 };
 
 }

@@ -56,7 +56,7 @@ mt::SALBP::~SALBP() {
 }
 
 bool mt::SALBP::CheckIfTaboo( const unsigned int &argIterationCount,
-                              const SolutionBase * const argSolution,
+                              SolutionBase * const argSolution,
                               const unsigned long &argSwapIndexI,
                               const unsigned long &argSwapIndexJ,
                               const Matrix< unsigned long > &argTTMatrix ) const {
@@ -79,7 +79,7 @@ mt::SolutionBase *mt::SALBP::GenerateRandomSolution( const unsigned int &argSeed
     }
 }
 
-double mt::SALBP::GetOFV( const SolutionBase * const argSolution ) const {
+double mt::SALBP::GetOFV( SolutionBase * const argSolution ) const {
     // Storage for the converted solution and its objective function value
     PermSolution * tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
 
@@ -122,7 +122,7 @@ double mt::SALBP::GetOFV( const SolutionBase * const argSolution ) const {
     return std::distance( stationTimes.begin(), std::find( stationTimes.begin(), stationTimes.end(), 0 ) );
 }
 
-void mt::SALBP::UpdateTabooTenures( const SolutionBase * const argNewSolution,
+void mt::SALBP::UpdateTabooTenures( SolutionBase * const argNewSolution,
                                     const long &argSwapI, const long &argSwapJ,
                                     const unsigned long &argTabooTenure,
                                     mt::Matrix<unsigned long> &argTTMatrix ) const {
