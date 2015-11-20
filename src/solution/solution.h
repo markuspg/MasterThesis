@@ -39,7 +39,7 @@ public:
     Solution( const solutionTypes_t &argSolutionType, std::vector< T > * const argSolution );
     virtual ~Solution();
 
-    T& operator() ( const unsigned long &argIndex ) { return ( *solutionVec )[ argIndex ]; }
+    T& operator() ( const unsigned long &argIndex );
     T& operator() ( const unsigned long &argIndex ) const { return ( *solutionVec )[ argIndex ]; }
 
     // Solution diversification operator (james2009cooperative, p. 816)
@@ -51,6 +51,7 @@ public:
 protected:
     typename std::vector< T >::size_type size = 0;
     std::vector< T > * solutionVec = nullptr;
+    bool solVecChanged = false;
 };
 
 }
@@ -59,7 +60,8 @@ template < typename T >
 mt::Solution< T >::Solution( const Solution &argSolution ) :
     SolutionBase{ argSolution },
     size{ argSolution.size },
-    solutionVec{ new std::vector< T >{ *argSolution.solutionVec } }
+    solutionVec{ new std::vector< T >{ *argSolution.solutionVec } },
+    solVecChanged{ true }
 {
 }
 
@@ -67,7 +69,8 @@ template < typename T >
 mt::Solution< T >::Solution( Solution &&argSolution ) :
     SolutionBase{ argSolution },
     size{ argSolution.size },
-    solutionVec{ argSolution.solutionVec }
+    solutionVec{ argSolution.solutionVec },
+    solVecChanged{ true }
 {
     argSolution.solutionVec = nullptr;
 }
@@ -76,13 +79,21 @@ template < typename T >
 mt::Solution< T >::Solution( const solutionTypes_t &argSolutionType, std::vector< T > * const argSolution ) :
     SolutionBase{ argSolutionType },
     size{ argSolution->size() },
-    solutionVec{ argSolution }
+    solutionVec{ argSolution },
+    solVecChanged{ true }
 {
 }
 
 template < typename T >
 mt::Solution< T >::~Solution() {
     delete solutionVec;
+}
+
+template < typename T >
+T& mt::Solution< T >::operator() ( const unsigned long &argIndex ) {
+    return ( *solutionVec )[ argIndex ];
+    // Because solutionVec could possibly be changed
+    solVecChanged = true;
 }
 
 template< typename T >
@@ -107,6 +118,7 @@ void mt::Solution< T >::Diversify( const unsigned long &argStepWidthBase ) {
             vecCopy.erase( *it );
         }
     }
+    solVecChanged = true;
 }
 
 #endif // SOLUTION_H
