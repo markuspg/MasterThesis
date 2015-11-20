@@ -42,7 +42,6 @@ public:
     virtual std::vector< double > *GenerateRandomSolution( const unsigned int &argSeed,
                                                            const std::size_t &argSize ) const override;
     virtual PermSolution *GetPermSolution() const override;
-    virtual std::vector< double > *GetSolutionVectorCopy() const;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const override;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,

@@ -89,10 +89,6 @@ mt::PermSolution *mt::RandomKeySolution::GetPermSolution() const {
     return new PermSolution{ ConvertToPermutation() };
 }
 
-std::vector< double > *mt::RandomKeySolution::GetSolutionVectorCopy() const {
-    return new std::vector< double >{ *solutionVec };
-}
-
 mt::SolutionBase *mt::RandomKeySolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
                                                             const unsigned long &argSwapIndexJ ) const {
     std::vector< double > *temp = new std::vector< double >{ *solutionVec };
