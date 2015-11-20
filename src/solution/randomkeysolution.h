@@ -42,10 +42,9 @@ public:
     virtual SolutionBase *Copy() const override;
     virtual std::vector< double > *GenerateRandomSolution( const unsigned int &argSeed,
                                                            const std::size_t &argSize ) const override;
-    virtual std::vector< unsigned long > *GetAssignmentVectorCopy() const override { return nullptr; }
     virtual QAPSolution *GetQAPSolution() const override;
     virtual SALBPSolution *GetSALBPSolution() const override;
-    virtual std::vector< double > *GetSolutionVectorCopy() const override;
+    virtual std::vector< double > *GetSolutionVectorCopy() const;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const override;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,

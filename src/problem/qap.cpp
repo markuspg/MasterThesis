@@ -57,18 +57,18 @@ mt::SolutionBase *mt::QAP::GenerateRandomSolution( const unsigned int &argSeed )
 double mt::QAP::GetOFV( const mt::SolutionBase * const argSolution ) const {
     // Stores the converted solution
     mt::QAPSolution * const tempSol = dynamic_cast< mt::QAPSolution* >( argSolution->GetQAPSolution() );
-    const std::vector< unsigned long > * const assignmentVec = tempSol->GetAssignmentVectorCopy();
-    delete tempSol;
 
     unsigned long ofv = 0;
-    for ( unsigned long i = 0; i < assignmentVec->size(); ++i ) {
-        for ( unsigned long j = 0; j < assignmentVec->size(); ++j ) {
-            const int flow = flows( ( *assignmentVec )[ i ], ( *assignmentVec )[ j ] );
+    std::vector< unsigned long >::size_type size = tempSol->GetSize();
+    for ( unsigned long i = 0; i < size; ++i ) {
+        for ( unsigned long j = 0; j < size; ++j ) {
+            const int flow = flows( ( *tempSol )( i ), ( *tempSol )( j ) );
             const int distance = distances( i, j );
             ofv += flow * distance;
         }
     }
-    delete assignmentVec;
+
+    delete tempSol;
 
     return ofv;
 }

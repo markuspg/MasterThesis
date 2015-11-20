@@ -83,10 +83,6 @@ std::vector< unsigned long > *mt::QAPSolution::GenerateRandomSolution( const uns
     return tempVec;
 }
 
-std::vector< unsigned long > *mt::QAPSolution::GetAssignmentVectorCopy() const {
-    return new std::vector< unsigned long >{ *solutionVec };
-}
-
 mt::QAPSolution *mt::QAPSolution::GetQAPSolution() const {
     return dynamic_cast< mt::QAPSolution* >( Copy() );
 }
@@ -106,20 +102,19 @@ mt::SolutionBase *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSw
 
 mt::SolutionBase *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const mt::SolutionBase * const argOtherParent ) const {
+    const QAPSolution * const tempSol = dynamic_cast< const QAPSolution* >( argOtherParent );
+    assert( tempSol );
+
     std::vector< unsigned long > * const newAssignment = new std::vector< unsigned long >;
     newAssignment->resize( size, 0 );
-
-    std::vector< unsigned long > *otherParentsAssignment = argOtherParent->GetAssignmentVectorCopy();
 
     for ( unsigned long i = 0; i < size; ++i ) {
         if ( i < argCrossoverPoint ) {
             newAssignment->at( i ) = ( *solutionVec )[ i ];
         } else {
-            newAssignment->at( i ) = ( *otherParentsAssignment )[ i ];
+            newAssignment->at( i ) = ( *tempSol )( i );
         }
     }
-
-    delete otherParentsAssignment;
 
     return new mt::QAPSolution{ newAssignment };
 }

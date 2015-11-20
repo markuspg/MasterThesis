@@ -83,20 +83,12 @@ std::vector< unsigned long > *mt::SALBPSolution::GenerateRandomSolution( const u
     return tempVec;
 }
 
-std::vector< unsigned long > *mt::SALBPSolution::GetAssignmentVectorCopy() const {
-    return new std::vector< unsigned long >{ *solutionVec };
-}
-
 mt::QAPSolution *mt::SALBPSolution::GetQAPSolution() const {
     return nullptr;
 }
 
 mt::SALBPSolution *mt::SALBPSolution::GetSALBPSolution() const {
     return dynamic_cast< mt::SALBPSolution* >( Copy() );
-}
-
-std::vector< double > *mt::SALBPSolution::GetSolutionVectorCopy() const {
-    return nullptr;
 }
 
 mt::SolutionBase *mt::SALBPSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
@@ -110,20 +102,19 @@ mt::SolutionBase *mt::SALBPSolution::GetSwappedVariant( const unsigned long &arg
 
 mt::SolutionBase *mt::SALBPSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const mt::SolutionBase * const argOtherParent ) const {
+    const SALBPSolution * const tempSol = dynamic_cast< const SALBPSolution* >( argOtherParent );
+    assert( tempSol );
+
     std::vector< unsigned long > * const newAssignment = new std::vector< unsigned long >;
     newAssignment->resize( size, 0 );
-
-    std::vector< unsigned long > *otherParentsAssignment = argOtherParent->GetAssignmentVectorCopy();
 
     for ( unsigned long i = 0; i < size; ++i ) {
         if ( i < argCrossoverPoint ) {
             newAssignment->at( i ) = ( *solutionVec )[ i ];
         } else {
-            newAssignment->at( i ) = ( *otherParentsAssignment )[ i ];
+            newAssignment->at( i ) = ( *tempSol )( i );
         }
     }
-
-    delete otherParentsAssignment;
 
     return new mt::SALBPSolution{ newAssignment };
 }

@@ -26,6 +26,7 @@
 #include "../solution/qap_solution.h"
 #include "../solution/solution.h"
 
+#include <cassert>
 #include <iostream>
 #include <vector>
 
