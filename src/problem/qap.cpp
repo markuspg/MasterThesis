@@ -36,7 +36,7 @@ bool mt::QAP::CheckIfTaboo( const unsigned int &argIterationCount,
                             const unsigned long &argSwapIndexJ,
                             const Matrix< unsigned long > &argTTMatrix ) const {
     // taillard1991robust, p. 447
-    QAPSolution * const tempSol = dynamic_cast< QAPSolution* >( argSolution->GetQAPSolution() );
+    PermSolution * const tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
     if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) > argIterationCount
          && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) > argIterationCount ) {
         delete tempSol;
@@ -48,15 +48,15 @@ bool mt::QAP::CheckIfTaboo( const unsigned int &argIterationCount,
 
 mt::SolutionBase *mt::QAP::GenerateRandomSolution( const unsigned int &argSeed ) const {
     if ( *settings->randomKeys ) {
-        return new mt::RandomKeySolution{ argSeed, size };
+        return new RandomKeySolution{ argSeed, size };
     } else {
-        return new mt::QAPSolution{ argSeed, size };
+        return new PermSolution{ argSeed, size };
     }
 }
 
 double mt::QAP::GetOFV( const mt::SolutionBase * const argSolution ) const {
     // Stores the converted solution
-    mt::QAPSolution * const tempSol = dynamic_cast< mt::QAPSolution* >( argSolution->GetQAPSolution() );
+    mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argSolution->GetPermSolution() );
 
     unsigned long ofv = 0;
     std::vector< unsigned long >::size_type size = tempSol->GetSize();
@@ -77,7 +77,7 @@ void mt::QAP::UpdateTabooTenures( const mt::SolutionBase * const argNewSolution,
                                   const long &argSwapI, const long &argSwapJ,
                                   const unsigned long &argTabooTenure,
                                   mt::Matrix<unsigned long> &argTTMatrix ) const {
-    mt::QAPSolution * const tempSol = dynamic_cast< mt::QAPSolution* >( argNewSolution->GetQAPSolution() );
+    mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argNewSolution->GetPermSolution() );
     // Forbid the  re-assignment of the swapped units to the locations
     argTTMatrix( ( *tempSol )( argSwapI ), argSwapI ) = argTabooTenure;
     argTTMatrix( ( *tempSol )( argSwapJ ), argSwapJ ) = argTabooTenure;

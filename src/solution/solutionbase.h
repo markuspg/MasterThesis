@@ -25,15 +25,14 @@
 enum class solutionTypes_t : unsigned short {
     SOLUTIONBASE,
     SOLUTION,
-    QAPSOLUTION,
-    RANDOMKEYSOLUTION,
-    SALBPSOLUTION
+    PERMSOLUTION,
+    RANDOMKEYSOLUTION
 };
 
 
 namespace mt {
 
-class QAPSolution;
+class PermSolution;
 class SALBPSolution;
 
 class SolutionBase
@@ -48,8 +47,7 @@ public:
     virtual SolutionBase *Copy() const = 0;
     // Solution diversification operator (james2009cooperative, p. 816)
     virtual void Diversify( const unsigned long &argStepWidthBase ) = 0;
-    virtual QAPSolution *GetQAPSolution() const = 0;
-    virtual SALBPSolution *GetSALBPSolution() const = 0;
+    virtual PermSolution *GetPermSolution() const = 0;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const = 0;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,

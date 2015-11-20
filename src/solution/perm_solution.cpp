@@ -17,32 +17,32 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "qap_solution.h"
+#include "perm_solution.h"
 
-mt::QAPSolution::QAPSolution( const unsigned int &argSeed, const std::size_t &argSize ) :
-    Solution{ solutionTypes_t::QAPSOLUTION, GenerateRandomSolution( argSeed, argSize ) }
+mt::PermSolution::PermSolution( const unsigned int &argSeed, const std::size_t &argSize ) :
+    Solution{ solutionTypes_t::PERMSOLUTION, GenerateRandomSolution( argSeed, argSize ) }
 {
 }
 
-mt::QAPSolution::QAPSolution( std::vector< unsigned long > * const argSolution ) :
-    Solution{ solutionTypes_t::QAPSOLUTION, argSolution }
+mt::PermSolution::PermSolution( std::vector< unsigned long > * const argSolution ) :
+    Solution{ solutionTypes_t::PERMSOLUTION, argSolution }
 {
 }
 
-mt::QAPSolution::QAPSolution( const mt::QAPSolution &argQAPSolution ) :
-    Solution{ argQAPSolution }
+mt::PermSolution::PermSolution( const mt::PermSolution &argPermSolution ) :
+    Solution{ argPermSolution }
 {
 }
 
-mt::QAPSolution::QAPSolution( mt::QAPSolution &&argQAPSolution ) :
-    Solution{ argQAPSolution }
+mt::PermSolution::PermSolution( mt::PermSolution &&argPermSolution ) :
+    Solution{ argPermSolution }
 {
 }
 
-mt::QAPSolution::~QAPSolution() {
+mt::PermSolution::~PermSolution() {
 }
 
-mt::QAPSolution *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolution *argSol ) {
+mt::PermSolution *mt::PermSolution::ComputeFromRandomKeys( const mt::RandomKeySolution *argSol ) {
     // The solution to be converted and calculated
     std::vector< double > * solution = argSol->GetSolutionVectorCopy();
     // Stores the converted solution
@@ -59,15 +59,15 @@ mt::QAPSolution *mt::QAPSolution::ComputeFromRandomKeys( const mt::RandomKeySolu
     delete solution;
     solution = nullptr;
 
-    return new mt::QAPSolution{ tempAssignment };
+    return new PermSolution{ tempAssignment };
 }
 
-mt::SolutionBase *mt::QAPSolution::Copy() const {
-    return new mt::QAPSolution{ new std::vector< unsigned long >{ *solutionVec } };
+mt::SolutionBase *mt::PermSolution::Copy() const {
+    return new PermSolution{ new std::vector< unsigned long >{ *solutionVec } };
 }
 
-std::vector< unsigned long > *mt::QAPSolution::GenerateRandomSolution( const unsigned int &argSeed,
-                                                                       const std::size_t &argSize ) const {
+std::vector< unsigned long > *mt::PermSolution::GenerateRandomSolution( const unsigned int &argSeed,
+                                                                        const std::size_t &argSize ) const {
     std::vector< unsigned long > *tempVec = new std::vector< unsigned long >;
     tempVec->resize( argSize, 0 );
     std::iota( tempVec->begin(), tempVec->end(), 0 );
@@ -83,26 +83,22 @@ std::vector< unsigned long > *mt::QAPSolution::GenerateRandomSolution( const uns
     return tempVec;
 }
 
-mt::QAPSolution *mt::QAPSolution::GetQAPSolution() const {
-    return dynamic_cast< mt::QAPSolution* >( Copy() );
+mt::PermSolution *mt::PermSolution::GetPermSolution() const {
+    return dynamic_cast< PermSolution* >( Copy() );
 }
 
-mt::SALBPSolution *mt::QAPSolution::GetSALBPSolution() const {
-    return nullptr;
-}
-
-mt::SolutionBase *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                                      const unsigned long &argSwapIndexJ ) const {
+mt::SolutionBase *mt::PermSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
+                                                       const unsigned long &argSwapIndexJ ) const {
     std::vector< unsigned long > *temp = new std::vector< unsigned long >{ *solutionVec };
     double tempD = ( *temp )[ argSwapIndexI ];
     ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
     ( *temp )[ argSwapIndexJ ] = tempD;
-    return new QAPSolution{ temp };
+    return new PermSolution{ temp };
 }
 
-mt::SolutionBase *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
+mt::SolutionBase *mt::PermSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const mt::SolutionBase * const argOtherParent ) const {
-    const QAPSolution * const tempSol = dynamic_cast< const QAPSolution* >( argOtherParent );
+    const PermSolution * const tempSol = dynamic_cast< const PermSolution* >( argOtherParent );
     assert( tempSol );
 
     std::vector< unsigned long > * const newAssignment = new std::vector< unsigned long >;
@@ -116,5 +112,5 @@ mt::SolutionBase *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long
         }
     }
 
-    return new mt::QAPSolution{ newAssignment };
+    return new PermSolution{ newAssignment };
 }

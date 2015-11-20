@@ -23,7 +23,7 @@
 #include "problem.h"
 #include "task.h"
 #include "../helper_functions.h"
-#include "../solution/salbp_solution.h"
+#include "../solution/perm_solution.h"
 #include "../solution/solution.h"
 
 #include <list>

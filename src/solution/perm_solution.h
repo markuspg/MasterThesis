@@ -17,13 +17,14 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SALBPSOLUTION_H
-#define SALBPSOLUTION_H
+#ifndef PERMSOLUTION_H
+#define PERMSOLUTION_H
 
 #include "solution.h"
 #include "randomkeysolution.h"
 
 #include <algorithm>
+#include <cassert>
 #include <memory>
 #include <random>
 #include <vector>
@@ -32,20 +33,20 @@ namespace mt {
 
 class RandomKeySolution;
 
-class SALBPSolution final : public Solution< unsigned long > {
+class PermSolution final : public Solution< unsigned long >
+{
 public:
-    SALBPSolution( const unsigned int &argSeed, const std::size_t &argSize );
-    SALBPSolution( std::vector< unsigned long > * const argSolution );
-    SALBPSolution( const SALBPSolution &argSALBPSolution );
-    SALBPSolution( SALBPSolution &&argSALBPSolution );
-    virtual ~SALBPSolution();
+    PermSolution( const unsigned int &argSeed, const std::size_t &argSize );
+    PermSolution( std::vector< unsigned long > * const argSolution );
+    PermSolution( const PermSolution &argPermSolution );
+    PermSolution( PermSolution &&argPermSolution );
+    virtual ~PermSolution();
 
-    static SALBPSolution *ComputeFromRandomKeys( const RandomKeySolution *argSol );
+    static PermSolution *ComputeFromRandomKeys( const RandomKeySolution *argSol );
     virtual SolutionBase *Copy() const override;
     virtual std::vector< unsigned long > *GenerateRandomSolution( const unsigned int &argSeed,
                                                                   const std::size_t &argSize ) const override;
-    virtual QAPSolution *GetQAPSolution() const override;
-    virtual SALBPSolution *GetSALBPSolution() const override;
+    virtual PermSolution *GetPermSolution() const override;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const override;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
@@ -54,4 +55,4 @@ public:
 
 }
 
-#endif // SALBPSOLUTION_H
+#endif // PERMSOLUTION_H

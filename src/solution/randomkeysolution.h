@@ -20,9 +20,8 @@
 #ifndef RANDOMKEYSOLUTION_H
 #define RANDOMKEYSOLUTION_H
 
+#include "perm_solution.h"
 #include "solution.h"
-#include "qap_solution.h"
-#include "salbp_solution.h"
 
 #include <memory>
 #include <random>
@@ -42,8 +41,7 @@ public:
     virtual SolutionBase *Copy() const override;
     virtual std::vector< double > *GenerateRandomSolution( const unsigned int &argSeed,
                                                            const std::size_t &argSize ) const override;
-    virtual QAPSolution *GetQAPSolution() const override;
-    virtual SALBPSolution *GetSALBPSolution() const override;
+    virtual PermSolution *GetPermSolution() const override;
     virtual std::vector< double > *GetSolutionVectorCopy() const;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const override;

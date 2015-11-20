@@ -23,7 +23,7 @@
 #include "problem.h"
 #include "../helper_functions.h"
 #include "../matrix.h"
-#include "../solution/qap_solution.h"
+#include "../solution/perm_solution.h"
 #include "../solution/solution.h"
 
 #include <cassert>

@@ -61,7 +61,7 @@ bool mt::SALBP::CheckIfTaboo( const unsigned int &argIterationCount,
                               const unsigned long &argSwapIndexJ,
                               const Matrix< unsigned long > &argTTMatrix ) const {
     // taillard1991robust, p. 447
-    SALBPSolution * const tempSol = dynamic_cast< SALBPSolution* >( argSolution->GetSALBPSolution() );
+    PermSolution * const tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
     if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) > argIterationCount
          && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) > argIterationCount ) {
         delete tempSol;
@@ -73,15 +73,15 @@ bool mt::SALBP::CheckIfTaboo( const unsigned int &argIterationCount,
 
 mt::SolutionBase *mt::SALBP::GenerateRandomSolution( const unsigned int &argSeed ) const {
     if ( *settings->randomKeys ) {
-        return new mt::RandomKeySolution{ argSeed, size };
+        return new RandomKeySolution{ argSeed, size };
     } else {
-        return new mt::SALBPSolution{ argSeed, size };
+        return new PermSolution{ argSeed, size };
     }
 }
 
 double mt::SALBP::GetOFV( const SolutionBase * const argSolution ) const {
     // Storage for the converted solution and its objective function value
-    mt::SALBPSolution * tempSol = dynamic_cast< mt::SALBPSolution* >( argSolution->GetSALBPSolution() );
+    PermSolution * tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
 
     std::list< Task* > tasksToBeScheduled;
     std::vector< unsigned long > stationTimes;
@@ -126,7 +126,7 @@ void mt::SALBP::UpdateTabooTenures( const SolutionBase * const argNewSolution,
                                     const long &argSwapI, const long &argSwapJ,
                                     const unsigned long &argTabooTenure,
                                     mt::Matrix<unsigned long> &argTTMatrix ) const {
-    SALBPSolution * const tempSol = dynamic_cast< SALBPSolution* >( argNewSolution->GetSALBPSolution() );
+    PermSolution * const tempSol = dynamic_cast< PermSolution* >( argNewSolution->GetPermSolution() );
     // Forbid the  re-assignment of the swapped tasks to the same priority list positions
     argTTMatrix( ( *tempSol )( argSwapI ), argSwapI ) = argTabooTenure;
     argTTMatrix( ( *tempSol )( argSwapJ ), argSwapJ ) = argTabooTenure;

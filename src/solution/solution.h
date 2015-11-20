@@ -27,7 +27,7 @@
 
 namespace mt {
 
-class QAPSolution;
+class PermSolution;
 
 template < typename T >
 class Solution : public SolutionBase
