@@ -45,8 +45,10 @@ public:
     void Diversify( const unsigned long &argStepWidthBase ) override;
     virtual std::vector< T > *GenerateRandomSolution( const unsigned int &argSeed,
                                                       const std::size_t &argSize ) const = 0;
+    typename std::vector< T >::size_type GetSize() const { return size; }
 
 protected:
+    typename std::vector< T >::size_type size = 0;
     std::vector< T > * solutionVec = nullptr;
 };
 
@@ -76,6 +78,7 @@ mt::Solution< T >::Solution( Solution &&argSolution ) :
 template < typename T >
 mt::Solution< T >::Solution( std::vector< T > * const argSolution ) :
     SolutionBase{},
+    size{ argSolution->size() },
     solutionVec{ argSolution }
 {
 }

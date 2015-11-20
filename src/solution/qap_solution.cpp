@@ -106,13 +106,12 @@ mt::SolutionBase *mt::QAPSolution::GetSwappedVariant( const unsigned long &argSw
 
 mt::SolutionBase *mt::QAPSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const mt::SolutionBase * const argOtherParent ) const {
-    const unsigned long newAssignmentSize = solutionVec->size();
     std::vector< unsigned long > * const newAssignment = new std::vector< unsigned long >;
-    newAssignment->resize( newAssignmentSize, 0 );
+    newAssignment->resize( size, 0 );
 
     std::vector< unsigned long > *otherParentsAssignment = argOtherParent->GetAssignmentVectorCopy();
 
-    for ( unsigned long i = 0; i < newAssignmentSize; ++i ) {
+    for ( unsigned long i = 0; i < size; ++i ) {
         if ( i < argCrossoverPoint ) {
             newAssignment->at( i ) = ( *solutionVec )[ i ];
         } else {

@@ -88,13 +88,12 @@ mt::SolutionBase *mt::RandomKeySolution::GetSwappedVariant( const unsigned long 
 
 mt::SolutionBase *mt::RandomKeySolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const mt::SolutionBase * const argOtherParent ) const {
-    const unsigned long newSolutionVecSize = solutionVec->size();
     std::vector< double > * const newSolutionVec = new std::vector< double >;
-    newSolutionVec->resize( newSolutionVecSize, 0.0 );
+    newSolutionVec->resize( size, 0.0 );
 
     std::vector< double > *otherParentsAssignment = argOtherParent->GetSolutionVectorCopy();
 
-    for ( unsigned long i = 0; i < newSolutionVecSize; ++i ) {
+    for ( unsigned long i = 0; i < size; ++i ) {
         if ( i < argCrossoverPoint ) {
             newSolutionVec->at( i ) = ( *solutionVec )[ i ];
         } else {
