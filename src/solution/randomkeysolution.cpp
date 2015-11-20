@@ -42,6 +42,26 @@ mt::RandomKeySolution::RandomKeySolution( mt::RandomKeySolution &&argRandomKeySo
 mt::RandomKeySolution::~RandomKeySolution() {
 }
 
+std::vector< unsigned long > *mt::RandomKeySolution::ConvertToPermutation() const {
+    // The solution to be converted and calculated
+    std::vector< double > * solution = new std::vector< double >{ *solutionVec };
+    // Stores the converted solution
+    std::vector< unsigned long > *tempAssignment = new std::vector< unsigned long >;
+    tempAssignment->resize( size );
+
+    // Query for 'solution-size' iterations the minimum element and set the index in the assigment vector
+    for ( unsigned long i = 0; i < size; ++i ) {
+        std::vector< double >::iterator minElem = std::min_element( solution->begin(), solution->end() );
+        auto offset = std::distance( solution->begin(), minElem) ;
+        ( *tempAssignment )[ i ] = offset;
+        *minElem = std::numeric_limits< double >::max();
+    }
+    delete solution;
+    solution = nullptr;
+
+    return tempAssignment;
+}
+
 mt::SolutionBase *mt::RandomKeySolution::Copy() const {
     return new mt::RandomKeySolution{ new std::vector< double >{ *solutionVec } };
 }
@@ -66,7 +86,7 @@ std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const unsi
 }
 
 mt::PermSolution *mt::RandomKeySolution::GetPermSolution() const {
-    return PermSolution::ComputeFromRandomKeys( this );
+    return new PermSolution{ ConvertToPermutation() };
 }
 
 std::vector< double > *mt::RandomKeySolution::GetSolutionVectorCopy() const {

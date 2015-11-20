@@ -42,7 +42,6 @@ public:
     PermSolution( PermSolution &&argPermSolution );
     virtual ~PermSolution();
 
-    static PermSolution *ComputeFromRandomKeys( const RandomKeySolution *argSol );
     virtual SolutionBase *Copy() const override;
     virtual std::vector< unsigned long > *GenerateRandomSolution( const unsigned int &argSeed,
                                                                   const std::size_t &argSize ) const override;

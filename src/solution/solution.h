@@ -58,6 +58,7 @@ protected:
 template < typename T >
 mt::Solution< T >::Solution( const Solution &argSolution ) :
     SolutionBase{ argSolution },
+    size{ argSolution.size },
     solutionVec{ new std::vector< T >{ *argSolution.solutionVec } }
 {
 }
@@ -65,6 +66,7 @@ mt::Solution< T >::Solution( const Solution &argSolution ) :
 template < typename T >
 mt::Solution< T >::Solution( Solution &&argSolution ) :
     SolutionBase{ argSolution },
+    size{ argSolution.size },
     solutionVec{ argSolution.solutionVec }
 {
     argSolution.solutionVec = nullptr;

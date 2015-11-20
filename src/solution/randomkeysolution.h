@@ -47,6 +47,9 @@ public:
                                              const unsigned long &argSwapIndexJ ) const override;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const SolutionBase * const argOtherParent ) const override;
+
+private:
+    std::vector< unsigned long > *ConvertToPermutation() const;
 };
 
 }

@@ -42,26 +42,6 @@ mt::PermSolution::PermSolution( mt::PermSolution &&argPermSolution ) :
 mt::PermSolution::~PermSolution() {
 }
 
-mt::PermSolution *mt::PermSolution::ComputeFromRandomKeys( const mt::RandomKeySolution *argSol ) {
-    // The solution to be converted and calculated
-    std::vector< double > * solution = argSol->GetSolutionVectorCopy();
-    // Stores the converted solution
-    std::vector< unsigned long > *tempAssignment = new std::vector< unsigned long >;
-    tempAssignment->resize( solution->size() );
-
-    // Query for 'solution-size' iterations the minimum element and set the index in the assigment vector
-    for ( unsigned long i = 0; i < solution->size(); ++i ) {
-        std::vector<double>::iterator minElem = std::min_element( solution->begin(), solution->end() );
-        auto offset = std::distance( solution->begin(), minElem) ;
-        ( *tempAssignment )[ i ] = offset;
-        *minElem = std::numeric_limits< double >::max();
-    }
-    delete solution;
-    solution = nullptr;
-
-    return new PermSolution{ tempAssignment };
-}
-
 mt::SolutionBase *mt::PermSolution::Copy() const {
     return new PermSolution{ new std::vector< unsigned long >{ *solutionVec } };
 }
