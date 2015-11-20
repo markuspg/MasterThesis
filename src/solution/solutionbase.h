@@ -22,6 +22,15 @@
 
 #include <vector>
 
+enum class solutionTypes_t : unsigned short {
+    SOLUTIONBASE,
+    SOLUTION,
+    QAPSOLUTION,
+    RANDOMKEYSOLUTION,
+    SALBPSOLUTION
+};
+
+
 namespace mt {
 
 class QAPSolution;
@@ -30,9 +39,10 @@ class SALBPSolution;
 class SolutionBase
 {
 public:
-    SolutionBase();
+    SolutionBase() = delete;
     SolutionBase( const SolutionBase &argSolutionBase );
-    SolutionBase( SolutionBase &&argSolutionBase ) = delete;
+    SolutionBase( SolutionBase &&argSolutionBase );
+    SolutionBase( const solutionTypes_t &argSolutionType );
     virtual ~SolutionBase();
 
     virtual SolutionBase *Copy() const = 0;
@@ -46,6 +56,8 @@ public:
                                              const unsigned long &argSwapIndexJ ) const = 0;
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
                                                     const SolutionBase * const argOtherParent ) const = 0;
+
+    const solutionTypes_t solutionType = solutionTypes_t::SOLUTIONBASE;
 };
 
 }

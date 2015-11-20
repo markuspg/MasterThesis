@@ -20,12 +20,12 @@
 #include "qap_solution.h"
 
 mt::QAPSolution::QAPSolution( const unsigned int &argSeed, const std::size_t &argSize ) :
-    Solution{ GenerateRandomSolution( argSeed, argSize ) }
+    Solution{ solutionTypes_t::QAPSOLUTION, GenerateRandomSolution( argSeed, argSize ) }
 {
 }
 
 mt::QAPSolution::QAPSolution( std::vector< unsigned long > * const argSolution ) :
-    Solution{ argSolution }
+    Solution{ solutionTypes_t::QAPSOLUTION, argSolution }
 {
 }
 

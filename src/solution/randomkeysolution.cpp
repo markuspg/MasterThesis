@@ -20,12 +20,12 @@
 #include "randomkeysolution.h"
 
 mt::RandomKeySolution::RandomKeySolution( const unsigned int &argSeed, const std::size_t &argSize ) :
-    Solution{ GenerateRandomSolution( argSeed, argSize ) }
+    Solution{ solutionTypes_t::RANDOMKEYSOLUTION, GenerateRandomSolution( argSeed, argSize ) }
 {
 }
 
 mt::RandomKeySolution::RandomKeySolution( std::vector<double> * const argSolution ) :
-    Solution{ argSolution }
+    Solution{ solutionTypes_t::RANDOMKEYSOLUTION, argSolution }
 {
 }
 

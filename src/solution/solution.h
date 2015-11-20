@@ -33,10 +33,10 @@ template < typename T >
 class Solution : public SolutionBase
 {
 public:
-    Solution();
+    Solution() = delete;
     Solution( const Solution &argSolution );
     Solution( Solution &&argSolution );
-    Solution( std::vector< T > * const argSolution );
+    Solution( const solutionTypes_t &argSolutionType, std::vector< T > * const argSolution );
     virtual ~Solution();
 
     T& operator() ( const unsigned long &argIndex ) { return ( *solutionVec )[ argIndex ]; }
@@ -55,12 +55,6 @@ protected:
 }
 
 template < typename T >
-mt::Solution< T >::Solution() :
-    SolutionBase{}
-{
-}
-
-template < typename T >
 mt::Solution< T >::Solution( const Solution &argSolution ) :
     SolutionBase{ argSolution },
     solutionVec{ new std::vector< T >{ *argSolution.solutionVec } }
@@ -76,8 +70,8 @@ mt::Solution< T >::Solution( Solution &&argSolution ) :
 }
 
 template < typename T >
-mt::Solution< T >::Solution( std::vector< T > * const argSolution ) :
-    SolutionBase{},
+mt::Solution< T >::Solution( const solutionTypes_t &argSolutionType, std::vector< T > * const argSolution ) :
+    SolutionBase{ argSolutionType },
     size{ argSolution->size() },
     solutionVec{ argSolution }
 {
