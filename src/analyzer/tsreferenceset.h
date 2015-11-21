@@ -61,7 +61,9 @@ public:
     const mt::Problem * const problem;
 
 private:
+    void DiversifyUnchangedSolutions();
     void PromoteBestSolution( const unsigned short &argIndex );
+    void SpreadGlobalBestSolution();
 
     std::vector< SolutionBase* > bestSolutions;
     std::vector< double > bestSolutionValues;

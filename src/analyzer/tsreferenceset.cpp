@@ -47,6 +47,20 @@ mt::TSReferenceSet::~TSReferenceSet() {
     measure.SetOverallIterationCount( iterationCounter );
 }
 
+void mt::TSReferenceSet::DiversifyUnchangedSolutions() {
+    // Diversify all solutions not being updated in the preceding iteration (james2009cooperative, p. 816)
+    for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
+        if ( std::get< bool >( solutions[ i ] ) == false ) {
+            std::get< SolutionBase* >( solutions[ i ] )->Diversify( std::get< unsigned long >(
+                                                                            solutions[ i ] ) );
+            std::get< double >( solutions[ i ] ) = problem->GetOFV( std::get< SolutionBase* >(
+                                                                            solutions[ i ] ) );
+            std::get< unsigned long >( solutions[ i ] ) += 1;
+            std::get< bool >( solutions[ i ] ) = true;
+        }
+    }
+}
+
 mt::SolutionBase *mt::TSReferenceSet::GetStartSolution( const unsigned short &argIndex ) const {
     return std::get< SolutionBase* >( solutions[ argIndex ] );
 }
@@ -84,43 +98,20 @@ void mt::TSReferenceSet::RotateSolutions() {
         // (james2009cooperative, p. 814)
         return;
     }
-    // If whilst the last iteration a new global best solution was found, ...
-    if ( updatedGlobalBestSolution ) {
-        // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 816)
-        for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
-            if ( i % 2 == 1 ) {
-                unsigned long tempStepWidth = std::get< unsigned long >( solutions[ i ] );
-                delete std::get< SolutionBase* >( solutions[ i ] );
-                solutions[ i ] = solTup{ globalBestSolution->Copy(),
-                                         globalBestSolutionV,
-                                         tempStepWidth,
-                                         true };
-            }
-        }
-    }
 
-    // Diversify all solutions not being updated in the preceding iteration (james2009cooperative, p. 816)
-    for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
-        if ( std::get< bool >( solutions[ i ] ) == false ) {
-            std::get< SolutionBase* >( solutions[ i ] )->Diversify( std::get< unsigned long >(
-                                                                            solutions[ i ] ) );
-            std::get< double >( solutions[ i ] ) = problem->GetOFV( std::get< SolutionBase* >(
-                                                                            solutions[ i ] ) );
-            std::get< unsigned long >( solutions[ i ] ) += 1;
-            std::get< bool >( solutions[ i ] ) = true;
-        }
-    }
+    SpreadGlobalBestSolution();
+
+    DiversifyUnchangedSolutions();
 
     // Reference set rotation according to 'james2009cooperative' p. 817
     std::rotate( solutions.begin(), solutions.begin() + 1, solutions.end() );
-
-    // Reset the inidicator for the next iteration
-    updatedGlobalBestSolution = false;
 }
 
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
                                       mt::SolutionBase *argSolution,
                                       const double &argV ) {
+    // Update the solutions before the rotation, because otherwise the best solution would me massively
+    // overrated because of its promotion which would lead to much too high convergence
     problem->UpdateFrequenciesMatrix( frequenciesMatrix, argSolution );
 
     // If no valid solution could be found, just set the 'updated' flag to false
@@ -138,4 +129,24 @@ void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
     solutions[ argIndex ] = solTup{ argSolution, argV, tempStepWidth, true };
 
     PromoteBestSolution( argIndex );
+}
+
+void mt::TSReferenceSet::SpreadGlobalBestSolution() {
+    // If whilst the last iteration a new global best solution was found, ...
+    if ( updatedGlobalBestSolution ) {
+        // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 816)
+        for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
+            if ( i % 2 == 1 ) {
+                unsigned long tempStepWidth = std::get< unsigned long >( solutions[ i ] );
+                delete std::get< SolutionBase* >( solutions[ i ] );
+                solutions[ i ] = solTup{ globalBestSolution->Copy(),
+                                         globalBestSolutionV,
+                                         tempStepWidth,
+                                         true };
+            }
+        }
+    }
+
+    // Reset the inidicator for the next iteration
+    updatedGlobalBestSolution = false;
 }
