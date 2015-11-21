@@ -54,6 +54,8 @@ public:
                                const Matrix< unsigned long > &argTTMatrix ) const = 0;
     virtual SolutionBase *GenerateRandomSolution( const unsigned int &argSeed ) const = 0;
     virtual double GetOFV( SolutionBase * const argSolution ) const = 0;
+    virtual void UpdateFrequenciesMatrix( Matrix< unsigned long > &argFrequenciesMatrix,
+                                          SolutionBase * const argNewSolution ) const = 0;
     virtual void UpdateTabooTenures( SolutionBase * const argNewSolution,
                                      const long &argSwapI, const long &argSwapJ,
                                      const unsigned long &argTabooTenure,

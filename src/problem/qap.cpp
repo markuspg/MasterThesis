@@ -73,6 +73,16 @@ double mt::QAP::GetOFV( mt::SolutionBase * const argSolution ) const {
     return ofv;
 }
 
+void mt::QAP::UpdateFrequenciesMatrix( Matrix<unsigned long> &argFrequenciesMatrix,
+                                       SolutionBase * const argNewSolution) const {
+    mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argNewSolution->GetPermSolution() );
+    std::vector< unsigned long >::size_type solSize = tempSol->GetSize();
+    for ( unsigned long i = 0; i < solSize; ++i ) {
+        argFrequenciesMatrix( ( *tempSol )( i ), i ) += 1;
+    }
+    delete tempSol;
+}
+
 void mt::QAP::UpdateTabooTenures( mt::SolutionBase * const argNewSolution,
                                   const long &argSwapI, const long &argSwapJ,
                                   const unsigned long &argTabooTenure,

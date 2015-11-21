@@ -22,6 +22,7 @@
 mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem,
                                     const unsigned short &argTSInstanceAmount ) :
     problem{ argProblem },
+    frequenciesMatrix{ argProblem->size, 0 },
     tsInstanceQuantity{ argTSInstanceAmount }
 {
     bestSolutions.resize( tsInstanceQuantity, nullptr );
@@ -55,6 +56,7 @@ double mt::TSReferenceSet::GetStartSolutionValue( const unsigned short &argIndex
 }
 
 void mt::TSReferenceSet::PrepareOptimizationRun() {
+    frequenciesMatrix.ResetWithValue( 0 );
     initializationRun = false;
     iterationCounter = 0;
 }
@@ -119,6 +121,8 @@ void mt::TSReferenceSet::RotateSolutions() {
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
                                       mt::SolutionBase *argSolution,
                                       const double &argV ) {
+    problem->UpdateFrequenciesMatrix( frequenciesMatrix, argSolution );
+
     // If no valid solution could be found, just set the 'updated' flag to false
     if ( !argSolution ) {
         std::get< bool >( solutions[ argIndex ] ) = false;

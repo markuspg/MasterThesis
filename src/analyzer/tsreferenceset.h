@@ -65,6 +65,7 @@ private:
 
     std::vector< SolutionBase* > bestSolutions;
     std::vector< double > bestSolutionValues;
+    mt::Matrix< unsigned long > frequenciesMatrix;
     bool initializationRun = true;
     std::unique_ptr< SolutionBase > globalBestSolution = nullptr;
     double globalBestSolutionV = std::numeric_limits< double >::max();

@@ -122,6 +122,16 @@ double mt::SALBP::GetOFV( SolutionBase * const argSolution ) const {
     return std::distance( stationTimes.begin(), std::find( stationTimes.begin(), stationTimes.end(), 0 ) );
 }
 
+void mt::SALBP::UpdateFrequenciesMatrix( Matrix<unsigned long> &argFrequenciesMatrix,
+                                         SolutionBase * const argNewSolution) const {
+    mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argNewSolution->GetPermSolution() );
+    std::vector< unsigned long >::size_type solSize = tempSol->GetSize();
+    for ( unsigned long i = 0; i < solSize; ++i ) {
+        argFrequenciesMatrix( ( *tempSol )( i ), i ) += 1;
+    }
+    delete tempSol;
+}
+
 void mt::SALBP::UpdateTabooTenures( SolutionBase * const argNewSolution,
                                     const long &argSwapI, const long &argSwapJ,
                                     const unsigned long &argTabooTenure,
