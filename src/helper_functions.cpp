@@ -148,6 +148,9 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
         }
         if ( commandLineArguments[ i ] == "--ts" ) {
             tempTSInstances = std::stoul( commandLineArguments[ i + 1 ] );
+            if ( tempTSInstances < 1 ) {
+                throw std::runtime_error{ "There has to be at least one taboo search thread" };
+            }
             lastActiveIndex = i + 1;
             continue;
         }
