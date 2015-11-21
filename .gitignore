@@ -1,5 +1,7 @@
 *.csv
+doxygen
 .kdev4
 MasterThesis
 *.qap
+*.txt
 *.user
