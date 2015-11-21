@@ -44,6 +44,7 @@ public:
                                 const double &argMutationImpact,
                                 const double &argMutationRate,
                                 const std::string &argOutputFile,
+                                const bool &argPromoteGlobalBestSol,
                                 const bool &argRandomizedTabooTenures,
                                 const bool &argRandomKeys,
                                 const double &argReproductionRate,
@@ -62,6 +63,7 @@ private:
     std::string problemName;
     unsigned long problemSize;
     std::string problemType;
+    bool promoteGlobalBestSol = false;
     bool randomizedTabooTenures = false;
     bool randomKeys = false;
     double reproductionRate = 0.5;

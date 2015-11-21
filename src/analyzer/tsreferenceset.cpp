@@ -133,7 +133,7 @@ void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
 
 void mt::TSReferenceSet::SpreadGlobalBestSolution() {
     // If whilst the last iteration a new global best solution was found, ...
-    if ( updatedGlobalBestSolution ) {
+    if ( *settings->promoteGlobalBestSol && updatedGlobalBestSolution ) {
         // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 816)
         for ( unsigned short i = 0; i < tsInstanceQuantity; ++i ) {
             if ( i % 2 == 1 ) {

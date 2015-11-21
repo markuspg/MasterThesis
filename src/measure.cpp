@@ -43,6 +43,7 @@ void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
                                          const double &argMutationImpact,
                                          const double &argMutationRate,
                                          const std::string &argOutputFile,
+                                         const bool &argPromoteGlobalBestSol,
                                          const bool &argRandomizedTabooTenures,
                                          const bool &argRandomKeys,
                                          const double &argReproductionRate,
@@ -54,6 +55,7 @@ void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
     mutationImpact = argMutationImpact;
     mutationRate = argMutationRate;
     outputFile = argOutputFile;
+    promoteGlobalBestSol = argPromoteGlobalBestSol;
     randomizedTabooTenures = argRandomizedTabooTenures;
     randomKeys = argRandomKeys;
     reproductionRate = argReproductionRate;
@@ -75,9 +77,9 @@ void mt::Measure::WriteToDisk() {
     outputStream.open( outputFile.c_str(), std::ios::app | std::ios::out );
     outputStream << problemName << '|' << problemType << '|' << problemSize << '|' << gaInstances << '|'
                  << maxFailures << '|' << mutationImpact << '|' << mutationRate << '|'
-                 << randomizedTabooTenures << '|' << randomKeys << '|' << reproductionRate << '|'
-                 << tabooTenureDeviation << '|' << tabooTenuresFac << '|'  << tsInstances << '|'
-                 << analyzerIterations << '|' << threadIterations << "\n";
+                 << promoteGlobalBestSol << '|' << randomizedTabooTenures << '|' << randomKeys << '|'
+                 << reproductionRate << '|' << tabooTenureDeviation << '|' << tabooTenuresFac << '|'
+                 << tsInstances << '|' << analyzerIterations << '|' << threadIterations << "\n";
     outputStream.close();
 
     // Clean up any data which will not be automatically overwritten in the next run

@@ -72,6 +72,7 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
     unsigned int tempMaxFailures = 1000000;
     std::string tempOutputFile;
     std::vector< std::string > tempProblemFiles;
+    bool tempPromoteGlobalBestSol = false;
     bool tempRandomizedTabooTenures = false;
     bool tempRandomKeys = false;
     double tempTabooTenureDeviation = 0.1;
@@ -95,6 +96,8 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
                          "\t                      search instances (default: 1)\n"
                          "\t--mf <maxFailures>    The number of allowed improvement failures\n"
                          "\t                      before the search terminates (default: 1000000)\n"
+                         "\t--pgb <promGlobBest>  If new global best solution shall be spread (any non-zero\n"
+                         "\t                      integer value will be interpreted as true; default: 0)\n"
                          "\t--rk <UseRandomKeys>  If solutions shall be encoded as random keys (any non-zero\n"
                          "\t                      integer value will be interpreted as true; default: 0)\n"
                          "\t--rtt <randTTenures>  If the taboo tenures shall be randomized (any non-zero\n"
@@ -112,6 +115,11 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
         }
         if ( commandLineArguments[ i ] == "--mf" ) {
             tempMaxFailures = std::stoul( commandLineArguments[ i + 1 ] );
+            lastActiveIndex = i + 1;
+            continue;
+        }
+        if ( commandLineArguments[ i ] == "--pgb" ) {
+            tempPromoteGlobalBestSol = static_cast< bool >( std::stoul( commandLineArguments[ i + 1 ] ) );
             lastActiveIndex = i + 1;
             continue;
         }
@@ -152,8 +160,9 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
     tempOutputFile = commandLineArguments.back();
     
     settings = new mt::Settings{ tempGAInstances, tempMaxFailures, tempOutputFile,
-                                 std::move( tempProblemFiles ), tempRandomizedTabooTenures, tempRandomKeys,
-                                 tempTabooTenureDeviation, tempTabooTenureFac, tempTSInstances };
+                                 std::move( tempProblemFiles ), tempPromoteGlobalBestSol,
+                                 tempRandomizedTabooTenures, tempRandomKeys, tempTabooTenureDeviation,
+                                 tempTabooTenureFac, tempTSInstances };
     
     return 0;
 }
