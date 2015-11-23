@@ -20,20 +20,22 @@
 #include "settings.h"
 
 mt::Settings::Settings( const unsigned short &argGAInstances, const unsigned int &argMaxFailures,
+                        const double &argMutationImpact, const double &argMutationRate,
                         const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
                         const bool &argPromoteGlobalBestSol, const bool &argRandomizedTabooTenures,
-                        const bool &argRandomKeys, const double &argTabooTenureDeviation,
-                        const unsigned short &argTabooTenureFac, const unsigned short &argTSInstances ) :
+                        const bool &argRandomKeys, const double &argReproductionRate,
+                        const double &argTabooTenureDeviation, const unsigned short &argTabooTenureFac,
+                        const unsigned short &argTSInstances ) :
     gaInstances{ new unsigned short{ argGAInstances } },
     maxFailures{ new unsigned int{ argMaxFailures } },
-    mutationImpact{ new double{ 0.1 } },
-    mutationRate{ new double{ 0.2 } },
+    mutationImpact{ new double{ argMutationImpact } },
+    mutationRate{ new double{ argMutationRate } },
     outputFile{ new std::string{ argOutputFile } },
     problemFiles{ new std::vector< std::string >{ argProblemFiles } },
     promoteGlobalBestSol{ new bool{ argPromoteGlobalBestSol } },
     randomizedTabooTenures{ new bool{ argRandomizedTabooTenures } },
     randomKeys{ new bool{ argRandomKeys } },
-    reproductionRate{ new double{ 0.5 } },
+    reproductionRate{ new double{ argReproductionRate } },
     tabooTenureDeviation{ new double { argTabooTenureDeviation } },
     tabooTenuresFac{ new unsigned short{ argTabooTenureFac } },
     tsInstances{ new unsigned short{ argTSInstances } }
@@ -42,13 +44,13 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const unsigned int
     std::cout << "   gaInstances:\t\t\t" << *gaInstances
               << "\n   maxFailures:\t\t\t" << *maxFailures
               << "\n   mutationImpact:\t\t" << *mutationImpact
-              << "\n   mutationRate:\t\t\t" << *mutationRate
+              << "\n   mutationRate:\t\t" << *mutationRate
               << "\n   outputFile:\t\t\t" << *outputFile
               << "\n   problemFiles:\t\t" << CreateStringOfProblemFiles()
               << "\n   promoteGlobalBestSol:\t" << *promoteGlobalBestSol
               << "\n   randomizedTabooTenures:\t" << *randomizedTabooTenures
               << "\n   randomKeys:\t\t\t" << *randomKeys
-              << "\n   reproductionRate:\t\t\t" << *reproductionRate
+              << "\n   reproductionRate:\t\t" << *reproductionRate
               << "\n   tabooTenureDeviation:\t" << *tabooTenureDeviation
               << "\n   tabooTenuresFac:\t\t" << *tabooTenuresFac
               << "\n   tsInstances:\t\t\t" << *tsInstances << std::endl;

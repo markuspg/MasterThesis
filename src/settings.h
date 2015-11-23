@@ -36,17 +36,19 @@ namespace mt {
 class Settings final {
 public:
     Settings( const unsigned short &argGAInstances, const unsigned int &argMaxFailures,
+              const double &argMutationImpact, const double &argMutationRate,
               const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
               const bool &argPromoteGlobalBestSol, const bool &argRandomizedTabooTenures,
-              const bool &argRandomKeys, const double &argTabooTenureDeviation,
-              const unsigned short &argTabooTenureFac, const unsigned short &argTSInstances );
+              const bool &argRandomKeys, const double &argReproductionRate,
+              const double &argTabooTenureDeviation, const unsigned short &argTabooTenureFac,
+              const unsigned short &argTSInstances );
     Settings( const Settings &argSettings ) = delete;
     Settings( Settings &&argSettings ) = delete;
     ~Settings();
 
     const unsigned short * const gaInstances = nullptr;
     const unsigned int * const maxFailures = nullptr;
-    const double * mutationImpact = nullptr;
+    const double * const mutationImpact = nullptr;
     const double * const mutationRate = nullptr;
     const std::string * const outputFile = nullptr;
     const std::vector< std::string > * const problemFiles = nullptr;

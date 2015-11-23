@@ -70,11 +70,14 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
     // The variables for the data
     unsigned short tempGAInstances = 1;
     unsigned int tempMaxFailures = 1000000;
+    double tempMutationImpact = 0.2;
+    double tempMutationRate = 0.1;
     std::string tempOutputFile;
     std::vector< std::string > tempProblemFiles;
     bool tempPromoteGlobalBestSol = false;
     bool tempRandomizedTabooTenures = false;
     bool tempRandomKeys = false;
+    double tempReproductionRate = 0.5;
     double tempTabooTenureDeviation = 0.1;
     unsigned short tempTabooTenureFac = 1;
     unsigned short tempTSInstances = 1;
@@ -96,12 +99,18 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
                          "\t                      search instances (default: 1)\n"
                          "\t--mf <maxFailures>    The number of allowed improvement failures\n"
                          "\t                      before the search terminates (default: 1000000)\n"
+                         "\t--mi <mutationImpact> The ratio of an individual's chromosomes which will be\n"
+                         "\t                      changed by a mutation [0.0,1.0](default: 0.2)\n"
+                         "\t--mr <mutationRate>   The share of the GA's population which will be mutated in\n"
+                         "\t                      each iteration [0.0,1.0](default: 0.1)\n"
                          "\t--pgb <promGlobBest>  If new global best solution shall be spread (any non-zero\n"
                          "\t                      integer value will be interpreted as true; default: 0)\n"
                          "\t--rk <UseRandomKeys>  If solutions shall be encoded as random keys (any non-zero\n"
                          "\t                      integer value will be interpreted as true; default: 0)\n"
                          "\t--rtt <randTTenures>  If the taboo tenures shall be randomized (any non-zero\n"
                          "\t                      integer value will be interpreted as true; default: 0)\n"
+                         "\t--rr <reproRate>      The portion of the GA's population which will reproduce\n"
+                         "\t                      in each iteration [0.0,1.0](default: 0.5)\n"
                          "\t--ttd <tTenureDev>    The spread factor for randomized taboo tenures [0.1,0.9]\n"
                          "\t                      (default: 0.1)\n"
                          "\t--ttf <tTenureFac>    How many times the problem size\n"
@@ -118,6 +127,22 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
             lastActiveIndex = i + 1;
             continue;
         }
+        if ( commandLineArguments[ i ] == "--mi" ) {
+            tempMutationImpact = std::stod( commandLineArguments[ i + 1 ] );
+            if ( tempMutationImpact < 0.0 || tempMutationImpact > 1.0 ) {
+                throw std::runtime_error{ "The mutation impact is not in the valid range of [0.0,1.0]" };
+            }
+            lastActiveIndex = i + 1;
+            continue;
+        }
+        if ( commandLineArguments[ i ] == "--mr" ) {
+            tempMutationRate = std::stod( commandLineArguments[ i + 1 ] );
+            if ( tempMutationRate < 0.0 || tempMutationRate > 1.0 ) {
+                throw std::runtime_error{ "The mutation rate is not in the valid range of [0.0,1.0]" };
+            }
+            lastActiveIndex = i + 1;
+            continue;
+        }
         if ( commandLineArguments[ i ] == "--pgb" ) {
             tempPromoteGlobalBestSol = static_cast< bool >( std::stoul( commandLineArguments[ i + 1 ] ) );
             lastActiveIndex = i + 1;
@@ -130,6 +155,14 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
         }
         if ( commandLineArguments[ i ] == "--rk" ) {
             tempRandomKeys = static_cast< bool >( std::stoul( commandLineArguments[ i + 1 ] ) );
+            lastActiveIndex = i + 1;
+            continue;
+        }
+        if ( commandLineArguments[ i ] == "--rr" ) {
+            tempReproductionRate = std::stod( commandLineArguments[ i + 1 ] );
+            if ( tempReproductionRate < 0.0 || tempReproductionRate > 1.0 ) {
+                throw std::runtime_error{ "The reproduction rate is not in the valid range of [0.0,1.0]" };
+            }
             lastActiveIndex = i + 1;
             continue;
         }
@@ -162,10 +195,10 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
 
     tempOutputFile = commandLineArguments.back();
     
-    settings = new mt::Settings{ tempGAInstances, tempMaxFailures, tempOutputFile,
-                                 std::move( tempProblemFiles ), tempPromoteGlobalBestSol,
-                                 tempRandomizedTabooTenures, tempRandomKeys, tempTabooTenureDeviation,
-                                 tempTabooTenureFac, tempTSInstances };
+    settings = new mt::Settings{ tempGAInstances, tempMaxFailures, tempMutationImpact, tempMutationRate,
+                                 tempOutputFile, std::move( tempProblemFiles ), tempPromoteGlobalBestSol,
+                                 tempRandomizedTabooTenures, tempRandomKeys, tempReproductionRate,
+                                 tempTabooTenureDeviation, tempTabooTenureFac, tempTSInstances };
     
     return 0;
 }
