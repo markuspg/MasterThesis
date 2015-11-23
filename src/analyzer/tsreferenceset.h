@@ -33,6 +33,7 @@
 #include <tuple>
 #include <vector>
 
+typedef std::pair< double, mt::SolutionBase* > dSol;
 typedef std::tuple< mt::SolutionBase*, double, unsigned long, bool > solTup;
 
 extern mt::Measure measure;

@@ -23,11 +23,11 @@ mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem ) :
     problem{ argProblem },
     frequenciesMatrix{ argProblem->size, 0 }
 {
-    bestSolutions.resize( *settings->tsInstances, nullptr );
-    bestSolutionValues.resize( *settings->tsInstances, std::numeric_limits< double >::max() );
-    solutions.resize( *settings->tsInstances, solTup{ nullptr, 0.0, 0, true } );
+    bestSolutions.resize( *settings->gaInstances + *settings->tsInstances, nullptr );
+    bestSolutionValues.resize( *settings->gaInstances + *settings->tsInstances, std::numeric_limits< double >::max() );
+    solutions.resize( *settings->gaInstances + *settings->tsInstances, solTup{ nullptr, 0.0, 0, true } );
     std::cout << "    Constructing TabooSearchReferenceSet" << std::endl;
-    for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
+    for ( unsigned short i = 0; i < *settings->gaInstances + *settings->tsInstances; ++i ) {
         std::get< SolutionBase* >( solutions[ i ] ) = problem->GenerateRandomSolution( i );
         std::get< double >( solutions[ i ] ) = problem->GetOFV( std::get< SolutionBase* >( solutions[ i ] ) );
     }
@@ -47,7 +47,7 @@ mt::TSReferenceSet::~TSReferenceSet() {
 
 void mt::TSReferenceSet::DiversifyUnchangedSolutions() {
     // Diversify all solutions not being updated in the preceding iteration (james2009cooperative, p. 816)
-    for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
+    for ( unsigned short i = 0; i < *settings->gaInstances + *settings->tsInstances; ++i ) {
         if ( std::get< bool >( solutions[ i ] ) == false ) {
             std::get< SolutionBase* >( solutions[ i ] )->Diversify( std::get< unsigned long >(
                                                                             solutions[ i ] ) );
@@ -134,7 +134,7 @@ void mt::TSReferenceSet::SpreadGlobalBestSolution() {
     // If whilst the last iteration a new global best solution was found, ...
     if ( *settings->promoteGlobalBestSol && updatedGlobalBestSolution ) {
         // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 816)
-        for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
+        for ( unsigned short i = 0; i < *settings->gaInstances + *settings->tsInstances; ++i ) {
             if ( i % 2 == 1 ) {
                 unsigned long tempStepWidth = std::get< unsigned long >( solutions[ i ] );
                 delete std::get< SolutionBase* >( solutions[ i ] );

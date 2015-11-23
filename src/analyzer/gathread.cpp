@@ -55,6 +55,17 @@ void mt::GAThread::CreateInitialPopulation() {
 void mt::GAThread::Iteration() {
     ++iterationCount;
 
+    {
+        std::lock_guard< std::mutex > lockTSReferenceSet{ tsReferenceSetMutex };
+        // Replace the weakest individuum from the population with one from the reference set
+        delete population[ popSize - 1 ].second;
+        // Since the GAs' solutions are stored 'behind' the TSs' solutions, the index has to be shifted
+        population[ popSize - 1 ].second =
+                referenceSet.GetStartSolution( index + *settings->tsInstances )->Copy();
+        population[ popSize - 1 ].first =
+                referenceSet.GetStartSolutionValue( index + *settings->tsInstances );
+    }
+
     Reproduce();
 
     Mutate();
@@ -62,6 +73,12 @@ void mt::GAThread::Iteration() {
     // Re-sort the population for the next iteration
     std::sort( population.begin(), population.end(),
             []( const dSol &a, const dSol &b ){ return a.first < b.first; } );
+
+    std::lock_guard< std::mutex > lockTSReferenceSet{ tsReferenceSetMutex };
+    // Since the GAs' solutions are stored 'behind' the TSs' solutions, the index has to be shifted
+    referenceSet.SetSolution( index + *settings->tsInstances,
+                              population[ 0 ].second->Copy(),
+                              population[ 0 ].first );
 }
 
 void mt::GAThread::Mutate() {
