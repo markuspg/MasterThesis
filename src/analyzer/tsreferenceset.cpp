@@ -108,15 +108,16 @@ void mt::TSReferenceSet::RotateSolutions() {
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
                                       mt::SolutionBase *argSolution,
                                       const double &argV ) {
-    // Update the solutions before the rotation, because otherwise the best solution would me massively
-    // overrated because of its promotion which would lead to much too high convergence
-    problem->UpdateFrequenciesMatrix( frequenciesMatrix, argSolution );
-
     // If no valid solution could be found, just set the 'updated' flag to false
     if ( !argSolution ) {
         std::get< bool >( solutions[ argIndex ] ) = false;
         return;
     }
+
+    // Update the solutions before the rotation, because otherwise the best solution would me massively
+    // overrated because of its promotion which would lead to much too high convergence
+    problem->UpdateFrequenciesMatrix( frequenciesMatrix, argSolution );
+
     // Check if the solution changed and replace if so, otherwise set 'updated' flag to false
     if ( argSolution == std::get< SolutionBase* >( solutions[ argIndex ] ) ) {
         std::get< bool >( solutions[ argIndex ] ) = false;
