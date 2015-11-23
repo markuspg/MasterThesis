@@ -82,6 +82,23 @@ mt::SolutionBase *mt::RandomKeySolution::GetSwappedVariant( const unsigned long 
     return new RandomKeySolution{ temp };
 }
 
+#ifdef Q_PROCESSOR_X86_64
+void mt::RandomKeySolution::Mutate( std::mt19937_64 &argEngine ) {
+#else
+void mt::RandomKeySolution::Mutate( std::mt19937 &argEngine ) {
+#endif
+    unsigned long mutationQuantity = std::round( *settings->mutationImpact * size );
+    // Ensure at least one mutation
+    mutationQuantity = mutationQuantity >= 1 ? mutationQuantity : 1;
+
+    std::uniform_int_distribution<> alleleDistribution{ 0, static_cast< int >( size - 1 ) };
+    std::uniform_real_distribution<> geneDistribution{ 0.0, 1.0 };
+
+    for ( unsigned long i = 0; i < mutationQuantity; ++i ) {
+        ( *solutionVec )[ alleleDistribution( argEngine ) ] = geneDistribution( argEngine );
+    }
+}
+
 mt::SolutionBase *mt::RandomKeySolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const mt::SolutionBase * const argOtherParent ) const {
     const RandomKeySolution* const tempSol = dynamic_cast< const RandomKeySolution* >( argOtherParent );

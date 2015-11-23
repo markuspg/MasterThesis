@@ -20,6 +20,7 @@
 #ifndef SOLUTIONBASE_H
 #define SOLUTIONBASE_H
 
+#include <random>
 #include <vector>
 
 enum class solutionTypes_t : unsigned short {
@@ -50,6 +51,11 @@ public:
     virtual PermSolution *GetPermSolution() = 0;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const = 0;
+#ifdef Q_PROCESSOR_X86_64
+    virtual void Mutate( std::mt19937_64 &argEngine ) = 0;
+#else
+    virtual void Mutate( std::mt19937 &argEngine ) = 0;
+#endif
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
                                                     const SolutionBase * const argOtherParent ) const = 0;
 

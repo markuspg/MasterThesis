@@ -29,6 +29,10 @@
 #include <random>
 #include <vector>
 
+#include "../settings.h"
+
+extern mt::Settings *settings;
+
 namespace mt {
 
 class RandomKeySolution;
@@ -48,6 +52,11 @@ public:
     virtual PermSolution *GetPermSolution() override;
     virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
                                              const unsigned long &argSwapIndexJ ) const override;
+#ifdef Q_PROCESSOR_X86_64
+    virtual void Mutate( std::mt19937_64 &argEngine ) override;
+#else
+    virtual void Mutate( std::mt19937 &argEngine ) override;
+#endif
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
                                                     const SolutionBase * const argOtherParent ) const;
 };

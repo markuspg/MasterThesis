@@ -25,8 +25,6 @@ mt::GAThread::GAThread( const unsigned short &argIndex, std::mutex &argMutex,
     popSize{ argProblem->size * argProblem->size > 100 ? 100 : argProblem->size * argProblem->size },
     population{ popSize, { 0.0, nullptr } },
     problem{ argProblem },
-    mutationGeneQuantity{ *settings->mutationImpact * problem->size < 1.0 ?
-            1 : static_cast< unsigned long >( *settings->mutationImpact * problem->size ) },
     mutationsQuantity{ *settings->mutationRate * popSize < 1 ?
             1 : static_cast< unsigned long >( *settings->mutationRate * popSize ) },
     reproductionQuantity{ *settings->reproductionRate * popSize / 2 < 1 ?
@@ -67,7 +65,17 @@ void mt::GAThread::Iteration() {
 }
 
 void mt::GAThread::Mutate() {
+    std::random_device randomDevice;
+#ifdef Q_PROCESSOR_X86_64
+    std::mt19937_64 engine{ randomDevice() + index };
+#else
+    std::mt19937 engine{ randomDevice() + index };
+#endif
 
+    for ( unsigned long i = 0; i < mutationsQuantity; ++i ) {
+        population[ i ].second->Mutate( engine );
+        population[ i ].first = problem->GetOFV( population[ i ].second );
+    }
 }
 
 void mt::GAThread::Reproduce() {

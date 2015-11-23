@@ -76,6 +76,27 @@ mt::SolutionBase *mt::PermSolution::GetSwappedVariant( const unsigned long &argS
     return new PermSolution{ temp };
 }
 
+#ifdef Q_PROCESSOR_X86_64
+void mt::PermSolution::Mutate( std::mt19937_64 &argEngine ) {
+#else
+void mt::PermSolution::Mutate( std::mt19937 &argEngine ) {
+#endif
+    // Divide by half, since mutation for permutations works on two genes at a time
+    unsigned long mutationQuantity = std::round( *settings->mutationImpact * size / 2 );
+    // Ensure at least one mutation
+    mutationQuantity = mutationQuantity > 1 ? mutationQuantity : 1;
+
+    std::uniform_int_distribution<> distribution{ 0, static_cast< int >( size - 1 ) };
+
+    for ( unsigned long i = 0; i < mutationQuantity; ++i ) {
+        unsigned long swapElementA = distribution( argEngine );
+        unsigned long swapElementB = distribution( argEngine );
+        unsigned long temp = ( *solutionVec )[ swapElementA ];
+        ( *solutionVec )[ swapElementA ] = ( *solutionVec )[ swapElementB ];
+        ( *solutionVec )[ swapElementB ] = temp;
+    }
+}
+
 mt::SolutionBase *mt::PermSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
             const mt::SolutionBase * const argOtherParent ) const {
     const PermSolution * const tempSol = dynamic_cast< const PermSolution* >( argOtherParent );
