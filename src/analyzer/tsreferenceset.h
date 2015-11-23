@@ -43,8 +43,7 @@ namespace mt {
 // For diversification and intensification (james2009cooperative, p. 814)
 class TSReferenceSet final {
 public:
-    TSReferenceSet( const Problem * const argProblem,
-                    const unsigned short &argTSInstanceAmount );
+    TSReferenceSet( const Problem * const argProblem );
     ~TSReferenceSet();
 
     double GetGlobalMinimumSolV() const { return *std::min_element( bestSolutionValues.begin(),
@@ -74,7 +73,6 @@ private:
     unsigned int iterationCounter = 0;
     // Store solutions, their OFV and their update status (james2009cooperative, p.816)
     std::vector< solTup > solutions;
-    const unsigned short &tsInstanceQuantity;
     bool updatedGlobalBestSolution = false;
 };
 

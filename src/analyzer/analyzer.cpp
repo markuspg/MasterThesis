@@ -21,7 +21,7 @@
 
 mt::Analyzer::Analyzer( const mt::Problem *argProblem ) :
     problem{ argProblem },
-    tsReferenceSet{ problem, *settings->tsInstances }
+    tsReferenceSet{ problem }
 {
     std::cout << "    Constructing Analyzer" << std::endl;
 }
