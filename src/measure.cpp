@@ -39,6 +39,7 @@ void mt::Measure::SetProblemParameters( const std::string &argName,
 }
 
 void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
+                                         const double &argImmigrationRate,
                                          const unsigned int &argMaxFailures,
                                          const double &argMutationImpact,
                                          const double &argMutationRate,
@@ -51,6 +52,7 @@ void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
                                          const unsigned short &argTabooTenuresFac,
                                          const unsigned short &argTSInstances ) {
     gaInstances = argGAInstances;
+    immigrationRate = argImmigrationRate;
     maxFailures = argMaxFailures;
     mutationImpact = argMutationImpact;
     mutationRate = argMutationRate;
@@ -76,10 +78,11 @@ void mt::Measure::WriteToDisk() {
     std::ofstream outputStream;
     outputStream.open( outputFile.c_str(), std::ios::app | std::ios::out );
     outputStream << problemName << '|' << problemType << '|' << problemSize << '|' << gaInstances << '|'
-                 << maxFailures << '|' << mutationImpact << '|' << mutationRate << '|'
-                 << promoteGlobalBestSol << '|' << randomizedTabooTenures << '|' << randomKeys << '|'
-                 << reproductionRate << '|' << tabooTenureDeviation << '|' << tabooTenuresFac << '|'
-                 << tsInstances << '|' << analyzerIterations << '|' << threadIterations << "\n";
+                 << immigrationRate << '|' << maxFailures << '|' << mutationImpact << '|'
+                 << mutationRate << '|' << promoteGlobalBestSol << '|' << randomizedTabooTenures << '|'
+                 << randomKeys << '|' << reproductionRate << '|' << tabooTenureDeviation << '|'
+                 << tabooTenuresFac << '|' << tsInstances << '|' << analyzerIterations << '|'
+                 << threadIterations << "\n";
     outputStream.close();
 
     // Clean up any data which will not be automatically overwritten in the next run

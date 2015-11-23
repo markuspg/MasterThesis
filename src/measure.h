@@ -40,6 +40,7 @@ public:
                                const unsigned long &argSize,
                                const std::string &argType );
     void SetSettingsParameters( const unsigned short &argGAInstances,
+                                const double &argImmigrationRate,
                                 const unsigned int &argMaxFailures,
                                 const double &argMutationImpact,
                                 const double &argMutationRate,
@@ -56,6 +57,7 @@ public:
 private:
     unsigned long analyzerIterations;
     unsigned short gaInstances = 1;
+    double immigrationRate = 0.0;
     unsigned int maxFailures = 1000000;
     double mutationImpact = 0.1;
     double mutationRate = 0.2;

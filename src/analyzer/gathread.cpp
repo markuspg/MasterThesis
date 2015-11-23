@@ -52,6 +52,18 @@ void mt::GAThread::CreateInitialPopulation() {
             []( const dSol &a, const dSol &b ){ return a.first < b.first; } );
 }
 
+void mt::GAThread::Immigrate() {
+    std::sort( population.begin(), population.end(),
+            []( const dSol &a, const dSol &b ){ return a.first < b.first; } );
+
+    unsigned long immigrationsQuantity = std::round( popSize * *settings->immigrationRate );
+    for ( unsigned long i = 1; i <= immigrationsQuantity; ++i ) {
+        delete population[ popSize - i ].second;
+        population[ popSize - i ].second = problem->GenerateRandomSolution( i );
+        population[ popSize - i ].first = problem->GetOFV( population[ popSize - i ].second );
+    }
+}
+
 void mt::GAThread::Iteration() {
     ++iterationCount;
 
@@ -69,6 +81,11 @@ void mt::GAThread::Iteration() {
     Reproduce();
 
     Mutate();
+
+    // Weird number to avoid decimal value precision issues
+    if ( *settings->immigrationRate > 0.0001 ) {
+        Immigrate();
+    }
 
     // Re-sort the population for the next iteration
     std::sort( population.begin(), population.end(),

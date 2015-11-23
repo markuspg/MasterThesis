@@ -69,6 +69,7 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
     
     // The variables for the data
     unsigned short tempGAInstances = 1;
+    double tempImmigrationRate = 0.0;
     unsigned int tempMaxFailures = 1000000;
     double tempMutationImpact = 0.2;
     double tempMutationRate = 0.1;
@@ -97,6 +98,8 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
                          "\t                      genetic algorithm (default: 1)\n"
                          "\t--ts <tsInstances>    The desired number of threads running taboo\n"
                          "\t                      search instances (default: 1)\n"
+                         "\t--ir <immigRate>      The share of the GA's population which will be replaced\n"
+                         "\t                      by random new individuums per it. [0.0,1.0](default: 0.0)\n"
                          "\t--mf <maxFailures>    The number of allowed improvement failures\n"
                          "\t                      before the search terminates (default: 1000000)\n"
                          "\t--mi <mutationImpact> The ratio of an individual's chromosomes which will be\n"
@@ -124,6 +127,14 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
         }
         if ( commandLineArguments[ i ] == "--mf" ) {
             tempMaxFailures = std::stoul( commandLineArguments[ i + 1 ] );
+            lastActiveIndex = i + 1;
+            continue;
+        }
+        if ( commandLineArguments[ i ] == "--ir" ) {
+            tempImmigrationRate = std::stod( commandLineArguments[ i + 1 ] );
+            if ( tempImmigrationRate < 0.0 || tempImmigrationRate > 1.0 ) {
+                throw std::runtime_error{ "The immigration rate is not in the valid range of [0.0,1.0]" };
+            }
             lastActiveIndex = i + 1;
             continue;
         }
@@ -195,10 +206,11 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
 
     tempOutputFile = commandLineArguments.back();
     
-    settings = new mt::Settings{ tempGAInstances, tempMaxFailures, tempMutationImpact, tempMutationRate,
-                                 tempOutputFile, std::move( tempProblemFiles ), tempPromoteGlobalBestSol,
-                                 tempRandomizedTabooTenures, tempRandomKeys, tempReproductionRate,
-                                 tempTabooTenureDeviation, tempTabooTenureFac, tempTSInstances };
+    settings = new mt::Settings{ tempGAInstances, tempImmigrationRate, tempMaxFailures, tempMutationImpact,
+                                 tempMutationRate, tempOutputFile, std::move( tempProblemFiles ),
+                                 tempPromoteGlobalBestSol, tempRandomizedTabooTenures, tempRandomKeys,
+                                 tempReproductionRate, tempTabooTenureDeviation, tempTabooTenureFac,
+                                 tempTSInstances };
     
     return 0;
 }

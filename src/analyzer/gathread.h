@@ -41,6 +41,7 @@ public:
 
 private:
     void CreateInitialPopulation();
+    void Immigrate();
     void Mutate();
     void Reproduce();
     void SelectParentsMonteCarlo( std::pair< unsigned long, unsigned long > &argParents );

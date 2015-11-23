@@ -85,6 +85,7 @@ void mt::Analyzer::Run() {
 
         tsReferenceSet.RotateSolutions();
 
+        // Since the genetic algorithm never finishes in this implementation, this behaviour is fine
         if ( finishedThreads == *settings->tsInstances ) {
             break;
         }
