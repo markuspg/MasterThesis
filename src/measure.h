@@ -68,7 +68,7 @@ private:
     std::string problemType;
     bool promoteGlobalBestSol = false;
     bool randomizedTabooTenures = false;
-    bool randomKeys = false;
+    bool randomKeys = true;
     double reproductionRate = 0.5;
     double tabooTenureDeviation = 0.1;
     unsigned short tabooTenuresFac = 1;

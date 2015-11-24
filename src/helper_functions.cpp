@@ -77,7 +77,7 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
     std::vector< std::string > tempProblemFiles;
     bool tempPromoteGlobalBestSol = false;
     bool tempRandomizedTabooTenures = false;
-    bool tempRandomKeys = false;
+    bool tempRandomKeys = true;
     double tempReproductionRate = 0.5;
     double tempTabooTenureDeviation = 0.1;
     unsigned short tempTabooTenureFac = 1;
@@ -110,7 +110,7 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
                          "\t--pgb <promGlobBest>  If new global best solution shall be spread (any non-zero\n"
                          "\t                      integer value will be interpreted as true; default: 0)\n"
                          "\t--rk <UseRandomKeys>  If solutions shall be encoded as random keys (any non-zero\n"
-                         "\t                      integer value will be interpreted as true; default: 0)\n"
+                         "\t                      integer value will be interpreted as true; default: 1)\n"
                          "\t--rtt <randTTenures>  If the taboo tenures shall be randomized (any non-zero\n"
                          "\t                      integer value will be interpreted as true; default: 0)\n"
                          "\t--rr <reproRate>      The portion of the GA's population which will reproduce\n"
