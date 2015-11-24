@@ -102,7 +102,7 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
                          "\t--ir <immigRate>      The share of the GA's population which will be replaced\n"
                          "\t                      by random new individuums per it. [0.0,1.0](default: 0.0)\n"
                          "\t--mf <maxFailures>    The number of allowed improvement failures\n"
-                         "\t                      before the search terminates (default: 1000000)\n"
+                         "\t                      before the search terminates (>= 100, default: 1000000)\n"
                          "\t--mi <mutationImpact> The ratio of an individual's chromosomes which will be\n"
                          "\t                      changed by a mutation [0.0,1.0](default: 0.2)\n"
                          "\t--mr <mutationRate>   The share of the GA's population which will be mutated in\n"
@@ -130,6 +130,10 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
         }
         if ( commandLineArguments[ i ] == "--mf" ) {
             tempMaxFailures = std::stoul( commandLineArguments[ i + 1 ] );
+            if ( tempMaxFailures < 100 ) {
+                throw std::runtime_error{ "Because the maximum failure quantity will be divided by 100 for"
+                                          " the initialization run, it has to be greater than 100" };
+            }
             lastActiveIndex = i + 1;
             continue;
         }
