@@ -54,6 +54,7 @@ public:
     double GetStartSolutionValue( const unsigned short &argIndex ) const;
     void PrepareOptimizationRun();
     void RotateSolutions();
+    void SetFinalMedium();
     void SetSolution( const unsigned short &argIndex, SolutionBase *argSolution, const double &argV );
 
     TSReferenceSet &operator++() { ++iterationCounter; return *this; }

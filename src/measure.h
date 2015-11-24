@@ -35,6 +35,9 @@ public:
     Measure( Measure &argMeasure ) = delete;
 
     void AddTSThreadIterations( std::string &argIterationsString );
+    void SetFinalMedium( const double &argFinMedium ) { finalMedium = argFinMedium; }
+    void SetInitializationMedium( const double &argIniMedium ) { initializationMedium = argIniMedium; }
+    void SetOptimizationMedium( const double &argOptMedium ) { optimizationMedium = argOptMedium; }
     void SetOverallIterationCount( const unsigned long &argIterationCount );
     void SetProblemParameters( const std::string &argName,
                                const unsigned long &argSize,
@@ -57,11 +60,14 @@ public:
 
 private:
     unsigned long analyzerIterations;
+    double finalMedium = 0.0;
     unsigned short gaInstances = 1;
     double immigrationRate = 0.0;
+    double initializationMedium = 0.0;
     unsigned int maxFailures = 1000000;
     double mutationImpact = 0.1;
     double mutationRate = 0.2;
+    double optimizationMedium = 0.0;
     std::string outputFile;
     std::string problemName;
     unsigned long problemSize;

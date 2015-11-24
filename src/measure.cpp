@@ -84,7 +84,8 @@ void mt::Measure::WriteToDisk() {
                  << mutationRate << '|' << promoteGlobalBestSol << '|' << randomizedTabooTenures << '|'
                  << randomKeys << '|' << reproductionRate << '|' << tabooTenureDeviation << '|'
                  << tabooTenuresFac << '|' << tabooTenureShuffling << '|' << tsInstances << '|'
-                 << analyzerIterations << '|' << threadIterations << "\n";
+                 << analyzerIterations << '|' << threadIterations << '|' << initializationMedium << '|'
+                 << optimizationMedium << '|' << finalMedium << "\n";
     outputStream.close();
 
     // Clean up any data which will not be automatically overwritten in the next run
