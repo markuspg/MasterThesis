@@ -41,7 +41,8 @@ public:
               std::vector< std::string > &&argProblemFiles, const bool &argPromoteGlobalBestSol,
               const bool &argRandomizedTabooTenures, const bool &argRandomKeys,
               const double &argReproductionRate, const double &argTabooTenureDeviation,
-              const unsigned short &argTabooTenureFac, const unsigned short &argTSInstances );
+              const unsigned short &argTabooTenureFac, const bool &argTabooTenureShuffling,
+              const unsigned short &argTSInstances );
     Settings( const Settings &argSettings ) = delete;
     Settings( Settings &&argSettings ) = delete;
     ~Settings();
@@ -59,6 +60,7 @@ public:
     const double * const reproductionRate = nullptr;
     const double * const tabooTenureDeviation = nullptr;
     const unsigned short * const tabooTenuresFac = nullptr;
+    const bool * const tabooTenureShuffling = nullptr;
     const unsigned short * const tsInstances = nullptr;
 
 private:

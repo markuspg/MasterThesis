@@ -81,6 +81,7 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
     double tempReproductionRate = 0.5;
     double tempTabooTenureDeviation = 0.1;
     unsigned short tempTabooTenureFac = 1;
+    bool tempTabooTenureShuffling = false;
     unsigned short tempTSInstances = 1;
     
     // Convert all arguments to strings and organize them in a vector
@@ -117,7 +118,9 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
                          "\t--ttd <tTenureDev>    The spread factor for randomized taboo tenures [0.1,0.9]\n"
                          "\t                      (default: 0.1)\n"
                          "\t--ttf <tTenureFac>    How many times the problem size\n"
-                         "\t                      the taboo tenure shall last (default: 1)" << std::endl;
+                         "\t                      the taboo tenure shall last (default: 1)\n"
+                         "\t--tts <tTShuffling>   If the taboo tenures shall be shuffled regularily like\n"
+                         "\t                      Taillard (1991, p.448) proposed (default: 0)" << std::endl;
             return 1;
         }
         if ( commandLineArguments[ i ] == "--ga" ) {
@@ -190,6 +193,11 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
             lastActiveIndex = i + 1;
             continue;
         }
+        if ( commandLineArguments[ i ] == "--tts" ) {
+            tempTabooTenureShuffling = static_cast< bool >( std::stoul( commandLineArguments[ i + 1 ] ) );
+            lastActiveIndex = i + 1;
+            continue;
+        }
         if ( commandLineArguments[ i ] == "--ts" ) {
             tempTSInstances = std::stoul( commandLineArguments[ i + 1 ] );
             if ( tempTSInstances < 1 ) {
@@ -198,6 +206,12 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
             lastActiveIndex = i + 1;
             continue;
         }
+    }
+
+    // Ensure, that random taboo tenures are enabled, if taboo tenure shuffling is activated
+    if ( tempTabooTenureShuffling && !tempRandomizedTabooTenures) {
+        throw std::runtime_error{ "Random taboo tenures have to be activated, if taboo tenure shuffling"
+                                  " is activated"};
     }
 
     for ( unsigned int i = lastActiveIndex + 1; i < static_cast< unsigned int >( argC ) - 1; ++i ) {
@@ -210,7 +224,7 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
                                  tempMutationRate, tempOutputFile, std::move( tempProblemFiles ),
                                  tempPromoteGlobalBestSol, tempRandomizedTabooTenures, tempRandomKeys,
                                  tempReproductionRate, tempTabooTenureDeviation, tempTabooTenureFac,
-                                 tempTSInstances };
+                                 tempTabooTenureShuffling, tempTSInstances };
     
     return 0;
 }

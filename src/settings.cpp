@@ -25,7 +25,8 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const double &argI
                         std::vector< std::string > &&argProblemFiles, const bool &argPromoteGlobalBestSol,
                         const bool &argRandomizedTabooTenures, const bool &argRandomKeys,
                         const double &argReproductionRate, const double &argTabooTenureDeviation,
-                        const unsigned short &argTabooTenureFac, const unsigned short &argTSInstances ) :
+                        const unsigned short &argTabooTenureFac, const bool &argTabooTenureShuffling,
+                        const unsigned short &argTSInstances ) :
     gaInstances{ new unsigned short{ argGAInstances } },
     immigrationRate{ new double{ argImmigrationRate } },
     maxFailures{ new unsigned int{ argMaxFailures } },
@@ -39,6 +40,7 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const double &argI
     reproductionRate{ new double{ argReproductionRate } },
     tabooTenureDeviation{ new double { argTabooTenureDeviation } },
     tabooTenuresFac{ new unsigned short{ argTabooTenureFac } },
+    tabooTenureShuffling{ new bool{ argTabooTenureShuffling } },
     tsInstances{ new unsigned short{ argTSInstances } }
 {
     std::cout << "  Settings constructor" << std::endl;
@@ -55,13 +57,14 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const double &argI
               << "\n   reproductionRate:\t\t" << *reproductionRate
               << "\n   tabooTenureDeviation:\t" << *tabooTenureDeviation
               << "\n   tabooTenuresFac:\t\t" << *tabooTenuresFac
+              << "\n   tabooTenureShuffling:\t" << *tabooTenureShuffling
               << "\n   tsInstances:\t\t\t" << *tsInstances << std::endl;
 
     std::lock_guard< std::mutex > lockMeasure{ measureMutex };
     measure.SetSettingsParameters( *gaInstances, *immigrationRate, *maxFailures, *mutationImpact,
                                    *mutationRate, *outputFile, *promoteGlobalBestSol, *randomizedTabooTenures,
                                    *randomKeys, *reproductionRate, *tabooTenureDeviation, *tabooTenuresFac,
-                                   *tsInstances );
+                                   *tabooTenureShuffling, *tsInstances );
 }
 
 mt::Settings::~Settings() {
@@ -79,6 +82,7 @@ mt::Settings::~Settings() {
     delete reproductionRate;
     delete tabooTenureDeviation;
     delete tabooTenuresFac;
+    delete tabooTenureShuffling;
     delete tsInstances;
 }
 

@@ -51,6 +51,7 @@ public:
                                 const double &argReproductionRate,
                                 const double &argTabooTenureDeviation,
                                 const unsigned short &argTabooTenuresFac,
+                                const bool &argTabooTenureShuffling,
                                 const unsigned short &argTSInstances );
     void WriteToDisk();
 
@@ -71,6 +72,7 @@ private:
     double reproductionRate = 0.5;
     double tabooTenureDeviation = 0.1;
     unsigned short tabooTenuresFac = 1;
+    bool tabooTenureShuffling = false;
     std::vector< std::string > tsThreadIterations;
     unsigned short tsInstances = 1;
 };

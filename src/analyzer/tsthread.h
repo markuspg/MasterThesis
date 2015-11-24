@@ -58,6 +58,7 @@ private:
     mt::TSReferenceSet &referenceSet;
     // taboo tenures and aspiration criterion local to each thread (james2009cooperative, p. 814)
     unsigned int tabooTenure = 0;
+    unsigned int tabooTenureCounter = 0;
     mt::Matrix< unsigned long > tabooTenures;
 };
 

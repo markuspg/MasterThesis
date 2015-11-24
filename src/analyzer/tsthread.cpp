@@ -28,6 +28,7 @@ mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
     problem{ argProblem },
     referenceSet{ argReferenceSet },
     tabooTenure{ mt::GetTabooTenure( referenceSet.problem->size ) },
+    tabooTenureCounter{ tabooTenure },
     tabooTenures{ referenceSet.problem->size, 0 }
 {
     std::cout << "      Constructing TSThread with id " << index << std::endl;
@@ -80,6 +81,14 @@ mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
 
 void mt::TSThread::Iteration() {
     ++iterationCount;
+
+    // Taboo tenure shuffling as proposed by taillard1991robust, p. 448
+    --tabooTenureCounter;
+    if ( !tabooTenureCounter && *settings->randomizedTabooTenures && *settings->tabooTenureShuffling ) {
+        tabooTenure = GetTabooTenure( problem->size );
+        tabooTenureCounter = tabooTenure;
+    }
+
     mt::SolutionBase *tempSol = nullptr;
     double tempSolV = 0.0;
     {

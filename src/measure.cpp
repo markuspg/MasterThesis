@@ -50,6 +50,7 @@ void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
                                          const double &argReproductionRate,
                                          const double &argTabooTenureDeviation,
                                          const unsigned short &argTabooTenuresFac,
+                                         const bool &argTabooTenureShuffling,
                                          const unsigned short &argTSInstances ) {
     gaInstances = argGAInstances;
     immigrationRate = argImmigrationRate;
@@ -63,6 +64,7 @@ void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
     reproductionRate = argReproductionRate;
     tabooTenureDeviation = argTabooTenureDeviation;
     tabooTenuresFac = argTabooTenuresFac;
+    tabooTenureShuffling = argTabooTenureShuffling;
     tsInstances = argTSInstances;
 
     tsThreadIterations.reserve( tsInstances );
@@ -81,8 +83,8 @@ void mt::Measure::WriteToDisk() {
                  << immigrationRate << '|' << maxFailures << '|' << mutationImpact << '|'
                  << mutationRate << '|' << promoteGlobalBestSol << '|' << randomizedTabooTenures << '|'
                  << randomKeys << '|' << reproductionRate << '|' << tabooTenureDeviation << '|'
-                 << tabooTenuresFac << '|' << tsInstances << '|' << analyzerIterations << '|'
-                 << threadIterations << "\n";
+                 << tabooTenuresFac << '|' << tabooTenureShuffling << '|' << tsInstances << '|'
+                 << analyzerIterations << '|' << threadIterations << "\n";
     outputStream.close();
 
     // Clean up any data which will not be automatically overwritten in the next run
