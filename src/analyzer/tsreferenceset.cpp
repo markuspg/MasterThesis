@@ -168,17 +168,21 @@ void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
 }
 
 void mt::TSReferenceSet::SpreadGlobalBestSolution() {
+    unsigned int shift = 0;
+    if ( iterationCounter % 2 == 1 ) {
+        shift = 1;
+    }
     // If whilst the last iteration a new global best solution was found, ...
     if ( *settings->promoteGlobalBestSol && updatedGlobalBestSolution ) {
         // promote it to all odd taboo search thread start solutions (james2009cooperative, p. 816)
         for ( unsigned short i = 0; i < *settings->gaInstances + *settings->tsInstances; ++i ) {
             if ( i % 2 == 1 ) {
-                unsigned long tempStepWidth = std::get< unsigned long >( solutions[ i ] );
-                delete std::get< SolutionBase* >( solutions[ i ] );
-                solutions[ i ] = solTup{ globalBestSolution->Copy(),
-                                         globalBestSolutionV,
-                                         tempStepWidth,
-                                         true };
+                unsigned long tempStepWidth = std::get< unsigned long >( solutions.at( i - shift ) );
+                delete std::get< SolutionBase* >( solutions.at( i - shift ) );
+                solutions.at( i - shift ) = solTup{ globalBestSolution->Copy(),
+                                            globalBestSolutionV,
+                                            tempStepWidth,
+                                            true };
             }
         }
     }
