@@ -49,8 +49,7 @@ public:
     TSReferenceSet( TSReferenceSet &&argTSReferenceSet ) = delete;
     ~TSReferenceSet();
 
-    double GetGlobalMinimumSolV() const { return *std::min_element( bestSolutionValues.begin(),
-                                                                    bestSolutionValues.end() ); }
+    double GetGlobalMinimumSolV() const;
     unsigned int GetIterationCount() const { return iterationCounter; }
     SolutionBase *GetStartSolution( const unsigned short &argIndex ) const;
     double GetStartSolutionValue( const unsigned short &argIndex ) const;
