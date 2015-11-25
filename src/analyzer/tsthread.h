@@ -39,9 +39,9 @@ public:
     TSThread( const unsigned short &argIndex, std::mutex &argMutex,
               const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet );
 
-    void CleanUpMatrix( mt::Matrix< dSol > *argMatrix ) const;
+    void CleanUpMatrix( mt::Matrix< dSol > &argMatrix ) const;
     SolutionBase *GetBestNeigh( double &argBestNeighV,
-                                SolutionBase *argTempSol );
+                                const std::unique_ptr< const SolutionBase > &argTempSol );
     bool IsFinished() const { return finished; }
     void Iteration();
     void PrepareOptimizationRun();

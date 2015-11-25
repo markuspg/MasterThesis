@@ -75,7 +75,9 @@ void mt::Analyzer::Run() {
             }
         }
         for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
-            gaThreads[ i ].join();
+            if ( gaThreads[ i ].joinable() ) {
+                gaThreads[ i ].join();
+            }
         }
         for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
             if ( tsThreads[ i ].joinable() ) {

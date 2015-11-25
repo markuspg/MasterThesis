@@ -34,22 +34,22 @@ mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
     std::cout << "      Constructing TSThread with id " << index << std::endl;
 }
 
-void mt::TSThread::CleanUpMatrix( mt::Matrix< dSol > *argMatrix ) const {
-    for ( unsigned long i = 0; i < referenceSet.problem->size; ++i ) {
-        for ( unsigned long j = i + 1; j < referenceSet.problem->size; ++j ) {
-            delete ( *argMatrix )( i, j ).second;
+void mt::TSThread::CleanUpMatrix( mt::Matrix< dSol > &argMatrix ) const {
+    for ( unsigned long i = 0; i < problem->size; ++i ) {
+        for ( unsigned long j = i + 1; j < problem->size; ++j ) {
+            delete argMatrix( i, j ).second;
         }
     }
 }
 
 mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
-                                              mt::SolutionBase *argTempSol ) {
+                                              const std::unique_ptr< const SolutionBase > &argTempSol ) {
     mt::Matrix< dSol >costs =
             { referenceSet.problem->size, dSol{ std::numeric_limits< double >::max(), nullptr } };
     // Iterate over all lines
-    for ( unsigned long i = 0; i < referenceSet.problem->size; ++i ) {
+    for ( unsigned long i = 0; i < problem->size; ++i ) {
         // Iterate over all columns above the main diagonal (because swaps are symmetrical)
-        for ( unsigned long j = i + 1; j < referenceSet.problem->size; ++j ) {
+        for ( unsigned long j = i + 1; j < problem->size; ++j ) {
             mt::SolutionBase *tempSolution =  argTempSol->GetSwappedVariant( i, j );
             costs( i, j ) = dSol{ referenceSet.problem->GetOFV( tempSolution ), tempSolution };
         }
@@ -71,7 +71,7 @@ mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
         } else {
             // Taillard's taboo evaluation => constant time
             mt::SolutionBase *bestNeigh = argTempSol->GetSwappedVariant( swapI, swapJ );
-            CleanUpMatrix( &costs );
+            CleanUpMatrix( costs );
             unsigned int tabooFinish = iterationCount + tabooTenure;
             problem->UpdateTabooTenures( bestNeigh, swapI, swapJ, tabooFinish, tabooTenures );
             return bestNeigh;
@@ -89,11 +89,11 @@ void mt::TSThread::Iteration() {
         tabooTenureCounter = tabooTenure;
     }
 
-    mt::SolutionBase *tempSol = nullptr;
+    std::unique_ptr< const SolutionBase > tempSol = nullptr;
     double tempSolV = 0.0;
     {
         std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
-        tempSol = referenceSet.GetStartSolution( index );
+        tempSol.reset( referenceSet.GetStartSolution( index ) );
         tempSolV = referenceSet.GetStartSolutionValue( index );
     }
 
@@ -116,8 +116,6 @@ void mt::TSThread::Iteration() {
             referenceSet.SetSolution( index, bestNeigh, bestNeighV );
         }
     }
-
-    delete tempSol;
 
     if ( failures >= maxFailures ) {
         finished = true;

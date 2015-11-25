@@ -37,8 +37,8 @@ bool mt::QAP::CheckIfTaboo( const unsigned int &argIterationCount,
                             const Matrix< unsigned long > &argTTMatrix ) const {
     // taillard1991robust, p. 447
     PermSolution * const tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
-    if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) > argIterationCount
-         && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) > argIterationCount ) {
+    if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) >= argIterationCount
+         && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) >= argIterationCount ) {
         delete tempSol;
         return true;
     }
