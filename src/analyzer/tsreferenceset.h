@@ -75,6 +75,7 @@ private:
     bool initializationRun = true;
     std::unique_ptr< SolutionBase > globalBestSolution = nullptr;
     double globalBestSolutionV = std::numeric_limits< double >::max();
+    std::stringstream globalBestSS;
     unsigned int iterationCounter = 0;
     // Store solutions, their OFV and their update status (james2009cooperative, p.816)
     std::vector< solTup > solutions;

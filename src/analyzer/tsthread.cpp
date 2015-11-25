@@ -102,10 +102,12 @@ void mt::TSThread::Iteration() {
 
     std::unique_ptr< const SolutionBase > tempSol = nullptr;
     double tempSolV = 0.0;
+    double bestSolV = 0.0;
     {
         std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
         tempSol.reset( referenceSet.GetStartSolution( index ) );
         tempSolV = referenceSet.GetStartSolutionValue( index );
+        bestSolV = referenceSet.GetLocalMinimumSolV( index );
     }
 
     double bestNeighV = std::numeric_limits< double >::max();
@@ -117,7 +119,7 @@ void mt::TSThread::Iteration() {
         std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
         referenceSet.SetSolution( index, nullptr, 0.0 );
     } else {
-        if ( bestNeighV >= tempSolV ) {
+        if ( bestNeighV >= bestSolV ) {
             ++failures;
         }
 

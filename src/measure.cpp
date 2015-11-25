@@ -31,6 +31,11 @@ void mt::Measure::SetFinalStats( const double &argFinMedian, const double &argFi
     finalMedium = argFinMedium;
 }
 
+void mt::Measure::SetGlobalBestDevelopment( const std::string &argGlobalBestDevelopment ) {
+    globalBestDevelopment = argGlobalBestDevelopment;
+    globalBestDevelopment.pop_back();
+}
+
 void mt::Measure::SetInitializationStats( const double &argIniMedian, const double &argIniMedium ) {
     initializationMedian = argIniMedian;
     initializationMedium = argIniMedium;
@@ -103,7 +108,8 @@ void mt::Measure::WriteToDisk() {
                  << tabooTenureDeviation << '|' << tabooTenuresFac << '|' << tabooTenureShuffling
                  << '|' << tsInstances << '|' << analyzerIterations << '|' << threadIterations << '|'
                  << initializationMedian << '|' << initializationMedium << '|' << optimizationMedian << '|'
-                 << optimizationMedium << '|' << finalMedian << '|' << finalMedium << "\n";
+                 << optimizationMedium << '|' << finalMedian << '|' << finalMedium << '|'
+                 << globalBestDevelopment << "\n";
     outputStream.close();
 
     // Clean up any data which will not be automatically overwritten in the next run

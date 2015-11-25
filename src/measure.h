@@ -36,6 +36,7 @@ public:
 
     void AddTSThreadIterations( std::string &argIterationsString );
     void SetFinalStats( const double &argFinMedian, const double &argFinMedium );
+    void SetGlobalBestDevelopment( const std::string &argGlobalBestDevelopment );
     void SetInitializationStats( const double &argIniMedian, const double &argIniMedium );
     void SetOptimizationStats( const double &argOptMedian, const double &argOptMedium );
     void SetOverallIterationCount( const unsigned long &argIterationCount );
@@ -65,6 +66,7 @@ private:
     double finalMedium = 0.0;
     unsigned short gaInstances = 1;
     bool globalBestAspiration = true;
+    std::string globalBestDevelopment;
     double immigrationRate = 0.0;
     double initializationMedian = 0.0;
     double initializationMedium = 0.0;

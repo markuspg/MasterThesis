@@ -48,6 +48,7 @@ mt::TSReferenceSet::~TSReferenceSet() {
     }
 
     std::lock_guard< std::mutex > lockMeasure{ measureMutex };
+    measure.SetGlobalBestDevelopment( globalBestSS.str() );
     measure.SetOverallIterationCount( iterationCounter );
 }
 
@@ -97,6 +98,7 @@ double mt::TSReferenceSet::GetStartSolutionValue( const unsigned short &argIndex
 
 void mt::TSReferenceSet::PrepareOptimizationRun() {
     frequenciesMatrix.ResetWithValue( 0 );
+    globalBestSS << 0 << ':' << 0 << ';';
     initializationRun = false;
     iterationCounter = 0;
 
@@ -124,6 +126,7 @@ void mt::TSReferenceSet::PromoteNewSolution( const unsigned short &argIndex ) {
             updatedGlobalBestSolution = true;
             globalBestSolution.reset( std::get< SolutionBase* >( solutions[ argIndex ] )->Copy() );
             globalBestSolutionV = bestSolutionValues[ argIndex ];
+            globalBestSS << iterationCounter << ':' << globalBestSolutionV << ';';
         }
     }
 }
