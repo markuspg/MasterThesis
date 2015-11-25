@@ -49,7 +49,8 @@ int main( int argc, char *argv[] ) {
                 delete problem;
                 std::lock_guard< std::mutex > lockMeasure{ measureMutex };
             } else {
-                throw std::runtime_error{ "  Invalid problem type encountered in line '" + line + "'" };
+                throw std::runtime_error{ "  Invalid problem encountered in line '" + line + "' of"
+                                          " file '" + *cit + "'"};
             }
             measure.WriteToDisk();
         }

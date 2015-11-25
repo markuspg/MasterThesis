@@ -73,7 +73,7 @@ mt::Matrix< T >::Matrix( const std::vector< T > &argItems ) :
     A->resize( dimension * dimension, 0 );
     typename std::vector< T >::size_type size = argItems.size();
     for ( std::size_t i = 0; i < size; i++ ) {
-        ( *A ).at( i ) = argItems[ i ];
+        ( *A ).at( i ) = argItems.at( i );
     }
 
     assert ( argItems.size() == A->size() );
