@@ -36,7 +36,7 @@ mt::TSReferenceSet::TSReferenceSet( const mt::Problem * const argProblem ) :
     iniMedium /= *settings->gaInstances + *settings->tsInstances;
 
     std::lock_guard< std::mutex > lockMeasure{ measureMutex };
-    measure.SetInitializationMedium( iniMedium );
+    measure.SetInitializationStats( GetSolutionsMedian(), iniMedium );
 }
 
 mt::TSReferenceSet::~TSReferenceSet() {
@@ -65,6 +65,20 @@ void mt::TSReferenceSet::DiversifyUnchangedSolutions() {
     }
 }
 
+double mt::TSReferenceSet::GetSolutionsMedian() const {
+    std::vector< solTup > tempSolutions{ solutions };
+    std::sort( tempSolutions.begin(), tempSolutions.end(),
+        []( const solTup &a, const solTup &b )
+            { return std::get< double >( a ) < std::get< double >( b ); } );
+    if ( solutions.size() % 2 == 0 ) {
+        double belowMedian = std::get< double >( tempSolutions[ tempSolutions.size() / 2 - 1 ] );
+        double aboveMedian = std::get< double >( tempSolutions[ tempSolutions.size() / 2 ] );
+        return ( belowMedian + aboveMedian ) / 2;
+    } else {
+        return std::get< double >( tempSolutions[ tempSolutions.size() / 2 ] );
+    }
+}
+
 mt::SolutionBase *mt::TSReferenceSet::GetStartSolution( const unsigned short &argIndex ) const {
     return std::get< SolutionBase* >( solutions[ argIndex ] );
 }
@@ -86,7 +100,7 @@ void mt::TSReferenceSet::PrepareOptimizationRun() {
     optMedium /= *settings->gaInstances + *settings->tsInstances;
 
     std::lock_guard< std::mutex > lockMeasure{ measureMutex };
-    measure.SetOptimizationMedium( optMedium );
+    measure.SetOptimizationStats( GetSolutionsMedian(), optMedium );
 }
 
 void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
@@ -121,7 +135,7 @@ void mt::TSReferenceSet::RotateSolutions() {
     std::rotate( solutions.begin(), solutions.begin() + 1, solutions.end() );
 }
 
-void mt::TSReferenceSet::SetFinalMedium() {
+void mt::TSReferenceSet::SetFinalStatistics() {
     double finMedium = 0.0;
     for ( unsigned short i = 0; i < *settings->gaInstances + *settings->tsInstances; ++i ) {
         std::get< double >( solutions[ i ] ) = problem->GetOFV( std::get< SolutionBase* >( solutions[ i ] ) );
@@ -130,7 +144,7 @@ void mt::TSReferenceSet::SetFinalMedium() {
     finMedium /= *settings->gaInstances + *settings->tsInstances;
 
     std::lock_guard< std::mutex > lockMeasure{ measureMutex };
-    measure.SetFinalMedium( finMedium );
+    measure.SetFinalStats( GetSolutionsMedian(), finMedium );
 }
 
 void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,

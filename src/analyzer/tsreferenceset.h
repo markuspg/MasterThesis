@@ -54,7 +54,7 @@ public:
     double GetStartSolutionValue( const unsigned short &argIndex ) const;
     void PrepareOptimizationRun();
     void RotateSolutions();
-    void SetFinalMedium();
+    void SetFinalStatistics();
     void SetSolution( const unsigned short &argIndex, SolutionBase *argSolution, const double &argV );
 
     TSReferenceSet &operator++() { ++iterationCounter; return *this; }
@@ -63,6 +63,7 @@ public:
 
 private:
     void DiversifyUnchangedSolutions();
+    double GetSolutionsMedian() const;
     void PromoteBestSolution( const unsigned short &argIndex );
     void SpreadGlobalBestSolution();
 

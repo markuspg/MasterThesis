@@ -26,6 +26,21 @@ void mt::Measure::AddTSThreadIterations( std::string &argIterationsString ) {
     tsThreadIterations.emplace_back( argIterationsString );
 }
 
+void mt::Measure::SetFinalStats( const double &argFinMedian, const double &argFinMedium ) {
+    finalMedian = argFinMedian;
+    finalMedium = argFinMedium;
+}
+
+void mt::Measure::SetInitializationStats( const double &argIniMedian, const double &argIniMedium ) {
+    initializationMedian = argIniMedian;
+    initializationMedium = argIniMedium;
+}
+
+void mt::Measure::SetOptimizationStats( const double &argOptMedian, const double &argOptMedium ) {
+    optimizationMedian = argOptMedian;
+    optimizationMedium = argOptMedium;
+}
+
 void mt::Measure::SetOverallIterationCount( const unsigned long &argIterationCount ) {
     analyzerIterations = argIterationCount;
 }
@@ -84,8 +99,9 @@ void mt::Measure::WriteToDisk() {
                  << mutationRate << '|' << promoteGlobalBestSol << '|' << randomizedTabooTenures << '|'
                  << randomKeys << '|' << reproductionRate << '|' << tabooTenureDeviation << '|'
                  << tabooTenuresFac << '|' << tabooTenureShuffling << '|' << tsInstances << '|'
-                 << analyzerIterations << '|' << threadIterations << '|' << initializationMedium << '|'
-                 << optimizationMedium << '|' << finalMedium << "\n";
+                 << analyzerIterations << '|' << threadIterations << '|' << initializationMedian << '|'
+                 << initializationMedium << '|' << optimizationMedian << '|' << optimizationMedium << '|'
+                 << finalMedian << '|' << finalMedium << "\n";
     outputStream.close();
 
     // Clean up any data which will not be automatically overwritten in the next run

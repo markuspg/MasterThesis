@@ -92,7 +92,7 @@ void mt::Analyzer::Run() {
     }
 
     // No matter that this will be called twice, since the second run will overwrite the first one's data
-    tsReferenceSet.SetFinalMedium();
+    tsReferenceSet.SetFinalStatistics();
 
     std::cout << "     Analyzer finished after " << tsReferenceSet.GetIterationCount()
               << " iterations" << std::endl;
