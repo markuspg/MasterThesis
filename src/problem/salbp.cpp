@@ -82,6 +82,7 @@ mt::SolutionBase *mt::SALBP::GenerateRandomSolution( const unsigned int &argSeed
 double mt::SALBP::GetOFV( SolutionBase * const argSolution ) const {
     // Storage for the converted solution and its objective function value
     PermSolution * tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
+    assert( tempSol );
 
     std::list< Task* > tasksToBeScheduled;
     std::vector< unsigned long > stationTimes;

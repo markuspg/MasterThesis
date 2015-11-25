@@ -80,7 +80,7 @@ double mt::TSReferenceSet::GetSolutionsMedian() const {
 }
 
 mt::SolutionBase *mt::TSReferenceSet::GetStartSolution( const unsigned short &argIndex ) const {
-    return std::get< SolutionBase* >( solutions[ argIndex ] );
+    return std::get< SolutionBase* >( solutions[ argIndex ] )->Copy();
 }
 
 double mt::TSReferenceSet::GetStartSolutionValue( const unsigned short &argIndex ) const {
@@ -160,11 +160,6 @@ void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
     // overrated because of its promotion which would lead to much too high convergence
     problem->UpdateFrequenciesMatrix( frequenciesMatrix, argSolution );
 
-    // Check if the solution changed and replace if so, otherwise set 'updated' flag to false
-    if ( argSolution == std::get< SolutionBase* >( solutions[ argIndex ] ) ) {
-        std::get< bool >( solutions[ argIndex ] ) = false;
-        return;
-    }
     unsigned long tempStepWidth = std::get< unsigned long >( solutions[ argIndex ] );
     delete std::get< SolutionBase* >( solutions[ argIndex ] );
     solutions[ argIndex ] = solTup{ argSolution, argV, tempStepWidth, true };

@@ -57,6 +57,7 @@ mt::SolutionBase *mt::QAP::GenerateRandomSolution( const unsigned int &argSeed )
 double mt::QAP::GetOFV( mt::SolutionBase * const argSolution ) const {
     // Stores the converted solution
     mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argSolution->GetPermSolution() );
+    assert( tempSol );
 
     unsigned long ofv = 0;
     std::vector< unsigned long >::size_type size = tempSol->GetSize();

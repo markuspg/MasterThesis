@@ -73,7 +73,7 @@ void mt::GAThread::Iteration() {
         delete population[ popSize - 1 ].second;
         // Since the GAs' solutions are stored 'behind' the TSs' solutions, the index has to be shifted
         population[ popSize - 1 ].second =
-                referenceSet.GetStartSolution( index + *settings->tsInstances )->Copy();
+                referenceSet.GetStartSolution( index + *settings->tsInstances );
         population[ popSize - 1 ].first =
                 referenceSet.GetStartSolutionValue( index + *settings->tsInstances );
     }

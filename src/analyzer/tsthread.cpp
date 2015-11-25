@@ -117,6 +117,8 @@ void mt::TSThread::Iteration() {
         }
     }
 
+    delete tempSol;
+
     if ( failures >= maxFailures ) {
         finished = true;
 
