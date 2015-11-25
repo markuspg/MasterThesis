@@ -102,7 +102,6 @@ void mt::TSThread::Iteration() {
 
     if ( !bestNeigh ) {
         ++failures;
-        ++invalidSolutions;
 
         std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
         referenceSet.SetSolution( index, nullptr, 0.0 );
@@ -132,7 +131,6 @@ void mt::TSThread::PrepareOptimizationRun() {
     // These settings are for the optimization run (after the initialization run)
     failures = 0;
     finished = false;
-    invalidSolutions = 0;
     iterationCount = 0;
     // Tighter stopping criterion in the initialization run (james2009cooperative, p. 814)
     maxFailures *= 100;

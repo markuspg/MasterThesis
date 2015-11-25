@@ -50,7 +50,6 @@ private:
     unsigned int failures = 0;
     bool finished = false;
     const unsigned short index = 0;
-    unsigned int invalidSolutions = 0;
     unsigned int iterationCount = 0;
     unsigned int maxFailures = 0;
     std::mutex &mutex;

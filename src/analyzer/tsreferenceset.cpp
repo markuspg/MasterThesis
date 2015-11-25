@@ -103,7 +103,7 @@ void mt::TSReferenceSet::PrepareOptimizationRun() {
     measure.SetOptimizationStats( GetSolutionsMedian(), optMedium );
 }
 
-void mt::TSReferenceSet::PromoteBestSolution( const unsigned short &argIndex ) {
+void mt::TSReferenceSet::PromoteNewSolution( const unsigned short &argIndex ) {
     // Check, if the previously set new solution is better than the best one found by this thread
     if ( std::get< double >( solutions[ argIndex ] ) < bestSolutionValues[ argIndex ] ) {
         // If yes, update the best solution for this thread
@@ -164,7 +164,7 @@ void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
     delete std::get< SolutionBase* >( solutions[ argIndex ] );
     solutions[ argIndex ] = solTup{ argSolution, argV, tempStepWidth, true };
 
-    PromoteBestSolution( argIndex );
+    PromoteNewSolution( argIndex );
 }
 
 void mt::TSReferenceSet::SpreadGlobalBestSolution() {

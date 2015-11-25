@@ -66,7 +66,7 @@ public:
 private:
     void DiversifyUnchangedSolutions();
     double GetSolutionsMedian() const;
-    void PromoteBestSolution( const unsigned short &argIndex );
+    void PromoteNewSolution( const unsigned short &argIndex );
     void SpreadGlobalBestSolution();
 
     std::vector< SolutionBase* > bestSolutions;
