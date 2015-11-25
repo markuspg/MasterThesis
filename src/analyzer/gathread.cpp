@@ -23,10 +23,11 @@ mt::GAThread::GAThread( const unsigned short &argIndex, std::mutex &argMutex,
                         const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet ) :
     index{ argIndex },
     popSize{ argProblem->size * argProblem->size > 100 ? 100 : argProblem->size * argProblem->size },
+    immigrationsQuantity{ static_cast< unsigned long >(
+                              std::round( popSize * *settings->immigrationRate ) ) },
     population{ popSize, { 0.0, nullptr } },
     problem{ argProblem },
-    mutationsQuantity{ *settings->mutationRate * popSize < 1 ?
-            1 : static_cast< unsigned long >( *settings->mutationRate * popSize ) },
+    mutationsQuantity{ static_cast< unsigned long >( std::round( popSize * *settings->mutationRate ) ) },
     reproductionQuantity{ *settings->reproductionRate * popSize / 2 < 1 ?
             1 : static_cast< unsigned long >( *settings->reproductionRate * popSize / 2 ) },
     tsReferenceSetMutex{ argMutex },
@@ -56,7 +57,6 @@ void mt::GAThread::Immigrate() {
     std::sort( population.begin(), population.end(),
             []( const dSol &a, const dSol &b ){ return a.first < b.first; } );
 
-    unsigned long immigrationsQuantity = std::round( popSize * *settings->immigrationRate );
     for ( unsigned long i = 1; i <= immigrationsQuantity; ++i ) {
         delete population[ popSize - i ].second;
         population[ popSize - i ].second = problem->GenerateRandomSolution( i );
@@ -80,10 +80,11 @@ void mt::GAThread::Iteration() {
 
     Reproduce();
 
-    Mutate();
+    if ( mutationsQuantity ) {
+        Mutate();
+    }
 
-    // Weird number to avoid decimal value precision issues
-    if ( *settings->immigrationRate > 0.0001 ) {
+    if ( immigrationsQuantity ) {
         Immigrate();
     }
 

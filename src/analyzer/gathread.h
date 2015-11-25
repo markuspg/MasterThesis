@@ -50,6 +50,7 @@ private:
     const unsigned short index = 0;
     unsigned int iterationCount = 0;
     unsigned long popSize = 0;
+    const unsigned long immigrationsQuantity = 0;   //! How many chromosomes shall immigrate per iteration
     std::vector< dSol > population;
     const mt::Problem * const problem = nullptr;
     const unsigned long mutationsQuantity = 0;      //! How many chromosomes shall be mutated per iteration

@@ -60,7 +60,7 @@ std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const unsi
 #endif
     std::uniform_real_distribution<> distribution{ 0.0, 1.0 };
     for ( unsigned long i = 0; i < argSize; ++i ) {
-        ( *tempVec )[ i ] = distribution( engine );
+        tempVec->at( i ) = distribution( engine );
     }
 
     return tempVec;

@@ -58,7 +58,7 @@ public:
     virtual void Mutate( std::mt19937 &argEngine ) override;
 #endif
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
-                                                    const SolutionBase * const argOtherParent ) const;
+                                                    const SolutionBase * const argOtherParent ) const override;
 };
 
 }

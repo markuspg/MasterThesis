@@ -45,6 +45,8 @@ namespace mt {
 class TSReferenceSet final {
 public:
     TSReferenceSet( const Problem * const argProblem );
+    TSReferenceSet( const TSReferenceSet &argTSReferenceSet ) = delete;
+    TSReferenceSet( TSReferenceSet &&argTSReferenceSet ) = delete;
     ~TSReferenceSet();
 
     double GetGlobalMinimumSolV() const { return *std::min_element( bestSolutionValues.begin(),
