@@ -70,6 +70,7 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
     
     // The variables for the data
     unsigned short tempGAInstances = 1;
+    bool tempGlobalBestAspiration = true;
     double tempImmigrationRate = 0.0;
     unsigned int tempMaxFailures = 1000000;
     double tempMutationImpact = 0.2;
@@ -98,6 +99,8 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
                          "for my master thesis. The command line arguments are the following:\n\n"
                          "\t--ga <gaInstances>    The desired number of threads running the\n"
                          "\t                      genetic algorithm (default: 1)\n"
+                         "\t--gba <globBestAsp>   Global or local best value aspiration crit. (any non-zero\n"
+                         "\t                      integer value will be interpreted as true; default: 1)\n"
                          "\t--ts <tsInstances>    The desired number of threads running taboo\n"
                          "\t                      search instances (default: 1)\n"
                          "\t--ir <immigRate>      The share of the GA's population which will be replaced\n"
@@ -126,6 +129,11 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
         }
         if ( commandLineArguments[ i ] == "--ga" ) {
             tempGAInstances = std::stoul( commandLineArguments[ i + 1 ] );
+            lastActiveIndex = i + 1;
+            continue;
+        }
+        if ( commandLineArguments[ i ] == "--gba" ) {
+            tempGlobalBestAspiration = static_cast< bool >( std::stoul( commandLineArguments[ i + 1 ] ) );
             lastActiveIndex = i + 1;
             continue;
         }
@@ -225,11 +233,12 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
 
     tempOutputFile = commandLineArguments.back();
     
-    settings = new mt::Settings{ tempGAInstances, tempImmigrationRate, tempMaxFailures, tempMutationImpact,
-                                 tempMutationRate, tempOutputFile, std::move( tempProblemFiles ),
-                                 tempPromoteGlobalBestSol, tempRandomizedTabooTenures, tempRandomKeys,
-                                 tempReproductionRate, tempTabooTenureDeviation, tempTabooTenureFac,
-                                 tempTabooTenureShuffling, tempTSInstances };
+    settings = new mt::Settings{ tempGAInstances, tempGlobalBestAspiration, tempImmigrationRate,
+                                 tempMaxFailures, tempMutationImpact, tempMutationRate, tempOutputFile,
+                                 std::move( tempProblemFiles ), tempPromoteGlobalBestSol,
+                                 tempRandomizedTabooTenures, tempRandomKeys, tempReproductionRate,
+                                 tempTabooTenureDeviation, tempTabooTenureFac, tempTabooTenureShuffling,
+                                 tempTSInstances };
     
     return 0;
 }

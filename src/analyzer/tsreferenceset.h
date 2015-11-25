@@ -50,6 +50,7 @@ public:
     ~TSReferenceSet();
 
     double GetGlobalMinimumSolV() const;
+    double GetLocalMinimumSolV( const unsigned short &argIndex ) const;
     unsigned int GetIterationCount() const { return iterationCounter; }
     SolutionBase *GetStartSolution( const unsigned short &argIndex ) const;
     double GetStartSolutionValue( const unsigned short &argIndex ) const;

@@ -27,11 +27,11 @@ mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
     mutex{ argMutex },
     problem{ argProblem },
     referenceSet{ argReferenceSet },
-    tabooTenure{ mt::GetTabooTenure( referenceSet.problem->size ) },
+    tabooTenure{ GetTabooTenure( problem->size ) },
     tabooTenureCounter{ tabooTenure },
-    tabooTenures{ referenceSet.problem->size, 0 }
+    tabooTenures{ problem->size, 0 }
 {
-    std::cout << "      Constructing TSThread with id " << index << std::endl;
+    // std::cout << "      Constructing TSThread with id " << index << std::endl;
 }
 
 void mt::TSThread::CleanUpMatrix( mt::Matrix< dSol > &argMatrix ) const {
@@ -45,15 +45,26 @@ void mt::TSThread::CleanUpMatrix( mt::Matrix< dSol > &argMatrix ) const {
 mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
                                               const std::unique_ptr< const SolutionBase > &argTempSol ) {
     mt::Matrix< dSol >costs =
-            { referenceSet.problem->size, dSol{ std::numeric_limits< double >::max(), nullptr } };
+            { problem->size, dSol{ std::numeric_limits< double >::max(), nullptr } };
     // Iterate over all lines
     for ( unsigned long i = 0; i < problem->size; ++i ) {
         // Iterate over all columns above the main diagonal (because swaps are symmetrical)
         for ( unsigned long j = i + 1; j < problem->size; ++j ) {
             mt::SolutionBase *tempSolution =  argTempSol->GetSwappedVariant( i, j );
-            costs( i, j ) = dSol{ referenceSet.problem->GetOFV( tempSolution ), tempSolution };
+            costs( i, j ) = dSol{ problem->GetOFV( tempSolution ), tempSolution };
         }
     }
+
+    // Get the local or global minimum found so far
+    double minimumSoFar = std::numeric_limits< double >::max();
+    if ( *settings->globalBestAspiration ) {
+        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
+        minimumSoFar = referenceSet.GetGlobalMinimumSolV();
+    } else {
+        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
+        minimumSoFar = referenceSet.GetLocalMinimumSolV( index );
+    }
+
     // Analyze all swaps
     long swapI = 0, swapJ = 0;
     while ( true ) {
@@ -66,7 +77,7 @@ mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
         // If a swap is taboo, exclude it from consideration by settings its cost to the maximum double value
         if ( problem->CheckIfTaboo( iterationCount, costs( swapI, swapJ ).second, swapI, swapJ, tabooTenures )
              // New global optimum as aspiration criterion
-             && argBestNeighV > referenceSet.GetGlobalMinimumSolV() ) {
+             && argBestNeighV > minimumSoFar ) {
             costs( swapI, swapJ ).first = std::numeric_limits< double >::max();
         } else {
             // Taillard's taboo evaluation => constant time

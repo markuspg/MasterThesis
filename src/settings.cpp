@@ -19,15 +19,16 @@
 
 #include "settings.h"
 
-mt::Settings::Settings( const unsigned short &argGAInstances, const double &argImmigrationRate,
-                        const unsigned int &argMaxFailures, const double &argMutationImpact,
-                        const double &argMutationRate, const std::string &argOutputFile,
-                        std::vector< std::string > &&argProblemFiles, const bool &argPromoteGlobalBestSol,
-                        const bool &argRandomizedTabooTenures, const bool &argRandomKeys,
-                        const double &argReproductionRate, const double &argTabooTenureDeviation,
-                        const unsigned short &argTabooTenureFac, const bool &argTabooTenureShuffling,
-                        const unsigned short &argTSInstances ) :
+mt::Settings::Settings( const unsigned short &argGAInstances, const bool &argGlobalBestAspiration,
+                        const double &argImmigrationRate, const unsigned int &argMaxFailures,
+                        const double &argMutationImpact, const double &argMutationRate,
+                        const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
+                        const bool &argPromoteGlobalBestSol, const bool &argRandomizedTabooTenures,
+                        const bool &argRandomKeys, const double &argReproductionRate,
+                        const double &argTabooTenureDeviation, const unsigned short &argTabooTenureFac,
+                        const bool &argTabooTenureShuffling, const unsigned short &argTSInstances ) :
     gaInstances{ new unsigned short{ argGAInstances } },
+    globalBestAspiration{ new bool{ argGlobalBestAspiration } },
     immigrationRate{ new double{ argImmigrationRate } },
     maxFailures{ new unsigned int{ argMaxFailures } },
     mutationImpact{ new double{ argMutationImpact } },
@@ -45,6 +46,7 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const double &argI
 {
     std::cout << "  Settings constructor" << std::endl;
     std::cout << "   gaInstances:\t\t\t" << *gaInstances
+              << "\n   globalBestAspiration:\t" << *globalBestAspiration
               << "\n   immigrationRate:\t\t" << *immigrationRate
               << "\n   maxFailures:\t\t\t" << *maxFailures
               << "\n   mutationImpact:\t\t" << *mutationImpact
@@ -61,15 +63,17 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const double &argI
               << "\n   tsInstances:\t\t\t" << *tsInstances << std::endl;
 
     std::lock_guard< std::mutex > lockMeasure{ measureMutex };
-    measure.SetSettingsParameters( *gaInstances, *immigrationRate, *maxFailures, *mutationImpact,
-                                   *mutationRate, *outputFile, *promoteGlobalBestSol, *randomizedTabooTenures,
-                                   *randomKeys, *reproductionRate, *tabooTenureDeviation, *tabooTenuresFac,
-                                   *tabooTenureShuffling, *tsInstances );
+    measure.SetSettingsParameters( *gaInstances, *globalBestAspiration, *immigrationRate, *maxFailures,
+                                   *mutationImpact, *mutationRate, *outputFile, *promoteGlobalBestSol,
+                                   *randomizedTabooTenures, *randomKeys, *reproductionRate,
+                                   *tabooTenureDeviation, *tabooTenuresFac, *tabooTenureShuffling,
+                                   *tsInstances );
 }
 
 mt::Settings::~Settings() {
     std::cout << " Settings destructor" << std::endl;
     delete gaInstances;
+    delete globalBestAspiration;
     delete immigrationRate;
     delete maxFailures;
     delete mutationImpact;

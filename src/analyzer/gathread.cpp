@@ -33,7 +33,7 @@ mt::GAThread::GAThread( const unsigned short &argIndex, std::mutex &argMutex,
     tsReferenceSetMutex{ argMutex },
     referenceSet{ argReferenceSet }
 {
-    std::cout << "      Constructing GAThread with id " << index << std::endl;
+    // std::cout << "      Constructing GAThread with id " << index << std::endl;
 
     CreateInitialPopulation();
 }

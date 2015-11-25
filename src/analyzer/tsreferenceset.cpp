@@ -69,6 +69,10 @@ double mt::TSReferenceSet::GetGlobalMinimumSolV() const {
     return *std::min_element( bestSolutionValues.begin(), bestSolutionValues.end() );
 }
 
+double mt::TSReferenceSet::GetLocalMinimumSolV( const unsigned short &argIndex ) const {
+    return bestSolutionValues[ argIndex ];
+}
+
 double mt::TSReferenceSet::GetSolutionsMedian() const {
     std::vector< solTup > tempSolutions{ solutions };
     std::sort( tempSolutions.begin(), tempSolutions.end(),

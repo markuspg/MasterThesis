@@ -35,19 +35,20 @@ namespace mt {
 
 class Settings final {
 public:
-    Settings( const unsigned short &argGAInstances, const double &argImmigrationRate,
-              const unsigned int &argMaxFailures, const double &argMutationImpact,
-              const double &argMutationRate, const std::string &argOutputFile,
-              std::vector< std::string > &&argProblemFiles, const bool &argPromoteGlobalBestSol,
-              const bool &argRandomizedTabooTenures, const bool &argRandomKeys,
-              const double &argReproductionRate, const double &argTabooTenureDeviation,
-              const unsigned short &argTabooTenureFac, const bool &argTabooTenureShuffling,
-              const unsigned short &argTSInstances );
+    Settings( const unsigned short &argGAInstances, const bool &argGlobalBestAspiration,
+              const double &argImmigrationRate, const unsigned int &argMaxFailures,
+              const double &argMutationImpact, const double &argMutationRate,
+              const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
+              const bool &argPromoteGlobalBestSol, const bool &argRandomizedTabooTenures,
+              const bool &argRandomKeys, const double &argReproductionRate,
+              const double &argTabooTenureDeviation, const unsigned short &argTabooTenureFac,
+              const bool &argTabooTenureShuffling, const unsigned short &argTSInstances );
     Settings( const Settings &argSettings ) = delete;
     Settings( Settings &&argSettings ) = delete;
     ~Settings();
 
     const unsigned short * const gaInstances = nullptr;
+    const bool * const globalBestAspiration = nullptr;
     const double * const immigrationRate = nullptr;
     const unsigned int * const maxFailures = nullptr;
     const double * const mutationImpact = nullptr;

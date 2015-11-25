@@ -43,6 +43,7 @@ public:
                                const unsigned long &argSize,
                                const std::string &argType );
     void SetSettingsParameters( const unsigned short &argGAInstances,
+                                const bool &argGlobalBestAspiration,
                                 const double &argImmigrationRate,
                                 const unsigned int &argMaxFailures,
                                 const double &argMutationImpact,
@@ -63,6 +64,7 @@ private:
     double finalMedian = 0.0;
     double finalMedium = 0.0;
     unsigned short gaInstances = 1;
+    bool globalBestAspiration = true;
     double immigrationRate = 0.0;
     double initializationMedian = 0.0;
     double initializationMedium = 0.0;

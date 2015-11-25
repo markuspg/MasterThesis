@@ -54,6 +54,7 @@ void mt::Measure::SetProblemParameters( const std::string &argName,
 }
 
 void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
+                                         const bool &argGlobalBestAspiration,
                                          const double &argImmigrationRate,
                                          const unsigned int &argMaxFailures,
                                          const double &argMutationImpact,
@@ -68,6 +69,7 @@ void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
                                          const bool &argTabooTenureShuffling,
                                          const unsigned short &argTSInstances ) {
     gaInstances = argGAInstances;
+    globalBestAspiration = argGlobalBestAspiration;
     immigrationRate = argImmigrationRate;
     maxFailures = argMaxFailures;
     mutationImpact = argMutationImpact;
@@ -95,13 +97,13 @@ void mt::Measure::WriteToDisk() {
     std::ofstream outputStream;
     outputStream.open( outputFile.c_str(), std::ios::app | std::ios::out );
     outputStream << problemName << '|' << problemType << '|' << problemSize << '|' << gaInstances << '|'
-                 << immigrationRate << '|' << maxFailures << '|' << mutationImpact << '|'
-                 << mutationRate << '|' << promoteGlobalBestSol << '|' << randomizedTabooTenures << '|'
-                 << randomKeys << '|' << reproductionRate << '|' << tabooTenureDeviation << '|'
-                 << tabooTenuresFac << '|' << tabooTenureShuffling << '|' << tsInstances << '|'
-                 << analyzerIterations << '|' << threadIterations << '|' << initializationMedian << '|'
-                 << initializationMedium << '|' << optimizationMedian << '|' << optimizationMedium << '|'
-                 << finalMedian << '|' << finalMedium << "\n";
+                 << globalBestAspiration << '|' << immigrationRate << '|' << maxFailures << '|'
+                 << mutationImpact << '|' << mutationRate << '|' << promoteGlobalBestSol << '|'
+                 << randomizedTabooTenures << '|' << randomKeys << '|' << reproductionRate << '|'
+                 << tabooTenureDeviation << '|' << tabooTenuresFac << '|' << tabooTenureShuffling
+                 << '|' << tsInstances << '|' << analyzerIterations << '|' << threadIterations << '|'
+                 << initializationMedian << '|' << initializationMedium << '|' << optimizationMedian << '|'
+                 << optimizationMedium << '|' << finalMedian << '|' << finalMedium << "\n";
     outputStream.close();
 
     // Clean up any data which will not be automatically overwritten in the next run
