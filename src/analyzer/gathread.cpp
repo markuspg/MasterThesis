@@ -94,7 +94,7 @@ void mt::GAThread::Iteration() {
 
     std::lock_guard< std::mutex > lockTSReferenceSet{ tsReferenceSetMutex };
     // Since the GAs' solutions are stored 'behind' the TSs' solutions, the index has to be shifted
-    referenceSet.SetSolution( index + *settings->tsInstances,
+    referenceSet.SetSolution( "GA", index + *settings->tsInstances,
                               population[ 0 ].second->Copy(),
                               population[ 0 ].first );
 }

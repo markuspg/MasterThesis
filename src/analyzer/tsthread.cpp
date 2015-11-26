@@ -117,7 +117,7 @@ void mt::TSThread::Iteration() {
         ++failures;
 
         std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
-        referenceSet.SetSolution( index, nullptr, 0.0 );
+        referenceSet.SetSolution( "TS", index, nullptr, 0.0 );
     } else {
         if ( bestNeighV >= bestSolV ) {
             ++failures;
@@ -125,7 +125,7 @@ void mt::TSThread::Iteration() {
 
         {
             std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
-            referenceSet.SetSolution( index, bestNeigh, bestNeighV );
+            referenceSet.SetSolution( "TS", index, bestNeigh, bestNeighV );
         }
     }
 

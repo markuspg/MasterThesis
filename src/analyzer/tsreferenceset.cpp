@@ -98,7 +98,7 @@ double mt::TSReferenceSet::GetStartSolutionValue( const unsigned short &argIndex
 
 void mt::TSReferenceSet::PrepareOptimizationRun() {
     frequenciesMatrix.ResetWithValue( 0 );
-    globalBestSS << 0 << ':' << 0 << ';';
+    globalBestSS << 0 << ":PO:" << 0 << ';';
     initializationRun = false;
     iterationCounter = 0;
 
@@ -113,7 +113,7 @@ void mt::TSReferenceSet::PrepareOptimizationRun() {
     measure.SetOptimizationStats( GetSolutionsMedian(), optMedium );
 }
 
-void mt::TSReferenceSet::PromoteNewSolution( const unsigned short &argIndex ) {
+void mt::TSReferenceSet::PromoteNewSolution( const std::string &argAlgo, const unsigned short &argIndex ) {
     // Check, if the previously set new solution is better than the best one found by this thread
     if ( std::get< double >( solutions[ argIndex ] ) < bestSolutionValues[ argIndex ] ) {
         // If yes, update the best solution for this thread
@@ -126,7 +126,7 @@ void mt::TSReferenceSet::PromoteNewSolution( const unsigned short &argIndex ) {
             updatedGlobalBestSolution = true;
             globalBestSolution.reset( std::get< SolutionBase* >( solutions[ argIndex ] )->Copy() );
             globalBestSolutionV = bestSolutionValues[ argIndex ];
-            globalBestSS << iterationCounter << ':' << globalBestSolutionV << ';';
+            globalBestSS << iterationCounter << ':' << argAlgo << ':' << globalBestSolutionV << ';';
         }
     }
 }
@@ -158,9 +158,8 @@ void mt::TSReferenceSet::SetFinalStatistics() {
     measure.SetFinalStats( GetSolutionsMedian(), finMedium );
 }
 
-void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
-                                      mt::SolutionBase *argSolution,
-                                      const double &argV ) {
+void mt::TSReferenceSet::SetSolution( const std::string &argAlgorithm, const unsigned short &argIndex,
+                                      SolutionBase *argSolution, const double &argV ) {
     // If no valid solution could be found, just set the 'updated' flag to false
     if ( !argSolution ) {
         std::get< bool >( solutions[ argIndex ] ) = false;
@@ -175,7 +174,7 @@ void mt::TSReferenceSet::SetSolution( const unsigned short &argIndex,
     delete std::get< SolutionBase* >( solutions[ argIndex ] );
     solutions[ argIndex ] = solTup{ argSolution, argV, tempStepWidth, true };
 
-    PromoteNewSolution( argIndex );
+    PromoteNewSolution( argAlgorithm, argIndex );
 }
 
 void mt::TSReferenceSet::SpreadGlobalBestSolution() {

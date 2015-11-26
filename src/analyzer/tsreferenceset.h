@@ -57,7 +57,8 @@ public:
     void PrepareOptimizationRun();
     void RotateSolutions();
     void SetFinalStatistics();
-    void SetSolution( const unsigned short &argIndex, SolutionBase *argSolution, const double &argV );
+    void SetSolution( const std::string &argAlgorithm, const unsigned short &argIndex,
+                      SolutionBase *argSolution, const double &argV );
 
     TSReferenceSet &operator++() { ++iterationCounter; return *this; }
 
@@ -66,7 +67,7 @@ public:
 private:
     void DiversifyUnchangedSolutions();
     double GetSolutionsMedian() const;
-    void PromoteNewSolution( const unsigned short &argIndex );
+    void PromoteNewSolution( const std::string &argAlgo, const unsigned short &argIndex );
     void SpreadGlobalBestSolution();
 
     std::vector< SolutionBase* > bestSolutions;
