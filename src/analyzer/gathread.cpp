@@ -22,7 +22,7 @@
 mt::GAThread::GAThread( const unsigned short &argIndex, std::mutex &argMutex,
                         const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet ) :
     index{ argIndex },
-    popSize{ argProblem->size * argProblem->size > 100 ? 100 : argProblem->size * argProblem->size },
+    popSize{ argProblem->size * argProblem->size / 2 - argProblem->size },
     immigrationsQuantity{ static_cast< unsigned long >(
                               std::round( popSize * *settings->immigrationRate ) ) },
     population{ popSize, { 0.0, nullptr } },
