@@ -36,7 +36,7 @@ public:
     Solution() = delete;
     Solution( const Solution &argSolution );
     Solution( Solution &&argSolution );
-    Solution( const solutionTypes_t &argSolutionType, std::vector< T > * const argSolution );
+    Solution( std::vector< T > * const argSolution );
     virtual ~Solution();
 
     T& operator() ( const unsigned long &argIndex );
@@ -76,8 +76,7 @@ mt::Solution< T >::Solution( Solution &&argSolution ) :
 }
 
 template < typename T >
-mt::Solution< T >::Solution( const solutionTypes_t &argSolutionType, std::vector< T > * const argSolution ) :
-    SolutionBase{ argSolutionType },
+mt::Solution< T >::Solution( std::vector< T > * const argSolution ) :
     size{ argSolution->size() },
     solutionVec{ argSolution },
     solVecChanged{ true }

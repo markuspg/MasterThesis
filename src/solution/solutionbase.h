@@ -23,14 +23,6 @@
 #include <random>
 #include <vector>
 
-enum class solutionTypes_t : unsigned short {
-    SOLUTIONBASE,
-    SOLUTION,
-    PERMSOLUTION,
-    RANDOMKEYSOLUTION
-};
-
-
 namespace mt {
 
 class PermSolution;
@@ -39,10 +31,6 @@ class SALBPSolution;
 class SolutionBase
 {
 public:
-    SolutionBase() = delete;
-    SolutionBase( const SolutionBase &argSolutionBase );
-    SolutionBase( SolutionBase &&argSolutionBase );
-    SolutionBase( const solutionTypes_t &argSolutionType );
     virtual ~SolutionBase();
 
     virtual SolutionBase *Copy() const = 0;
@@ -58,8 +46,6 @@ public:
 #endif
     virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
                                                     const SolutionBase * const argOtherParent ) const = 0;
-
-    const solutionTypes_t solutionType = solutionTypes_t::SOLUTIONBASE;
 };
 
 }

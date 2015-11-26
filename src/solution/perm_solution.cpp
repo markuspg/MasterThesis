@@ -20,12 +20,12 @@
 #include "perm_solution.h"
 
 mt::PermSolution::PermSolution( const unsigned int &argSeed, const std::size_t &argSize ) :
-    Solution{ solutionTypes_t::PERMSOLUTION, GenerateRandomSolution( argSeed, argSize ) }
+    Solution{ GenerateRandomSolution( argSeed, argSize ) }
 {
 }
 
 mt::PermSolution::PermSolution( std::vector< unsigned long > * const argSolution ) :
-    Solution{ solutionTypes_t::PERMSOLUTION, argSolution }
+    Solution{ argSolution }
 {
 }
 

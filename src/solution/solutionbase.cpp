@@ -19,20 +19,5 @@
 
 #include "solutionbase.h"
 
-mt::SolutionBase::SolutionBase( const SolutionBase &argSolutionBase ) :
-    solutionType{ argSolutionBase.solutionType }
-{
-}
-
-mt::SolutionBase::SolutionBase( SolutionBase &&argSolutionBase ) :
-    solutionType{ argSolutionBase.solutionType }
-{
-}
-
-mt::SolutionBase::SolutionBase( const solutionTypes_t &argSolutionType ) :
-    solutionType{ argSolutionType }
-{
-}
-
 mt::SolutionBase::~SolutionBase() {
 }
