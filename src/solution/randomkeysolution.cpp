@@ -36,7 +36,8 @@ mt::RandomKeySolution::RandomKeySolution( const mt::RandomKeySolution &argRandom
 }
 
 mt::RandomKeySolution::RandomKeySolution( mt::RandomKeySolution &&argRandomKeySolution ) :
-    Solution{ argRandomKeySolution }
+    Solution{ argRandomKeySolution },
+    permutationVec{ argRandomKeySolution.permutationVec }
 {
 }
 
@@ -45,7 +46,7 @@ mt::RandomKeySolution::~RandomKeySolution() {
 }
 
 mt::SolutionBase *mt::RandomKeySolution::Copy() const {
-    return new mt::RandomKeySolution{ *this };
+    return new RandomKeySolution{ *this };
 }
 
 std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const unsigned int &argSeed,
@@ -98,6 +99,8 @@ void mt::RandomKeySolution::Mutate( std::mt19937 &argEngine ) {
     for ( unsigned long i = 0; i < mutationQuantity; ++i ) {
         ( *solutionVec )[ alleleDistribution( argEngine ) ] = geneDistribution( argEngine );
     }
+
+    solVecChanged = true;
 }
 
 mt::SolutionBase *mt::RandomKeySolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
@@ -122,20 +125,20 @@ mt::SolutionBase *mt::RandomKeySolution::ReproduceWithOtherParent( const unsigne
 void mt::RandomKeySolution::UpdatePermutationVector() {
     delete permutationVec;
     // The solution to be converted and calculated
-    std::vector< double > * solution = new std::vector< double >{ *solutionVec };
+    std::vector< double > solution{ *solutionVec };
     // Stores the converted solution
     std::vector< unsigned long > *tempAssignment = new std::vector< unsigned long >;
     tempAssignment->resize( size );
 
     // Query for 'solution-size' iterations the minimum element and set the index in the assigment vector
     for ( unsigned long i = 0; i < size; ++i ) {
-        std::vector< double >::iterator minElem = std::min_element( solution->begin(), solution->end() );
-        auto offset = std::distance( solution->begin(), minElem) ;
+        std::vector< double >::iterator minElem = std::min_element( solution.begin(), solution.end() );
+        auto offset = std::distance( solution.begin(), minElem) ;
         ( *tempAssignment )[ i ] = offset;
         *minElem = std::numeric_limits< double >::max();
     }
-    delete solution;
-    solution = nullptr;
 
     permutationVec = tempAssignment;
+
+    solVecChanged = false;
 }

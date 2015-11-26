@@ -64,13 +64,13 @@ std::vector< unsigned long > *mt::PermSolution::GenerateRandomSolution( const un
 }
 
 mt::PermSolution *mt::PermSolution::GetPermSolution() {
-    return dynamic_cast< PermSolution* >( Copy() );
+    return new PermSolution{ *this };
 }
 
 mt::SolutionBase *mt::PermSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
                                                        const unsigned long &argSwapIndexJ ) const {
     std::vector< unsigned long > *temp = new std::vector< unsigned long >{ *solutionVec };
-    double tempD = ( *temp )[ argSwapIndexI ];
+    unsigned long tempD = ( *temp )[ argSwapIndexI ];
     ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
     ( *temp )[ argSwapIndexJ ] = tempD;
     return new PermSolution{ temp };
@@ -95,6 +95,8 @@ void mt::PermSolution::Mutate( std::mt19937 &argEngine ) {
         ( *solutionVec )[ swapElementA ] = ( *solutionVec )[ swapElementB ];
         ( *solutionVec )[ swapElementB ] = temp;
     }
+
+    solVecChanged = true;
 }
 
 mt::SolutionBase *mt::PermSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,

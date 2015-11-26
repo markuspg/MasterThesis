@@ -90,9 +90,10 @@ mt::Solution< T >::~Solution() {
 
 template < typename T >
 T& mt::Solution< T >::operator() ( const unsigned long &argIndex ) {
-    return ( *solutionVec )[ argIndex ];
     // Because solutionVec could possibly be changed
     solVecChanged = true;
+
+    return ( *solutionVec )[ argIndex ];
 }
 
 template< typename T >
