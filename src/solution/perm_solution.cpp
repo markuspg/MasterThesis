@@ -43,7 +43,7 @@ mt::PermSolution::~PermSolution() {
 }
 
 mt::SolutionBase *mt::PermSolution::Copy() const {
-    return new PermSolution{ new std::vector< unsigned long >{ *solutionVec } };
+    return new PermSolution{ *this };
 }
 
 std::vector< unsigned long > *mt::PermSolution::GenerateRandomSolution( const unsigned int &argSeed,

@@ -51,7 +51,7 @@ public:
 protected:
     typename std::vector< T >::size_type size = 0;
     std::vector< T > * solutionVec = nullptr;
-    bool solVecChanged = false;
+    bool solVecChanged = true;
 };
 
 }
@@ -61,7 +61,7 @@ mt::Solution< T >::Solution( const Solution &argSolution ) :
     SolutionBase{ argSolution },
     size{ argSolution.size },
     solutionVec{ new std::vector< T >{ *argSolution.solutionVec } },
-    solVecChanged{ true }
+    solVecChanged{ argSolution.solVecChanged }
 {
 }
 
@@ -70,7 +70,7 @@ mt::Solution< T >::Solution( Solution &&argSolution ) :
     SolutionBase{ argSolution },
     size{ argSolution.size },
     solutionVec{ argSolution.solutionVec },
-    solVecChanged{ true }
+    solVecChanged{ argSolution.solVecChanged }
 {
     argSolution.solutionVec = nullptr;
 }

@@ -30,7 +30,8 @@ mt::RandomKeySolution::RandomKeySolution( std::vector<double> * const argSolutio
 }
 
 mt::RandomKeySolution::RandomKeySolution( const mt::RandomKeySolution &argRandomKeySolution ) :
-    Solution{ argRandomKeySolution }
+    Solution{ argRandomKeySolution },
+    permutationVec{ new std::vector< unsigned long >{ *argRandomKeySolution.permutationVec } }
 {
 }
 
@@ -44,7 +45,7 @@ mt::RandomKeySolution::~RandomKeySolution() {
 }
 
 mt::SolutionBase *mt::RandomKeySolution::Copy() const {
-    return new mt::RandomKeySolution{ new std::vector< double >{ *solutionVec } };
+    return new mt::RandomKeySolution{ *this };
 }
 
 std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const unsigned int &argSeed,
