@@ -19,7 +19,7 @@
 
 #include "helper_functions.h"
 
-unsigned int mt::GetTabooTenure( const unsigned int &argPS ) {
+unsigned int mt::tools::GetTabooTenure( const unsigned int &argPS ) {
     unsigned int tabooTenure = 0;
     if ( *settings->randomizedTabooTenures ) {
         std::random_device randomDevice;
@@ -42,8 +42,8 @@ unsigned int mt::GetTabooTenure( const unsigned int &argPS ) {
     return tabooTenure;
 }
 
-mt::Problem *mt::LoadProblem( const std::string &argLine ) {
-    std::vector< std::string > problemTokens = mt::Split( argLine, '|' );
+mt::Problem *mt::tools::LoadProblem( const std::string &argLine ) {
+    std::vector< std::string > problemTokens = tools::Split( argLine, '|' );
     // Each problem consists at least of a name, a type, a size and some arbitrary other information
     if ( problemTokens.size() < 4 ) {
         return nullptr;
@@ -63,7 +63,7 @@ mt::Problem *mt::LoadProblem( const std::string &argLine ) {
     return nullptr;
 }
 
-int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
+int mt::tools::ParseCommandLine( const int &argC, const char * const argV[] ) {
     // A temporary storage for the extracted strings
     std::vector< std::string > commandLineArguments{};
     commandLineArguments.reserve( argC );
@@ -243,13 +243,13 @@ int mt::ParseCommandLine( const int &argC, const char * const argV[] ) {
     return 0;
 }
 
-std::vector<std::string> mt::Split( const std::string &argString, char argDelim ) {
+std::vector<std::string> mt::tools::Split( const std::string &argString, char argDelim ) {
     std::vector<std::string> elements;
-    mt::Split( argString, argDelim, elements );
+    tools::Split( argString, argDelim, elements );
     return elements;
 }
 
-void mt::Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements ) {
+void mt::tools::Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements ) {
     std::stringstream stringStream{ argString };
     std::string item;
     while ( std::getline( stringStream, item, argDelim ) ) {

@@ -21,8 +21,8 @@
 
 mt::QAP::QAP( const std::vector<std::string> &argTokens ) :
     Problem{ problemTypes_t::QAP, argTokens },
-    distances{ mt::Matrix< int >::ConvertStringVecToIntVec( Split( argTokens[ 4 ], ';' ) ) },
-    flows{ mt::Matrix< int >::ConvertStringVecToIntVec( Split( argTokens[ 3 ], ';' ) ) }
+    distances{ mt::Matrix< int >::ConvertStringVecToIntVec( tools::Split( argTokens[ 4 ], ';' ) ) },
+    flows{ mt::Matrix< int >::ConvertStringVecToIntVec( tools::Split( argTokens[ 3 ], ';' ) ) }
 {
     std::cout << "      > Constructing QAP " << argTokens[ 0 ] << std::endl;
 }

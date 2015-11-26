@@ -34,7 +34,7 @@ mt::Settings *settings = nullptr;
 int main( int argc, char *argv[] ) {
     std::cout << "<---- MasterThesis ---->" << std::endl;
     
-    if ( mt::ParseCommandLine( argc, argv ) ) {
+    if ( mt::tools::ParseCommandLine( argc, argv ) ) {
         return 1;
     }
 
@@ -42,7 +42,7 @@ int main( int argc, char *argv[] ) {
         std::fstream inputFile;
         inputFile.open( *cit, std::ios::in );
         for ( std::string line; std::getline( inputFile, line ); ) {
-            const mt::Problem * const problem = mt::LoadProblem( line );
+            const mt::Problem * const problem = mt::tools::LoadProblem( line );
             if ( problem ) {
                 mt::Analyzer analyzer{ problem };
                 analyzer.Analyze();

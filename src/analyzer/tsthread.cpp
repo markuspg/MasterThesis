@@ -27,7 +27,7 @@ mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
     mutex{ argMutex },
     problem{ argProblem },
     referenceSet{ argReferenceSet },
-    tabooTenure{ GetTabooTenure( problem->size ) },
+    tabooTenure{ tools::GetTabooTenure( problem->size ) },
     tabooTenureCounter{ tabooTenure },
     tabooTenures{ problem->size, 0 }
 {
@@ -96,7 +96,7 @@ void mt::TSThread::Iteration() {
     // Taboo tenure shuffling as proposed by taillard1991robust, p. 448
     --tabooTenureCounter;
     if ( !tabooTenureCounter && *settings->randomizedTabooTenures && *settings->tabooTenureShuffling ) {
-        tabooTenure = GetTabooTenure( problem->size );
+        tabooTenure = tools::GetTabooTenure( problem->size );
         tabooTenureCounter = tabooTenure;
     }
 

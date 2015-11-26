@@ -36,11 +36,15 @@ extern mt::Settings *settings;
 
 namespace mt {
 
+namespace tools {
+
 unsigned int GetTabooTenure( const unsigned int &argPS );
 mt::Problem *LoadProblem( const std::string &argLine );
 int ParseCommandLine( const int &argC, const char * const argV[] );
 std::vector<std::string> Split( const std::string &argString, char argDelim );
 void Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements );
+
+}
 
 }
 
