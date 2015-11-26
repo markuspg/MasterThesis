@@ -109,6 +109,10 @@ void mt::Measure::WriteToDisk() {
     std::string threadIterations = threadIterationsStream.str();
     std::ofstream outputStream;
     outputStream.open( outputFile.c_str(), std::ios::app | std::ios::out );
+    if ( !outputStream.tellp() ) {
+        outputStream << "problemName|PType|PSize|GAI|GBA|IR|MF|MI|MR|PGB|RTT|RK|RR|TTD|TTF|TTS|TSI|AnIt|"
+                        "ThIt|iniMian|iniMium|optMian|optMium|finMian|finMium|GBD|dur\n";
+    }
     outputStream << problemName << '|' << problemType << '|' << problemSize << '|' << gaInstances << '|'
                  << globalBestAspiration << '|' << immigrationRate << '|' << maxFailures << '|'
                  << mutationImpact << '|' << mutationRate << '|' << promoteGlobalBestSol << '|'
