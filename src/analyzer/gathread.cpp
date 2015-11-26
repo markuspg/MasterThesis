@@ -114,16 +114,19 @@ void mt::GAThread::Mutate() {
 }
 
 void mt::GAThread::Reproduce() {
+    std::random_device randomDevice;
+#ifdef Q_PROCESSOR_X86_64
+    std::mt19937_64 engine{ randomDevice() };
+#else
+    std::mt19937 engine{ randomDevice() };
+#endif
+    std::uniform_real_distribution<> parentsDistribution{ 0.0, 1.0 };
+
     for ( unsigned long i = 0; i < reproductionQuantity; ++i ) {
         std::pair< unsigned long, unsigned long > parentIndices;
-        SelectParentsMonteCarlo( parentIndices );
+        SelectParentsMonteCarlo( parentsDistribution( engine ), parentsDistribution( engine ),
+                                 parentIndices );
 
-        std::random_device randomDevice;
-#ifdef Q_PROCESSOR_X86_64
-        std::mt19937_64 engine{ randomDevice() };
-#else
-        std::mt19937 engine{ randomDevice() };
-#endif
         std::uniform_int_distribution<> distribution{ 0, static_cast< int >( problem->size ) };
         const unsigned long crossoverPoint = distribution( engine );
         mt::SolutionBase *childA = population[ parentIndices.first ].second->ReproduceWithOtherParent(
@@ -139,7 +142,8 @@ void mt::GAThread::Reproduce() {
     }
 }
 
-void mt::GAThread::SelectParentsMonteCarlo( std::pair< unsigned long , unsigned long > &argParentIndices ) {
+void mt::GAThread::SelectParentsMonteCarlo( const double &argParentAValue, const double &argParentBValue,
+                                            std::pair< unsigned long, unsigned long > &argParentIndices ) {
     std::vector< double > probabilities;
     probabilities.resize( popSize, 0.0 );
     double sum = 0.0;
@@ -148,30 +152,21 @@ void mt::GAThread::SelectParentsMonteCarlo( std::pair< unsigned long , unsigned 
         probabilities[ i ] = 1 / population[ i ].first;
         sum += probabilities[ i ];
     }
-    std::random_device randomDevice;
-#ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() };
-#else
-    std::mt19937 engine{ randomDevice() };
-#endif
-    std::uniform_real_distribution<> distribution{ 0.0, sum };
+
     // Turn the roulette wheel
-    double parentAValue = distribution( engine );
-    double parentBValue = distribution( engine );
+    double parentAValue = argParentAValue * sum;
+    double parentBValue = argParentBValue * sum;
     // Find the corresponding solutions
     double accum = 0.0;
     for ( unsigned long i = 0; i < popSize; ++i ) {
         accum += probabilities[ i ];
-        if ( accum > parentAValue ) {
+        if ( !argParentIndices.first && accum > parentAValue ) {
             argParentIndices.first = i;
-            break;
         }
-    }
-    accum = 0.0;
-    for ( unsigned long i = 0; i < popSize; ++i ) {
-        accum += probabilities[ i ];
-        if ( accum > parentBValue ) {
+        if ( !argParentIndices.second && accum > parentBValue ) {
             argParentIndices.second = i;
+        }
+        if ( argParentIndices.first && argParentIndices.second ) {
             break;
         }
     }

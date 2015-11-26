@@ -44,7 +44,8 @@ private:
     void Immigrate();
     void Mutate();
     void Reproduce();
-    void SelectParentsMonteCarlo( std::pair< unsigned long, unsigned long > &argParents );
+    void SelectParentsMonteCarlo( const double &argParentAValue, const double &argParentBValue,
+                                  std::pair< unsigned long, unsigned long > &argParentIndices );
 
     bool finished = false;
     const unsigned short index = 0;
