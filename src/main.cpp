@@ -45,9 +45,10 @@ int main( int argc, char *argv[] ) {
             const mt::Problem * const problem = mt::tools::LoadProblem( line );
             if ( problem ) {
                 mt::Analyzer analyzer{ problem };
+                // Start measuring the wall-clock time of the optimization part
+                measure.StartTimer();
                 analyzer.Analyze();
                 delete problem;
-                std::lock_guard< std::mutex > lockMeasure{ measureMutex };
             } else {
                 throw std::runtime_error{ "  Invalid problem encountered in line '" + line + "' of"
                                           " file '" + *cit + "'"};

@@ -92,7 +92,15 @@ void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
     tsThreadIterations.reserve( tsInstances );
 }
 
+void mt::Measure::StartTimer() {
+    start = std::chrono::system_clock::now();
+}
+
 void mt::Measure::WriteToDisk() {
+    // Optimization execution time measuring
+    std::chrono::system_clock::time_point finish = std::chrono::system_clock::now();
+    auto optimizationDuration = finish - start;
+
     std::stringstream threadIterationsStream;
     threadIterationsStream << tsThreadIterations.front();
     for ( auto cit = tsThreadIterations.cbegin() + 1; cit != tsThreadIterations.cend(); ++cit ) {
@@ -109,7 +117,9 @@ void mt::Measure::WriteToDisk() {
                  << '|' << tsInstances << '|' << analyzerIterations << '|' << threadIterations << '|'
                  << initializationMedian << '|' << initializationMedium << '|' << optimizationMedian << '|'
                  << optimizationMedium << '|' << finalMedian << '|' << finalMedium << '|'
-                 << globalBestDevelopment << "\n";
+                 << globalBestDevelopment << '|'
+                 << std::chrono::duration_cast< std::chrono::milliseconds >( optimizationDuration ).count()
+                 << "\n";
     outputStream.close();
 
     // Clean up any data which will not be automatically overwritten in the next run

@@ -20,6 +20,7 @@
 #ifndef MEASURE_H
 #define MEASURE_H
 
+#include <chrono>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -58,10 +59,12 @@ public:
                                 const unsigned short &argTabooTenuresFac,
                                 const bool &argTabooTenureShuffling,
                                 const unsigned short &argTSInstances );
+    void StartTimer();
     void WriteToDisk();
 
 private:
     unsigned long analyzerIterations;
+    std::chrono::system_clock::time_point start;
     double finalMedian = 0.0;
     double finalMedium = 0.0;
     unsigned short gaInstances = 1;
