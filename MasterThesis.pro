@@ -24,6 +24,7 @@ SOURCES += src/main.cpp \
     src/problem/qap.cpp \
     src/problem/salbp.cpp \
     src/problem/task.cpp \
+    src/problem/task_storage.cpp \
     src/solution/perm_solution.cpp \
     src/solution/randomkeysolution.cpp \
     src/solution/solution.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     src/problem/qap.h \
     src/problem/salbp.h \
     src/problem/task.h \
+    src/problem/task_storage.h \
     src/solution/perm_solution.h \
     src/solution/randomkeysolution.h \
     src/solution/solution.h \

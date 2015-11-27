@@ -22,6 +22,7 @@
 
 #include "problem.h"
 #include "task.h"
+#include "task_storage.h"
 #include "../helper_functions.h"
 #include "../solution/perm_solution.h"
 #include "../solution/solution.h"
@@ -29,6 +30,8 @@
 #include <list>
 
 namespace mt {
+
+class TaskStorage;
 
 class SALBP final : public Problem {
 public:
@@ -54,7 +57,7 @@ public:
     const unsigned long cycleTime = 0;
 
 private:
-    std::vector< Task* > tasks;
+    const TaskStorage * const tasks;
 };
 
 }

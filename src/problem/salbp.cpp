@@ -22,37 +22,12 @@
 mt::SALBP::SALBP( const std::vector<std::string> &argTokens ) :
     Problem{ problemTypes_t::SALBP, argTokens },
     cycleTime{ std::stoul( argTokens[ 5 ] ) },
-    tasks{ size, nullptr }
+    tasks{ new TaskStorage{ size, argTokens } }
 {
-    // Split the tokens for their usage whilst the Tasks' construction
-    std::vector< std::string > durationStrings = tools::Split( argTokens[ 3 ], ';' );
-    std::vector< std::string > precedenceStrings = tools::Split( argTokens[ 4 ], ';' );
-
-    // Construct all tasks, one after another
-    for ( unsigned long i = 0; i < size; ++i ) {
-        // First declare and initialize the needed variables
-        std::vector< Task* > *predecessors = new std::vector< Task* >;
-        unsigned long taskDuration = 0;
-        unsigned long taskID = 0;
-
-        // Then convert the string values to the needed data items
-        taskDuration = std::stoul( durationStrings[ i ] );
-        std::vector< std::string > precedenceString = tools::Split( precedenceStrings[ i ], ':' );
-        taskID = std::stoul( precedenceString[ 0 ] );
-        if ( precedenceString.size() > 1 ) {
-            std::vector< std::string > predecessorIndicesString = tools::Split( precedenceString[ 1 ], ',' );
-            for ( std::size_t j = 0; j < predecessorIndicesString.size(); ++j ) {
-                predecessors->emplace_back( tasks[ std::stoul( predecessorIndicesString[ j ] ) - 1 ] );
-            }
-        }
-        tasks[ i ] = new Task{ taskDuration, taskID, predecessors };
-    }
 }
 
 mt::SALBP::~SALBP() {
-    for ( auto &s: tasks ) {
-        delete s;
-    }
+    delete tasks;
 }
 
 bool mt::SALBP::CheckIfTaboo( const unsigned int &argIterationCount,
@@ -84,12 +59,14 @@ double mt::SALBP::GetOFV( SolutionBase * const argSolution ) const {
     PermSolution * tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
     assert( tempSol );
 
+    TaskStorage tempTasks{ *tasks };
+
     std::list< Task* > tasksToBeScheduled;
     std::vector< unsigned long > stationTimes;
     stationTimes.resize( size, 0 );
     // Sort the tasks according to their priorities in the list of the to be assigned tasks
     for ( unsigned long i = 0; i < size; ++i ) {
-        tasksToBeScheduled.emplace_back( tasks[ ( *tempSol )( i ) ] );
+        tasksToBeScheduled.emplace_back( tempTasks( ( *tempSol )( i ) ) );
     }
 
     std::list< Task* >::iterator *deleteIt = nullptr;
