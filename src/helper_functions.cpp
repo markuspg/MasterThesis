@@ -226,6 +226,11 @@ int mt::tools::ParseCommandLine( const int &argC, const char * const argV[] ) {
         throw std::runtime_error{ "Random taboo tenures have to be activated, if taboo tenure shuffling"
                                   " is activated"};
     }
+    // GA doesn't produce valid solutions for permutations, so exclude both
+    if ( tempGAInstances > 0 && !tempRandomKeys ) {
+        throw std::runtime_error{ "The Genetic Algorithm cannot be used without random keys, since it doesn't"
+                                  " produce valid solutions for permutations" };
+    }
 
     for ( unsigned int i = lastActiveIndex + 1; i < static_cast< unsigned int >( argC ) - 1; ++i ) {
         tempProblemFiles.emplace_back( argV[ i ] );
