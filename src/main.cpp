@@ -26,6 +26,7 @@
 #include <fstream>
 #include <iostream>
 #include <istream>
+#include <memory>
 
 std::mutex measureMutex;
 mt::Measure measure;
@@ -39,7 +40,7 @@ int main( int argc, char *argv[] ) {
     }
 
     for ( auto cit = settings->problemFiles->cbegin(); cit != settings->problemFiles->cend(); ++cit ) {
-        std::fstream inputFile;
+        std::ifstream inputFile;
         inputFile.open( *cit, std::ios::in );
         for ( std::string line; std::getline( inputFile, line ); ) {
             const mt::Problem * const problem = mt::tools::LoadProblem( line );
@@ -55,6 +56,7 @@ int main( int argc, char *argv[] ) {
             }
             measure.WriteToDisk();
         }
+        inputFile.close();
     }
     
     delete settings;

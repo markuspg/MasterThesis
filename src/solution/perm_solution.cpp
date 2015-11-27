@@ -35,7 +35,7 @@ mt::PermSolution::PermSolution( const mt::PermSolution &argPermSolution ) :
 }
 
 mt::PermSolution::PermSolution( mt::PermSolution &&argPermSolution ) :
-    Solution{ argPermSolution }
+    Solution{ std::move( argPermSolution ) }
 {
 }
 

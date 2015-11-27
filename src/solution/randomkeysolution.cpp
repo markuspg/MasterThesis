@@ -36,9 +36,10 @@ mt::RandomKeySolution::RandomKeySolution( const mt::RandomKeySolution &argRandom
 }
 
 mt::RandomKeySolution::RandomKeySolution( mt::RandomKeySolution &&argRandomKeySolution ) :
-    Solution{ argRandomKeySolution },
+    Solution{ std::move( argRandomKeySolution ) },
     permutationVec{ argRandomKeySolution.permutationVec }
 {
+    argRandomKeySolution.permutationVec = nullptr;
 }
 
 mt::RandomKeySolution::~RandomKeySolution() {

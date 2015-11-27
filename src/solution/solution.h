@@ -67,7 +67,7 @@ mt::Solution< T >::Solution( const Solution &argSolution ) :
 
 template < typename T >
 mt::Solution< T >::Solution( Solution &&argSolution ) :
-    SolutionBase{ argSolution },
+    SolutionBase{ std::move( argSolution ) },
     size{ argSolution.size },
     solutionVec{ argSolution.solutionVec },
     solVecChanged{ argSolution.solVecChanged }

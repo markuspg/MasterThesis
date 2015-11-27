@@ -124,6 +124,7 @@ void mt::Measure::WriteToDisk() {
                  << globalBestDevelopment << '|'
                  << std::chrono::duration_cast< std::chrono::milliseconds >( optimizationDuration ).count()
                  << "\n";
+    outputStream.flush();
     outputStream.close();
 
     // Clean up any data which will not be automatically overwritten in the next run
