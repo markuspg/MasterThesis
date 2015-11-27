@@ -77,7 +77,7 @@ mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
         // If a swap is taboo, exclude it from consideration by settings its cost to the maximum double value
         if ( problem->CheckIfTaboo( iterationCount, costs( swapI, swapJ ).second, swapI, swapJ, tabooTenures )
              // New global optimum as aspiration criterion
-             && argBestNeighV > minimumSoFar ) {
+             && argBestNeighV >= minimumSoFar ) {
             costs( swapI, swapJ ).first = std::numeric_limits< double >::max();
         } else {
             // Taillard's taboo evaluation => constant time
