@@ -106,10 +106,12 @@ void mt::GAThread::Mutate() {
 #else
     std::mt19937 engine{ randomDevice() + index };
 #endif
+    std::uniform_int_distribution<> distribution{ 0, static_cast< int >( popSize - 1 ) };
 
     for ( unsigned long i = 0; i < mutationsQuantity; ++i ) {
-        population[ i ].second->Mutate( engine );
-        population[ i ].first = problem->GetOFV( population[ i ].second );
+        const unsigned long mutateIndex = distribution( engine );
+        population[ mutateIndex ].second->Mutate( engine );
+        population[ mutateIndex ].first = problem->GetOFV( population[ mutateIndex ].second );
     }
 }
 
