@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -19,13 +19,13 @@
 
 #include "task.h"
 
-mt::Task::Task( const unsigned long &argDuration, const unsigned long &argIndex,
-                const std::vector< Task* > * argPredecessors ) :
-    duration{ argDuration },
-    index{ argIndex },
-    predecessors{ argPredecessors }
+mt::Task::Task(const unsigned long argDuration, const unsigned long argIndex,
+               const std::vector<Task*> *argPredecessors) :
+    duration{argDuration},
+    index{argIndex},
+    predecessors{argPredecessors}
 {
-    if ( predecessors->empty() ) {
+    if (predecessors->empty()) {
         allPredecessorsScheduled = true;
     }
 }
@@ -35,11 +35,11 @@ mt::Task::~Task() {
 }
 
 bool mt::Task::AllPredecessorsScheduled() {
-    if ( allPredecessorsScheduled ) {
+    if (allPredecessorsScheduled) {
         return true;
     } else {
-        for ( auto cit = predecessors->cbegin(); cit != predecessors->cend(); ++cit ) {
-            if ( !( *cit )->IsScheduled() ) {
+        for (auto cit = predecessors->cbegin(); cit != predecessors->cend(); ++cit) {
+            if ((*cit)->IsScheduled() == false) {
                 return false;
             }
         }
