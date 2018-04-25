@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -19,16 +19,14 @@
 
 #include "problem.h"
 
-mt::Problem::Problem( const problemTypes_t &argType, const std::vector<std::string> &argTokens ) :
-    name{ argTokens[ 0 ] },
-    size{ std::stoul( argTokens[ 2 ] ) },
-    type{ argType }
+mt::Problem::Problem(const problemTypes_t argType,
+                     const std::vector<std::string> &argTokens) :
+    name{argTokens[0]},
+    size{std::stoul(argTokens[2])},
+    type{argType}
 {
-    std::cout << "      Constructing Problem " << argTokens[ 0 ] << std::endl;
+    std::cout << "      Constructing Problem " << argTokens[0] << "\n";
 
-    std::lock_guard< std::mutex > lockMeasure{ measureMutex };
-    measure.SetProblemParameters( name, size, argTokens[ 1 ] );
-}
-
-mt::Problem::~Problem() {
+    std::lock_guard<std::mutex> lockMeasure{measureMutex};
+    measure.SetProblemParameters(name, size, argTokens[1]);
 }

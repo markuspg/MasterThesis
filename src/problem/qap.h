@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -34,29 +34,27 @@ namespace mt {
 
 class QAP final : public Problem {
 public:
-    QAP( const std::vector<std::string> &argTokens );
-    QAP( const Problem &argProblem ) = delete;
-    QAP( Problem &&argProblem ) = delete;
-    virtual ~QAP();
+    QAP(const std::vector<std::string> &argTokens);
+    ~QAP() override = default;
 
-    virtual bool CheckIfTaboo( const unsigned int &argIterationCount,
-                               SolutionBase * const argSolution,
-                               const unsigned long &argSwapIndexI,
-                               const unsigned long &argSwapIndexJ,
-                               const Matrix< unsigned long > &argTTMatrix ) const override;
-    virtual SolutionBase *GenerateRandomSolution( const unsigned int &argSeed ) const override;
-    virtual double GetOFV( SolutionBase * const argSolution ) const override;
-    virtual void UpdateFrequenciesMatrix( Matrix< unsigned long > &argFrequenciesMatrix,
-                                          SolutionBase * const argNewSolution ) const override;
-    virtual void UpdateTabooTenures( SolutionBase * const argNewSolution,
-                                     const long &argSwapI, const long &argSwapJ,
-                                     const unsigned long &argTabooTenure,
-                                     mt::Matrix< unsigned long > &argTTMatrix ) const override;
+    bool CheckIfTaboo(const unsigned int argIterationCount,
+                      SolutionBase * const argSolution,
+                      const unsigned long argSwapIndexI,
+                      const unsigned long argSwapIndexJ,
+                      const Matrix<unsigned long> &argTTMatrix) const override;
+    SolutionBase *GenerateRandomSolution(const unsigned int argSeed) const override;
+    double GetOFV(SolutionBase * const argSolution) const override;
+    void UpdateFrequenciesMatrix(Matrix<unsigned long> &argFrequenciesMatrix,
+                                 SolutionBase * const argNewSolution) const override;
+    void UpdateTabooTenures(SolutionBase * const argNewSolution,
+                            const long argSwapI, const long argSwapJ,
+                            const unsigned long argTabooTenure,
+                            mt::Matrix<unsigned long> &argTTMatrix) const override;
 
-    const mt::Matrix< int > distances;  //! From location to location
-    const mt::Matrix< int > flows;      //! From unit to unit
+    const mt::Matrix<int> distances;  //! From location to location
+    const mt::Matrix<int> flows;      //! From unit to unit
 };
 
-}
+} // namespace mt
 
 #endif // QAP_H

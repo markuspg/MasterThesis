@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -19,26 +19,23 @@
 
 #include "qap.h"
 
-mt::QAP::QAP( const std::vector<std::string> &argTokens ) :
-    Problem{ problemTypes_t::QAP, argTokens },
-    distances{ mt::Matrix< int >::ConvertStringVecToIntVec( tools::Split( argTokens[ 4 ], ';' ) ) },
-    flows{ mt::Matrix< int >::ConvertStringVecToIntVec( tools::Split( argTokens[ 3 ], ';' ) ) }
+mt::QAP::QAP(const std::vector<std::string> &argTokens) :
+    Problem{problemTypes_t::QAP, argTokens},
+    distances{mt::Matrix<int>::ConvertStringVecToIntVec(tools::Split(argTokens[4], ';'))},
+    flows{mt::Matrix<int>::ConvertStringVecToIntVec(tools::Split(argTokens[3], ';'))}
 {
-    std::cout << "      > Constructing QAP " << argTokens[ 0 ] << std::endl;
+    std::cout << "      > Constructing QAP " << argTokens[0] << "\n";
 }
 
-mt::QAP::~QAP() {
-}
-
-bool mt::QAP::CheckIfTaboo( const unsigned int &argIterationCount,
-                            SolutionBase * const argSolution,
-                            const unsigned long &argSwapIndexI,
-                            const unsigned long &argSwapIndexJ,
-                            const Matrix< unsigned long > &argTTMatrix ) const {
+bool mt::QAP::CheckIfTaboo(const unsigned int argIterationCount,
+                           SolutionBase * const argSolution,
+                           const unsigned long argSwapIndexI,
+                           const unsigned long argSwapIndexJ,
+                           const Matrix<unsigned long> &argTTMatrix) const {
     // taillard1991robust, p. 447
-    PermSolution * const tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
-    if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) >= argIterationCount
-         && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) >= argIterationCount ) {
+    const auto tempSol = dynamic_cast<PermSolution*>(argSolution->GetPermSolution());
+    if (argTTMatrix((*tempSol)(argSwapIndexI), argSwapIndexI) >= argIterationCount
+        && argTTMatrix((*tempSol)(argSwapIndexJ), argSwapIndexJ) >= argIterationCount ) {
         delete tempSol;
         return true;
     }
@@ -46,25 +43,25 @@ bool mt::QAP::CheckIfTaboo( const unsigned int &argIterationCount,
     return false;
 }
 
-mt::SolutionBase *mt::QAP::GenerateRandomSolution( const unsigned int &argSeed ) const {
-    if ( *settings->randomKeys ) {
-        return new RandomKeySolution{ argSeed, size };
+mt::SolutionBase *mt::QAP::GenerateRandomSolution(const unsigned int argSeed) const {
+    if (*settings->randomKeys) {
+        return new RandomKeySolution{argSeed, size};
     } else {
-        return new PermSolution{ argSeed, size };
+        return new PermSolution{argSeed, size};
     }
 }
 
-double mt::QAP::GetOFV( mt::SolutionBase * const argSolution ) const {
+double mt::QAP::GetOFV(mt::SolutionBase * const argSolution) const {
     // Stores the converted solution
-    mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argSolution->GetPermSolution() );
-    assert( tempSol );
+    const auto tempSol = dynamic_cast<mt::PermSolution*>(argSolution->GetPermSolution());
+    assert(tempSol);
 
     unsigned long ofv = 0;
-    std::vector< unsigned long >::size_type size = tempSol->GetSize();
-    for ( unsigned long i = 0; i < size; ++i ) {
-        for ( unsigned long j = 0; j < size; ++j ) {
-            const int flow = flows( ( *tempSol )( i ), ( *tempSol )( j ) );
-            const int distance = distances( i, j );
+    const auto size = tempSol->GetSize();
+    for (auto i = decltype(size){0}; i < size; ++i) {
+        for (auto j = decltype(size){0}; j < size; ++j ) {
+            const int flow = flows((*tempSol)(i), (*tempSol)(j));
+            const int distance = distances(i, j);
             ofv += flow * distance;
         }
     }
@@ -74,23 +71,23 @@ double mt::QAP::GetOFV( mt::SolutionBase * const argSolution ) const {
     return ofv;
 }
 
-void mt::QAP::UpdateFrequenciesMatrix( Matrix<unsigned long> &argFrequenciesMatrix,
-                                       SolutionBase * const argNewSolution) const {
-    mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argNewSolution->GetPermSolution() );
+void mt::QAP::UpdateFrequenciesMatrix(Matrix<unsigned long> &argFrequenciesMatrix,
+                                      SolutionBase * const argNewSolution) const {
+    const auto tempSol = dynamic_cast<mt::PermSolution*>(argNewSolution->GetPermSolution());
     std::vector< unsigned long >::size_type solSize = tempSol->GetSize();
-    for ( unsigned long i = 0; i < solSize; ++i ) {
-        argFrequenciesMatrix( ( *tempSol )( i ), i ) += 1;
+    for (unsigned long i = 0; i < solSize; ++i) {
+        argFrequenciesMatrix((*tempSol)(i), i) += 1;
     }
     delete tempSol;
 }
 
-void mt::QAP::UpdateTabooTenures( mt::SolutionBase * const argNewSolution,
-                                  const long &argSwapI, const long &argSwapJ,
-                                  const unsigned long &argTabooTenure,
-                                  mt::Matrix<unsigned long> &argTTMatrix ) const {
-    mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argNewSolution->GetPermSolution() );
+void mt::QAP::UpdateTabooTenures(mt::SolutionBase * const argNewSolution,
+                                 const long argSwapI, const long argSwapJ,
+                                 const unsigned long argTabooTenure,
+                                 mt::Matrix<unsigned long> &argTTMatrix) const {
+    const auto tempSol = dynamic_cast<mt::PermSolution*>(argNewSolution->GetPermSolution());
     // Forbid the  re-assignment of the swapped units to the locations
-    argTTMatrix( ( *tempSol )( argSwapI ), argSwapI ) = argTabooTenure;
-    argTTMatrix( ( *tempSol )( argSwapJ ), argSwapJ ) = argTabooTenure;
+    argTTMatrix((*tempSol)(argSwapI), argSwapI) = argTabooTenure;
+    argTTMatrix((*tempSol)(argSwapJ), argSwapJ) = argTabooTenure;
     delete tempSol;
 }

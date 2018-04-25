@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -41,31 +41,30 @@ namespace mt {
 
 class Problem {
 public:
-    Problem( const problemTypes_t &argType, const std::vector<std::string> &argTokens );
-    Problem( const Problem &argProblem ) = delete;
-    Problem( Problem &&argProblem ) = delete;
-    virtual ~Problem();
+    Problem(const problemTypes_t argType,
+            const std::vector<std::string> &argTokens);
+    virtual ~Problem() = default;
 
     // The taboo argument of this function is from 'taillard1991robust', p. 447
-    virtual bool CheckIfTaboo( const unsigned int &argIterationCount,
-                               SolutionBase * const argSolution,
-                               const unsigned long &argSwapIndexI,
-                               const unsigned long &argSwapIndexJ,
-                               const Matrix< unsigned long > &argTTMatrix ) const = 0;
-    virtual SolutionBase *GenerateRandomSolution( const unsigned int &argSeed ) const = 0;
-    virtual double GetOFV( SolutionBase * const argSolution ) const = 0;
-    virtual void UpdateFrequenciesMatrix( Matrix< unsigned long > &argFrequenciesMatrix,
-                                          SolutionBase * const argNewSolution ) const = 0;
-    virtual void UpdateTabooTenures( SolutionBase * const argNewSolution,
-                                     const long &argSwapI, const long &argSwapJ,
-                                     const unsigned long &argTabooTenure,
-                                     mt::Matrix< unsigned long > &argTTMatrix ) const = 0;
+    virtual bool CheckIfTaboo(const unsigned int argIterationCount,
+                              SolutionBase * const argSolution,
+                              const unsigned long argSwapIndexI,
+                              const unsigned long argSwapIndexJ,
+                              const Matrix<unsigned long> &argTTMatrix) const = 0;
+    virtual SolutionBase *GenerateRandomSolution(const unsigned int argSeed) const = 0;
+    virtual double GetOFV(SolutionBase * const argSolution) const = 0;
+    virtual void UpdateFrequenciesMatrix(Matrix<unsigned long> &argFrequenciesMatrix,
+                                         SolutionBase * const argNewSolution) const = 0;
+    virtual void UpdateTabooTenures(SolutionBase * const argNewSolution,
+                                    const long argSwapI, const long argSwapJ,
+                                    const unsigned long argTabooTenure,
+                                    mt::Matrix<unsigned long> &argTTMatrix) const = 0;
 
     const std::string name;
     const unsigned long size = 0;
     const problemTypes_t type;
 };
 
-}
+} // namespace mt
 
 #endif // PROBLEM_H

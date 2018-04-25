@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -19,10 +19,10 @@
 
 #include "salbp.h"
 
-mt::SALBP::SALBP( const std::vector<std::string> &argTokens ) :
-    Problem{ problemTypes_t::SALBP, argTokens },
-    cycleTime{ std::stoul( argTokens[ 5 ] ) },
-    tasks{ new TaskStorage{ size, argTokens } }
+mt::SALBP::SALBP(const std::vector<std::string> &argTokens) :
+    Problem{problemTypes_t::SALBP, argTokens},
+    cycleTime{std::stoul(argTokens[5])},
+    tasks{new TaskStorage{size, argTokens}}
 {
 }
 
@@ -30,15 +30,15 @@ mt::SALBP::~SALBP() {
     delete tasks;
 }
 
-bool mt::SALBP::CheckIfTaboo( const unsigned int &argIterationCount,
-                              SolutionBase * const argSolution,
-                              const unsigned long &argSwapIndexI,
-                              const unsigned long &argSwapIndexJ,
-                              const Matrix< unsigned long > &argTTMatrix ) const {
+bool mt::SALBP::CheckIfTaboo(const unsigned int argIterationCount,
+                             SolutionBase * const argSolution,
+                             const unsigned long argSwapIndexI,
+                             const unsigned long argSwapIndexJ,
+                             const Matrix<unsigned long> &argTTMatrix) const {
     // taillard1991robust, p. 447
-    PermSolution * const tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
-    if ( argTTMatrix( ( *tempSol )( argSwapIndexI ), argSwapIndexI ) >= argIterationCount
-         && argTTMatrix( ( *tempSol )( argSwapIndexJ ), argSwapIndexJ ) >= argIterationCount ) {
+    const auto tempSol = dynamic_cast<PermSolution*>(argSolution->GetPermSolution());
+    if (argTTMatrix((*tempSol)(argSwapIndexI), argSwapIndexI) >= argIterationCount
+        && argTTMatrix((*tempSol)(argSwapIndexJ), argSwapIndexJ) >= argIterationCount) {
         delete tempSol;
         return true;
     }
@@ -46,48 +46,48 @@ bool mt::SALBP::CheckIfTaboo( const unsigned int &argIterationCount,
     return false;
 }
 
-mt::SolutionBase *mt::SALBP::GenerateRandomSolution( const unsigned int &argSeed ) const {
-    if ( *settings->randomKeys ) {
-        return new RandomKeySolution{ argSeed, size };
+mt::SolutionBase *mt::SALBP::GenerateRandomSolution(const unsigned int argSeed) const {
+    if (*settings->randomKeys) {
+        return new RandomKeySolution{argSeed, size};
     } else {
-        return new PermSolution{ argSeed, size };
+        return new PermSolution{argSeed, size};
     }
 }
 
-double mt::SALBP::GetOFV( SolutionBase * const argSolution ) const {
+double mt::SALBP::GetOFV(SolutionBase * const argSolution) const {
     // Storage for the converted solution and its objective function value
-    PermSolution * tempSol = dynamic_cast< PermSolution* >( argSolution->GetPermSolution() );
-    assert( tempSol );
+    const auto tempSol = dynamic_cast<PermSolution*>(argSolution->GetPermSolution());
+    assert(tempSol);
 
-    TaskStorage tempTasks{ *tasks };
+    TaskStorage tempTasks{*tasks};
 
-    std::list< Task* > tasksToBeScheduled;
-    std::vector< unsigned long > stationTimes;
-    stationTimes.resize( size, 0 );
+    std::list<Task*> tasksToBeScheduled;
+    std::vector<unsigned long> stationTimes;
+    stationTimes.resize(size, 0);
     // Sort the tasks according to their priorities in the list of the to be assigned tasks
-    for ( unsigned long i = 0; i < size; ++i ) {
-        tasksToBeScheduled.emplace_back( tempTasks( ( *tempSol )( i ) ) );
+    for (unsigned long i = 0; i < size; ++i) {
+        tasksToBeScheduled.emplace_back(tempTasks((*tempSol)(i)));
     }
 
-    std::list< Task* >::iterator *deleteIt = nullptr;
-    for ( unsigned long i = 0; i < size; ++i ) {
+    std::list<Task*>::iterator *deleteIt = nullptr;
+    for (unsigned long i = 0; i < size; ++i) {
         auto it = tasksToBeScheduled.begin();
-        while ( it != tasksToBeScheduled.end() ) {
-            if ( deleteIt ) {
-                tasksToBeScheduled.erase( *deleteIt );
+        while (it != tasksToBeScheduled.end()) {
+            if (deleteIt) {
+                tasksToBeScheduled.erase(*deleteIt);
                 delete deleteIt;
                 deleteIt = nullptr;
                 it = tasksToBeScheduled.begin();
                 continue;
             }
             // First check for task, if it is available for scheduling (all predecessors scheduled)
-            if ( ( *it )->AllPredecessorsScheduled() ) {
+            if ((*it)->AllPredecessorsScheduled()) {
                 // Check, if the task fits into the current station
-                if ( stationTimes[ i ] + ( *it )->duration <= cycleTime ) {
+                if (stationTimes[i] + (*it)->duration <= cycleTime) {
                     // If yes, schedule it there, ...
-                    stationTimes[ i ] += ( *it )->duration;
-                    ( *it )->TaskGotScheduled();
-                    deleteIt = new std::list< Task* >::iterator{ it };
+                    stationTimes[i] += (*it)->duration;
+                    (*it)->TaskGotScheduled();
+                    deleteIt = new std::list<Task*>::iterator{it};
                     continue;
                 }
             }
@@ -97,26 +97,27 @@ double mt::SALBP::GetOFV( SolutionBase * const argSolution ) const {
 
     delete tempSol;
 
-    return std::distance( stationTimes.begin(), std::find( stationTimes.begin(), stationTimes.end(), 0 ) );
+    return std::distance(stationTimes.begin(), std::find(stationTimes.begin(),
+                                                         stationTimes.end(), 0));
 }
 
-void mt::SALBP::UpdateFrequenciesMatrix( Matrix<unsigned long> &argFrequenciesMatrix,
-                                         SolutionBase * const argNewSolution) const {
-    mt::PermSolution * const tempSol = dynamic_cast< mt::PermSolution* >( argNewSolution->GetPermSolution() );
-    std::vector< unsigned long >::size_type solSize = tempSol->GetSize();
-    for ( unsigned long i = 0; i < solSize; ++i ) {
-        argFrequenciesMatrix( ( *tempSol )( i ), i ) += 1;
+void mt::SALBP::UpdateFrequenciesMatrix(Matrix<unsigned long> &argFrequenciesMatrix,
+                                        SolutionBase * const argNewSolution) const {
+    const auto tempSol = dynamic_cast<mt::PermSolution*>(argNewSolution->GetPermSolution());
+    std::vector<unsigned long>::size_type solSize = tempSol->GetSize();
+    for (unsigned long i = 0; i < solSize; ++i) {
+        argFrequenciesMatrix((*tempSol)(i), i) += 1;
     }
     delete tempSol;
 }
 
-void mt::SALBP::UpdateTabooTenures( SolutionBase * const argNewSolution,
-                                    const long &argSwapI, const long &argSwapJ,
-                                    const unsigned long &argTabooTenure,
-                                    mt::Matrix<unsigned long> &argTTMatrix ) const {
-    PermSolution * const tempSol = dynamic_cast< PermSolution* >( argNewSolution->GetPermSolution() );
+void mt::SALBP::UpdateTabooTenures(SolutionBase * const argNewSolution,
+                                   const long argSwapI, const long argSwapJ,
+                                   const unsigned long argTabooTenure,
+                                   mt::Matrix<unsigned long> &argTTMatrix) const {
+    const auto tempSol = dynamic_cast<PermSolution*>(argNewSolution->GetPermSolution());
     // Forbid the  re-assignment of the swapped tasks to the same priority list positions
-    argTTMatrix( ( *tempSol )( argSwapI ), argSwapI ) = argTabooTenure;
-    argTTMatrix( ( *tempSol )( argSwapJ ), argSwapJ ) = argTabooTenure;
+    argTTMatrix((*tempSol)(argSwapI), argSwapI) = argTabooTenure;
+    argTTMatrix((*tempSol)(argSwapJ), argSwapJ) = argTabooTenure;
     delete tempSol;
 }

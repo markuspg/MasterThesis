@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -35,24 +35,22 @@ class TaskStorage;
 
 class SALBP final : public Problem {
 public:
-    SALBP( const std::vector<std::string> &argTokens );
-    SALBP( const SALBP &argSALBP ) = delete;
-    SALBP( SALBP &&argSALBP ) = delete;
-    virtual ~SALBP();
+    SALBP(const std::vector<std::string> &argTokens);
+    ~SALBP() override;
 
-    virtual bool CheckIfTaboo( const unsigned int &argIterationCount,
-                               SolutionBase * const argSolution,
-                               const unsigned long &argSwapIndexI,
-                               const unsigned long &argSwapIndexJ,
-                               const Matrix< unsigned long > &argTTMatrix ) const override;
-    virtual SolutionBase *GenerateRandomSolution( const unsigned int &argSeed ) const override;
-    virtual double GetOFV( SolutionBase * const argSolution ) const override;
-    virtual void UpdateFrequenciesMatrix( Matrix< unsigned long > &argFrequenciesMatrix,
-                                          SolutionBase * const argNewSolution ) const override;
-    virtual void UpdateTabooTenures( SolutionBase * const argNewSolution,
-                                     const long &argSwapI, const long &argSwapJ,
-                                     const unsigned long &argTabooTenure,
-                                     mt::Matrix< unsigned long > &argTTMatrix ) const override;
+    bool CheckIfTaboo(const unsigned int argIterationCount,
+                      SolutionBase * const argSolution,
+                      const unsigned long argSwapIndexI,
+                      const unsigned long argSwapIndexJ,
+                      const Matrix<unsigned long> &argTTMatrix) const override;
+    SolutionBase *GenerateRandomSolution(const unsigned int argSeed) const override;
+    double GetOFV(SolutionBase * const argSolution) const override;
+    void UpdateFrequenciesMatrix(Matrix<unsigned long> &argFrequenciesMatrix,
+                                 SolutionBase * const argNewSolution) const override;
+    void UpdateTabooTenures(SolutionBase * const argNewSolution,
+                            const long argSwapI, const long argSwapJ,
+                            const unsigned long argTabooTenure,
+                            mt::Matrix<unsigned long> &argTTMatrix) const override;
 
     const unsigned long cycleTime = 0;
 
@@ -60,6 +58,6 @@ private:
     const TaskStorage * const tasks;
 };
 
-}
+} // namespace mt
 
 #endif // SALBP_H
