@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -20,7 +20,6 @@
 #ifndef TASKSTORAGE_H
 #define TASKSTORAGE_H
 
-#include "task.h"
 #include "../helper_functions.h"
 
 #include <string>
@@ -28,21 +27,32 @@
 
 namespace mt {
 
+class Task;
+
 class TaskStorage final {
 public:
     TaskStorage() = delete;
-    TaskStorage( const TaskStorage &argTaskStorage );
-    TaskStorage( TaskStorage &&argTaskStorage ) = delete;
-    TaskStorage( const unsigned long &argSize, const std::vector< std::string > &argTokens );
+    TaskStorage(const TaskStorage &argTaskStorage);
+    TaskStorage(TaskStorage &&argTaskStorage) = default;
+    TaskStorage(const unsigned long argSize,
+                const std::vector<std::string> &argTokens);
     ~TaskStorage();
 
-    Task *operator() ( const unsigned long &argIndex ) { return tasks[ argIndex ]; }
-    Task *operator() ( const unsigned long &argIndex ) const { return tasks[ argIndex ]; }
+    Task *operator() (const unsigned long argIndex);
+    Task *operator() (const unsigned long argIndex) const;
 
 private:
-    std::vector< Task* > tasks;
+    std::vector<Task*> tasks;
 };
 
+} // namespace mt
+
+inline mt::Task *mt::TaskStorage::operator() (const unsigned long argIndex) {
+    return tasks[argIndex];
+}
+
+inline mt::Task *mt::TaskStorage::operator() (const unsigned long argIndex) const {
+    return tasks[argIndex];
 }
 
 #endif // TASKSTORAGE_H

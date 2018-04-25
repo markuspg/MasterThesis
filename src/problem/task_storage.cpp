@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -20,53 +20,57 @@
 #include "task_storage.h"
 
 mt::TaskStorage::TaskStorage(const TaskStorage &argTaskStorage) :
-    tasks{ argTaskStorage.tasks.size(), nullptr }
+    tasks(argTaskStorage.tasks.size(), nullptr)
 {
-    std::vector< Task* >::size_type size = argTaskStorage.tasks.size();
-    for ( unsigned long i = 0; i < size; ++i ) {
-        std::vector< Task* > *predecessors = new std::vector< Task* >;
-        for ( auto cit = argTaskStorage.tasks[ i ]->predecessors->cbegin();
-              cit != argTaskStorage.tasks[ i ]->predecessors->cend(); ++cit ) {
-            predecessors->emplace_back( tasks[ ( *cit )->index - 1 ] );
+    const auto size = argTaskStorage.tasks.size();
+    for (auto i = decltype(size){0}; i < size; ++i) {
+        std::vector<Task*> *predecessors = new std::vector<Task*>;
+        for (auto cit = argTaskStorage.tasks[i]->predecessors->cbegin();
+             cit != argTaskStorage.tasks[i]->predecessors->cend(); ++cit) {
+            predecessors->emplace_back(tasks[(*cit)->index - 1]);
         }
-        tasks[ i ] = new Task{ argTaskStorage.tasks[ i ]->duration, argTaskStorage.tasks[ i ]->index,
-                               predecessors };
+        tasks[i] = new Task{argTaskStorage.tasks[i]->duration,
+                            argTaskStorage.tasks[i]->index, predecessors};
     }
 }
 
-mt::TaskStorage::TaskStorage( const unsigned long &argSize, const std::vector< std::string > &argTokens ) :
-    tasks{ argSize, nullptr }
+mt::TaskStorage::TaskStorage(const unsigned long argSize,
+                             const std::vector<std::string> &argTokens) :
+    tasks(argSize, nullptr)
 {
     // Split the tokens for their usage whilst the Tasks' construction
-    std::vector< std::string > durationStrings = tools::Split( argTokens[ 3 ], ';' );
-    std::vector< std::string > precedenceStrings = tools::Split( argTokens[ 4 ], ';' );
+    std::vector<std::string> durationStrings = tools::Split(argTokens[3], ';');
+    std::vector<std::string> precedenceStrings = tools::Split(argTokens[4], ';');
 
     // Construct all tasks, one after another
-    for ( unsigned long i = 0; i < argSize; ++i ) {
+    for (unsigned long i = 0; i < argSize; ++i) {
         // First declare and initialize the needed variables
-        std::vector< Task* > *predecessors = new std::vector< Task* >;
+        std::vector<Task*> *predecessors = new std::vector<Task*>;
         unsigned long taskDuration = 0;
         unsigned long taskID = 0;
 
         // Then convert the string values to the needed data items
-        taskDuration = std::stoul( durationStrings[ i ] );
-        std::vector< std::string > precedenceString = tools::Split( precedenceStrings[ i ], ':' );
-        taskID = std::stoul( precedenceString[ 0 ] );
-        if ( precedenceString.size() > 1 ) {
-            std::vector< std::string > predecessorIndicesString = tools::Split( precedenceString[ 1 ], ',' );
-            for ( std::size_t j = 0; j < predecessorIndicesString.size(); ++j ) {
-                const unsigned long predecessorIndexString = std::stoul( predecessorIndicesString[ j ] ) - 1;
+        taskDuration = std::stoul(durationStrings[i]);
+        std::vector<std::string> precedenceString
+                = tools::Split(precedenceStrings[i], ':');
+        taskID = std::stoul(precedenceString[0]);
+        if (precedenceString.size() > 1) {
+            std::vector<std::string> predecessorIndicesString
+                    = tools::Split(precedenceString[1], ',');
+            for (std::size_t j = 0; j < predecessorIndicesString.size(); ++j) {
+                const unsigned long predecessorIndexString
+                        = std::stoul(predecessorIndicesString[j]) - 1;
                 // Ensure lexicographical ordering of the tasks
-                assert( predecessorIndexString < i );
-                predecessors->emplace_back( tasks[ predecessorIndexString ] );
+                assert(predecessorIndexString < i);
+                predecessors->emplace_back(tasks[predecessorIndexString]);
             }
         }
-        tasks[ i ] = new Task{ taskDuration, taskID, predecessors };
+        tasks[i] = new Task{taskDuration, taskID, predecessors};
     }
 }
 
 mt::TaskStorage::~TaskStorage() {
-    for ( auto &s: tasks ) {
-        delete s;
+    for (const auto taskPtr : tasks) {
+        delete taskPtr;
     }
 }
