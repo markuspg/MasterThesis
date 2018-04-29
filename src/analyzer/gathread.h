@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -26,17 +26,18 @@
 #include <mutex>
 #include <vector>
 
-typedef std::pair< double, mt::SolutionBase* > dSol;
+using dSol = std::pair<double, mt::SolutionBase*>;
 
 namespace mt {
 
 class GAThread final {
 public:
-    GAThread( const unsigned short &argIndex, std::mutex &argMutex,
-              const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet );
+    GAThread(const unsigned short argIndex, std::mutex &argMutex,
+             const mt::Problem * const argProblem,
+             mt::TSReferenceSet &argReferenceSet);
     ~GAThread();
 
-    bool IsFinished() const { return finished; }
+    bool IsFinished() const;
     void Iteration();
 
 private:
@@ -44,22 +45,30 @@ private:
     void Immigrate();
     void Mutate();
     void Reproduce();
-    void SelectParentsMonteCarlo( const double &argParentAValue, const double &argParentBValue,
-                                  std::pair< unsigned long, unsigned long > &argParentIndices );
+    void SelectParentsMonteCarlo(const double argParentAValue,
+                                 const double argParentBValue,
+                                 std::pair<unsigned long, unsigned long> &argParentIndices);
 
     bool finished = false;
     const unsigned short index = 0;
     unsigned int iterationCount = 0;
     const unsigned long popSize = 0;
-    const unsigned long immigrationsQuantity = 0;   //! How many chromosomes shall immigrate per iteration
+    //! How many chromosomes shall immigrate per iteration
+    const unsigned long immigrationsQuantity = 0;
     std::vector< dSol > population;
     const mt::Problem * const problem = nullptr;
-    const unsigned long mutationsQuantity = 0;      //! How many chromosomes shall be mutated per iteration
-    const unsigned long reproductionQuantity = 0;   //! How many reproductions shall happen per iteration
+    //! How many chromosomes shall be mutated per iteration
+    const unsigned long mutationsQuantity = 0;
+    //! How many reproductions shall happen per iteration
+    const unsigned long reproductionQuantity = 0;
     std::mutex &tsReferenceSetMutex;
     mt::TSReferenceSet &referenceSet;
 };
 
+} // namespace mt
+
+inline bool mt::GAThread::IsFinished() const  {
+    return finished;
 }
 
 #endif // GATHREAD_H
