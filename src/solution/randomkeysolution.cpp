@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -76,51 +76,50 @@ mt::PermSolution *mt::RandomKeySolution::GetPermSolution() {
     return new PermSolution{ new std::vector< unsigned long >{ *permutationVec } };
 }
 
-mt::SolutionBase *mt::RandomKeySolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                                            const unsigned long &argSwapIndexJ ) const {
-    std::vector< double > *temp = new std::vector< double >{ *solutionVec };
-    double tempD = ( *temp )[ argSwapIndexI ];
-    ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
-    ( *temp )[ argSwapIndexJ ] = tempD;
-    return new RandomKeySolution{ temp };
+mt::SolutionBase *mt::RandomKeySolution::GetSwappedVariant(const unsigned long argSwapIndexI,
+                                                           const unsigned long argSwapIndexJ) const {
+    const auto temp = new std::vector<double>{*solutionVec};
+    double tempD = (*temp)[argSwapIndexI];
+    (*temp)[argSwapIndexI] = (*temp)[argSwapIndexJ];
+    (*temp)[argSwapIndexJ] = tempD;
+    return new RandomKeySolution{temp};
 }
 
-#ifdef Q_PROCESSOR_X86_64
-void mt::RandomKeySolution::Mutate( std::mt19937_64 &argEngine ) {
-#else
-void mt::RandomKeySolution::Mutate( std::mt19937 &argEngine ) {
-#endif
-    unsigned long mutationQuantity = std::round( *settings->mutationImpact * size );
+void mt::RandomKeySolution::Mutate(std::mt19937_64 &argEngine) {
+    unsigned long mutationQuantity
+            = static_cast<unsigned long>(std::llround(*settings->mutationImpact * size));
     // Ensure at least one mutation
     mutationQuantity = mutationQuantity >= 1 ? mutationQuantity : 1;
 
-    std::uniform_int_distribution<> alleleDistribution{ 0, static_cast< int >( size - 1 ) };
-    std::uniform_real_distribution<> geneDistribution{ 0.0, 1.0 };
+    std::uniform_int_distribution<unsigned int> alleleDistribution{
+        0, static_cast<unsigned int>(size - 1)};
+    std::uniform_real_distribution<> geneDistribution{0.0, 1.0};
 
-    for ( unsigned long i = 0; i < mutationQuantity; ++i ) {
-        ( *solutionVec )[ alleleDistribution( argEngine ) ] = geneDistribution( argEngine );
+    for (unsigned long i = 0; i < mutationQuantity; ++i) {
+        (*solutionVec)[alleleDistribution(argEngine)] = geneDistribution(argEngine);
     }
 
     solVecChanged = true;
 }
 
-mt::SolutionBase *mt::RandomKeySolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
-            const mt::SolutionBase * const argOtherParent ) const {
-    const RandomKeySolution* const tempSol = dynamic_cast< const RandomKeySolution* >( argOtherParent );
-    assert( tempSol );
+mt::SolutionBase *mt::RandomKeySolution::ReproduceWithOtherParent(
+        const unsigned long argCrossoverPoint,
+        const mt::SolutionBase * const argOtherParent) const {
+    const auto tempSol = dynamic_cast<const RandomKeySolution*>(argOtherParent);
+    assert(tempSol);
 
-    std::vector< double > * const newSolutionVec = new std::vector< double >;
-    newSolutionVec->resize( size, 0.0 );
+    const auto newSolutionVec = new std::vector<double>;
+    newSolutionVec->resize(size, 0.0);
 
-    for ( unsigned long i = 0; i < size; ++i ) {
-        if ( i < argCrossoverPoint ) {
-            newSolutionVec->at( i ) = ( *solutionVec )[ i ];
+    for (unsigned long i = 0; i < size; ++i) {
+        if (i < argCrossoverPoint ) {
+            newSolutionVec->at(i) = (*solutionVec)[i];
         } else {
-            newSolutionVec->at( i ) = ( *tempSol )( i );
+            newSolutionVec->at(i) = (*tempSol)(i);
         }
     }
 
-    return new mt::RandomKeySolution{ newSolutionVec };
+    return new mt::RandomKeySolution{newSolutionVec};
 }
 
 void mt::RandomKeySolution::UpdatePermutationVector() {

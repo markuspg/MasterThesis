@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -67,53 +67,51 @@ mt::PermSolution *mt::PermSolution::GetPermSolution() {
     return new PermSolution{ *this };
 }
 
-mt::SolutionBase *mt::PermSolution::GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                                       const unsigned long &argSwapIndexJ ) const {
-    std::vector< unsigned long > *temp = new std::vector< unsigned long >{ *solutionVec };
-    unsigned long tempD = ( *temp )[ argSwapIndexI ];
-    ( *temp )[ argSwapIndexI ] = ( *temp )[ argSwapIndexJ ];
-    ( *temp )[ argSwapIndexJ ] = tempD;
-    return new PermSolution{ temp };
+mt::SolutionBase *mt::PermSolution::GetSwappedVariant(const unsigned long argSwapIndexI,
+                                                      const unsigned long argSwapIndexJ) const {
+    const auto temp = new std::vector<unsigned long>{*solutionVec};
+    unsigned long tempD = (*temp)[argSwapIndexI];
+    (*temp)[argSwapIndexI] = (*temp)[argSwapIndexJ];
+    (*temp)[argSwapIndexJ] = tempD;
+    return new PermSolution{temp};
 }
 
-#ifdef Q_PROCESSOR_X86_64
-void mt::PermSolution::Mutate( std::mt19937_64 &argEngine ) {
-#else
-void mt::PermSolution::Mutate( std::mt19937 &argEngine ) {
-#endif
+void mt::PermSolution::Mutate(std::mt19937_64 &argEngine) {
     // Divide by half, since mutation for permutations works on two genes at a time
-    unsigned long mutationQuantity = std::round( *settings->mutationImpact * size / 2 );
+    unsigned long mutationQuantity
+            = static_cast<unsigned long>(std::llround(*settings->mutationImpact * size / 2));
     // Ensure at least one mutation
     mutationQuantity = mutationQuantity > 1 ? mutationQuantity : 1;
 
-    std::uniform_int_distribution<> distribution{ 0, static_cast< int >( size - 1 ) };
+    std::uniform_int_distribution<unsigned long> distribution{ 0, size - 1};
 
-    for ( unsigned long i = 0; i < mutationQuantity; ++i ) {
-        unsigned long swapElementA = distribution( argEngine );
-        unsigned long swapElementB = distribution( argEngine );
-        unsigned long temp = ( *solutionVec )[ swapElementA ];
-        ( *solutionVec )[ swapElementA ] = ( *solutionVec )[ swapElementB ];
-        ( *solutionVec )[ swapElementB ] = temp;
+    for (unsigned long i = 0; i < mutationQuantity; ++i) {
+        const auto swapElementA = distribution(argEngine);
+        const auto swapElementB = distribution(argEngine);
+        const auto temp = (*solutionVec)[swapElementA];
+        (*solutionVec)[swapElementA] = (*solutionVec)[swapElementB];
+        (*solutionVec)[swapElementB] = temp;
     }
 
     solVecChanged = true;
 }
 
-mt::SolutionBase *mt::PermSolution::ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
-            const mt::SolutionBase * const argOtherParent ) const {
-    const PermSolution * const tempSol = dynamic_cast< const PermSolution* >( argOtherParent );
-    assert( tempSol );
+mt::SolutionBase *mt::PermSolution::ReproduceWithOtherParent(
+        const unsigned long argCrossoverPoint,
+        const mt::SolutionBase * const argOtherParent) const {
+    const auto tempSol = dynamic_cast<const PermSolution*>(argOtherParent);
+    assert(tempSol);
 
-    std::vector< unsigned long > * const newAssignment = new std::vector< unsigned long >;
-    newAssignment->resize( size, 0 );
+    const auto newAssignment = new std::vector<unsigned long>;
+    newAssignment->resize(size, 0);
 
-    for ( unsigned long i = 0; i < size; ++i ) {
-        if ( i < argCrossoverPoint ) {
-            newAssignment->at( i ) = ( *solutionVec )[ i ];
+    for (unsigned long i = 0; i < size; ++i) {
+        if (i < argCrossoverPoint) {
+            newAssignment->at(i) = (*solutionVec)[i];
         } else {
-            newAssignment->at( i ) = ( *tempSol )( i );
+            newAssignment->at(i) = (*tempSol)(i);
         }
     }
 
-    return new PermSolution{ newAssignment };
+    return new PermSolution{newAssignment};
 }

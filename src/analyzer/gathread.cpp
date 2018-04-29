@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -101,17 +101,13 @@ void mt::GAThread::Iteration() {
 
 void mt::GAThread::Mutate() {
     std::random_device randomDevice;
-#ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() + index };
-#else
-    std::mt19937 engine{ randomDevice() + index };
-#endif
-    std::uniform_int_distribution<> distribution{ 0, static_cast< int >( popSize - 1 ) };
+    std::mt19937_64 engine{randomDevice() + index};
+    std::uniform_int_distribution<unsigned long> distribution{0, popSize - 1};
 
-    for ( unsigned long i = 0; i < mutationsQuantity; ++i ) {
-        const unsigned long mutateIndex = distribution( engine );
-        population[ mutateIndex ].second->Mutate( engine );
-        population[ mutateIndex ].first = problem->GetOFV( population[ mutateIndex ].second );
+    for (unsigned long i = 0; i < mutationsQuantity; ++i) {
+        const unsigned long mutateIndex = distribution(engine);
+        population[mutateIndex].second->Mutate(engine);
+        population[mutateIndex].first = problem->GetOFV(population[mutateIndex].second);
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -50,17 +50,13 @@ public:
     virtual std::vector< unsigned long > *GenerateRandomSolution( const unsigned int &argSeed,
                                                                   const std::size_t &argSize ) const override;
     virtual PermSolution *GetPermSolution() override;
-    virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                             const unsigned long &argSwapIndexJ ) const override;
-#ifdef Q_PROCESSOR_X86_64
-    virtual void Mutate( std::mt19937_64 &argEngine ) override;
-#else
-    virtual void Mutate( std::mt19937 &argEngine ) override;
-#endif
-    virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
-                                                    const SolutionBase * const argOtherParent ) const override;
+    SolutionBase *GetSwappedVariant(const unsigned long argSwapIndexI,
+                                    const unsigned long argSwapIndexJ) const override;
+    void Mutate(std::mt19937_64 &argEngine) override;
+    SolutionBase *ReproduceWithOtherParent(const unsigned long argCrossoverPoint,
+                                           const SolutionBase * const argOtherParent) const override;
 };
 
-}
+} // namespace mt
 
 #endif // PERMSOLUTION_H

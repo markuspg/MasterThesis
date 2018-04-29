@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -43,7 +43,7 @@ public:
     T& operator() ( const unsigned long &argIndex ) const { return ( *solutionVec )[ argIndex ]; }
 
     // Solution diversification operator (james2009cooperative, p. 816)
-    void Diversify( const unsigned long &argStepWidthBase ) override;
+    void Diversify(const unsigned long argStepWidthBase) override;
     virtual std::vector< T > *GenerateRandomSolution( const unsigned int &argSeed,
                                                       const std::size_t &argSize ) const = 0;
     typename std::vector< T >::size_type GetSize() const { return size; }
@@ -54,7 +54,7 @@ protected:
     bool solVecChanged = true;
 };
 
-}
+} //namespace mt
 
 template < typename T >
 mt::Solution< T >::Solution( const Solution &argSolution ) :
@@ -96,26 +96,26 @@ T& mt::Solution< T >::operator() ( const unsigned long &argIndex ) {
     return ( *solutionVec )[ argIndex ];
 }
 
-template< typename T >
-void mt::Solution< T >::Diversify( const unsigned long &argStepWidthBase ) {
+template<typename T>
+void mt::Solution<T>::Diversify(const unsigned long argStepWidthBase) {
     // This ensures that the diversification step size always starts with 2 (james2009cooperative, p. 816)
-    unsigned long stepWidth = argStepWidthBase % ( solutionVec->size() - 1 );
+    unsigned long stepWidth = argStepWidthBase % (solutionVec->size() - 1);
     ++stepWidth;
-    std::list< T > vecCopy{ solutionVec->begin(), solutionVec->end() };
+    std::list<T> vecCopy{solutionVec->begin(), solutionVec->end()};
     solutionVec->clear();
-    for ( unsigned long step = stepWidth + 1; step > 0; --step ) {
-        std::list< typename std::list< T >::iterator > iteratorList;
+    for (unsigned long step = stepWidth + 1; step > 0; --step) {
+        std::list<typename std::list<T>::iterator> iteratorList;
         // Collect iterators to all items to be moved
-        typename std::list< T >::size_type size = vecCopy.size();
-        for ( unsigned long index = step - 1; index < size; index += step ) {
+        typename std::list<T>::size_type size = vecCopy.size();
+        for (unsigned long index = step - 1; index < size; index += step) {
             auto it = vecCopy.begin();
-            std::advance( it, index );
-            iteratorList.emplace_back( it );
+            std::advance(it, index);
+            iteratorList.emplace_back(it);
         }
         // Move the referenced items to the vector and delete them from the vector copy list
-        for ( auto it = iteratorList.begin(); it != iteratorList.end(); ++it ) {
-            solutionVec->emplace_back( *( *it ) );
-            vecCopy.erase( *it );
+        for (auto it = iteratorList.begin(); it != iteratorList.end(); ++it) {
+            solutionVec->emplace_back(*(*it));
+            vecCopy.erase(*it);
         }
     }
     solVecChanged = true;

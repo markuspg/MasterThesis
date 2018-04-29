@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -18,6 +18,3 @@
  */
 
 #include "solutionbase.h"
-
-mt::SolutionBase::~SolutionBase() {
-}

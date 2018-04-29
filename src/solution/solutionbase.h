@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -21,7 +21,6 @@
 #define SOLUTIONBASE_H
 
 #include <random>
-#include <vector>
 
 namespace mt {
 
@@ -31,23 +30,20 @@ class SALBPSolution;
 class SolutionBase
 {
 public:
-    virtual ~SolutionBase();
+    virtual ~SolutionBase() = default;
 
     virtual SolutionBase *Copy() const = 0;
     // Solution diversification operator (james2009cooperative, p. 816)
-    virtual void Diversify( const unsigned long &argStepWidthBase ) = 0;
+    virtual void Diversify(const unsigned long argStepWidthBase) = 0;
     virtual PermSolution *GetPermSolution() = 0;
-    virtual SolutionBase *GetSwappedVariant( const unsigned long &argSwapIndexI,
-                                             const unsigned long &argSwapIndexJ ) const = 0;
-#ifdef Q_PROCESSOR_X86_64
-    virtual void Mutate( std::mt19937_64 &argEngine ) = 0;
-#else
-    virtual void Mutate( std::mt19937 &argEngine ) = 0;
-#endif
-    virtual SolutionBase *ReproduceWithOtherParent( const unsigned long &argCrossoverPoint,
-                                                    const SolutionBase * const argOtherParent ) const = 0;
+    virtual SolutionBase *GetSwappedVariant(const unsigned long argSwapIndexI,
+                                            const unsigned long argSwapIndexJ) const = 0;
+    virtual void Mutate(std::mt19937_64 &argEngine) = 0;
+    virtual SolutionBase *ReproduceWithOtherParent(
+            const unsigned long argCrossoverPoint,
+            const SolutionBase * const argOtherParent) const = 0;
 };
 
-}
+} // namespace mt
 
 #endif // SOLUTIONBASE_H
