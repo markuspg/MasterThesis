@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -27,7 +27,7 @@
 #include <iostream>
 #include <mutex>
 
-typedef std::pair< double, mt::SolutionBase* > dSol;
+using dSol = std::pair<double, mt::SolutionBase*>;
 
 extern mt::Measure measure;
 extern std::mutex measureMutex;
@@ -36,13 +36,14 @@ namespace mt {
 
 class TSThread final {
 public:
-    TSThread( const unsigned short &argIndex, std::mutex &argMutex,
-              const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet );
+    TSThread(const unsigned short argIndex, std::mutex &argMutex,
+             const mt::Problem * const argProblem,
+             mt::TSReferenceSet &argReferenceSet);
 
-    void CleanUpMatrix( mt::Matrix< dSol > &argMatrix ) const;
-    SolutionBase *GetBestNeigh( double &argBestNeighV,
-                                const std::unique_ptr< const SolutionBase > &argTempSol );
-    bool IsFinished() const { return finished; }
+    void CleanUpMatrix(mt::Matrix<dSol> &argMatrix) const;
+    SolutionBase *GetBestNeigh(double argBestNeighV,
+                               const std::unique_ptr<const SolutionBase> &argTempSol);
+    bool IsFinished() const;
     void Iteration();
     void PrepareOptimizationRun();
 
@@ -55,12 +56,17 @@ private:
     std::mutex &mutex;
     const mt::Problem * const problem = nullptr;
     mt::TSReferenceSet &referenceSet;
-    // taboo tenures and aspiration criterion local to each thread (james2009cooperative, p. 814)
+    // taboo tenures and aspiration criterion local to each thread
+    // (james2009cooperative, p. 814)
     unsigned int tabooTenure = 0;
     unsigned int tabooTenureCounter = 0;
-    mt::Matrix< unsigned long > tabooTenures;
+    mt::Matrix<unsigned long> tabooTenures;
 };
 
+} // namespace mt
+
+inline bool mt::TSThread::IsFinished() const {
+    return finished;
 }
 
 #endif // TSTHREAD_H

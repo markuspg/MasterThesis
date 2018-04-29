@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -19,72 +19,81 @@
 
 #include "tsthread.h"
 
-mt::TSThread::TSThread( const unsigned short &argIndex, std::mutex &argMutex,
-                        const mt::Problem * const argProblem, mt::TSReferenceSet &argReferenceSet ) :
-    index{ argIndex },
-    // Tighter stopping criterion in the initialization run (james2009cooperative, p. 814)
-    maxFailures{ *settings->maxFailures / 100 },
-    mutex{ argMutex },
-    problem{ argProblem },
-    referenceSet{ argReferenceSet },
-    tabooTenure{ tools::GetTabooTenure( problem->size ) },
-    tabooTenureCounter{ tabooTenure },
-    tabooTenures{ problem->size, 0 }
+mt::TSThread::TSThread(const unsigned short argIndex, std::mutex &argMutex,
+                       const mt::Problem * const argProblem,
+                       mt::TSReferenceSet &argReferenceSet) :
+    index{argIndex},
+    // Tighter stopping criterion in the initialization run
+    // (james2009cooperative, p. 814)
+    maxFailures{*settings->maxFailures / 100},
+    mutex{argMutex},
+    problem{argProblem},
+    referenceSet{argReferenceSet},
+    tabooTenure{tools::GetTabooTenure(problem->size)},
+    tabooTenureCounter{tabooTenure},
+    tabooTenures{problem->size, 0}
 {
     // std::cout << "      Constructing TSThread with id " << index << std::endl;
 }
 
-void mt::TSThread::CleanUpMatrix( mt::Matrix< dSol > &argMatrix ) const {
-    for ( unsigned long i = 0; i < problem->size; ++i ) {
-        for ( unsigned long j = i + 1; j < problem->size; ++j ) {
-            delete argMatrix( i, j ).second;
+void mt::TSThread::CleanUpMatrix(mt::Matrix<dSol> &argMatrix) const {
+    for (unsigned long i = 0; i < problem->size; ++i) {
+        for (unsigned long j = i + 1; j < problem->size; ++j) {
+            delete argMatrix(i, j).second;
         }
     }
 }
 
-mt::SolutionBase *mt::TSThread::GetBestNeigh( double &argBestNeighV,
-                                              const std::unique_ptr< const SolutionBase > &argTempSol ) {
-    mt::Matrix< dSol >costs =
-            { problem->size, dSol{ std::numeric_limits< double >::max(), nullptr } };
+mt::SolutionBase *mt::TSThread::GetBestNeigh(
+        double argBestNeighV, const std::unique_ptr<const SolutionBase> &argTempSol) {
+    mt::Matrix<dSol>costs =
+            {problem->size, dSol{std::numeric_limits<double>::max(), nullptr}};
     // Iterate over all lines
-    for ( unsigned long i = 0; i < problem->size; ++i ) {
-        // Iterate over all columns above the main diagonal (because swaps are symmetrical)
-        for ( unsigned long j = i + 1; j < problem->size; ++j ) {
-            mt::SolutionBase *tempSolution =  argTempSol->GetSwappedVariant( i, j );
-            costs( i, j ) = dSol{ problem->GetOFV( tempSolution ), tempSolution };
+    for (unsigned long i = 0; i < problem->size; ++i) {
+        // Iterate over all columns above the main diagonal (because swaps are
+        // symmetrical)
+        for (unsigned long j = i + 1; j < problem->size; ++j) {
+            mt::SolutionBase *tempSolution =  argTempSol->GetSwappedVariant(i, j);
+            costs(i, j) = dSol{problem->GetOFV(tempSolution), tempSolution};
         }
     }
 
     // Get the local or global minimum found so far
-    double minimumSoFar = std::numeric_limits< double >::max();
-    if ( *settings->globalBestAspiration ) {
-        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
+    double minimumSoFar = std::numeric_limits<double>::max();
+    if (*settings->globalBestAspiration) {
+        std::lock_guard<std::mutex> lockTSReferenceSet{mutex};
         minimumSoFar = referenceSet.GetGlobalMinimumSolV();
     } else {
-        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
-        minimumSoFar = referenceSet.GetLocalMinimumSolV( index );
+        std::lock_guard<std::mutex> lockTSReferenceSet{mutex};
+        minimumSoFar = referenceSet.GetLocalMinimumSolV(index);
     }
 
     // Analyze all swaps
     long swapI = 0, swapJ = 0;
-    while ( true ) {
+    while (true) {
         // taillard1991robust, p. 445
-        argBestNeighV = costs.GetMinimumValueIndizes( swapI, swapJ, []( dSol a, dSol b ){ return a.first < b.first; } ).first;
-        // If no improvement could be achieved, leave with false, indicating improvement failure
-        if ( argBestNeighV == std::numeric_limits< double >::max() ) {
+        argBestNeighV = costs.GetMinimumValueIndizes(swapI, swapJ, [](dSol a, dSol b){
+                return a.first < b.first;
+        }).first;
+        // If no improvement could be achieved, leave with false, indicating
+        // improvement failure
+        if (argBestNeighV == std::numeric_limits<double>::max()) {
             return nullptr;
         }
-        // If a swap is taboo, exclude it from consideration by settings its cost to the maximum double value
-        if ( problem->CheckIfTaboo( iterationCount, costs( swapI, swapJ ).second, swapI, swapJ, tabooTenures )
+        // If a swap is taboo, exclude it from consideration by settings its
+        // cost to the maximum double value
+        if (problem->CheckIfTaboo(iterationCount, costs(swapI, swapJ).second,
+                                  swapI, swapJ, tabooTenures)
              // New global optimum as aspiration criterion
-             && argBestNeighV >= minimumSoFar ) {
-            costs( swapI, swapJ ).first = std::numeric_limits< double >::max();
+             && argBestNeighV >= minimumSoFar) {
+            costs(swapI, swapJ).first = std::numeric_limits<double>::max();
         } else {
             // Taillard's taboo evaluation => constant time
-            mt::SolutionBase *bestNeigh = argTempSol->GetSwappedVariant( swapI, swapJ );
-            CleanUpMatrix( costs );
+            mt::SolutionBase *bestNeigh = argTempSol->GetSwappedVariant(swapI, swapJ);
+            CleanUpMatrix(costs);
             unsigned int tabooFinish = iterationCount + tabooTenure;
-            problem->UpdateTabooTenures( bestNeigh, swapI, swapJ, tabooFinish, tabooTenures );
+            problem->UpdateTabooTenures(bestNeigh, swapI, swapJ,
+                                        tabooFinish, tabooTenures);
             return bestNeigh;
         }
     }
@@ -95,46 +104,48 @@ void mt::TSThread::Iteration() {
 
     // Taboo tenure shuffling as proposed by taillard1991robust, p. 448
     --tabooTenureCounter;
-    if ( !tabooTenureCounter && *settings->randomizedTabooTenures && *settings->tabooTenureShuffling ) {
-        tabooTenure = tools::GetTabooTenure( problem->size );
+    if (!tabooTenureCounter
+            && *settings->randomizedTabooTenures
+            && *settings->tabooTenureShuffling ) {
+        tabooTenure = tools::GetTabooTenure(problem->size);
         tabooTenureCounter = tabooTenure;
     }
 
-    std::unique_ptr< const SolutionBase > tempSol = nullptr;
+    std::unique_ptr<const SolutionBase> tempSol = nullptr;
     double bestSolV = 0.0;
     {
-        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
-        tempSol.reset( referenceSet.GetStartSolution( index ) );
-        bestSolV = referenceSet.GetLocalMinimumSolV( index );
+        std::lock_guard<std::mutex> lockTSReferenceSet{mutex};
+        tempSol.reset(referenceSet.GetStartSolution(index));
+        bestSolV = referenceSet.GetLocalMinimumSolV(index);
     }
 
-    double bestNeighV = std::numeric_limits< double >::max();
-    mt::SolutionBase *bestNeigh = GetBestNeigh( bestNeighV, tempSol );
+    double bestNeighV = std::numeric_limits<double>::max();
+    mt::SolutionBase *bestNeigh = GetBestNeigh(bestNeighV, tempSol);
 
-    if ( !bestNeigh ) {
+    if (!bestNeigh) {
         ++failures;
 
-        std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
-        referenceSet.SetSolution( "TS", index, nullptr, 0.0 );
+        std::lock_guard<std::mutex> lockTSReferenceSet{mutex};
+        referenceSet.SetSolution("TS", index, nullptr, 0.0);
     } else {
-        if ( bestNeighV >= bestSolV ) {
+        if (bestNeighV >= bestSolV) {
             ++failures;
         }
 
         {
-            std::lock_guard< std::mutex > lockTSReferenceSet{ mutex };
-            referenceSet.SetSolution( "TS", index, bestNeigh, bestNeighV );
+            std::lock_guard<std::mutex> lockTSReferenceSet{mutex};
+            referenceSet.SetSolution("TS", index, bestNeigh, bestNeighV);
         }
     }
 
-    if ( failures >= maxFailures ) {
+    if (failures >= maxFailures) {
         finished = true;
 
         std::stringstream measureStream;
         measureStream << index << ':' << iterationCount;
         std::string measureString = measureStream.str();
-        std::lock_guard< std::mutex > lockMeasure{ measureMutex };
-        measure.AddTSThreadIterations( measureString );
+        std::lock_guard<std::mutex> lockMeasure{measureMutex};
+        measure.AddTSThreadIterations(measureString);
     }
 }
 
@@ -145,5 +156,5 @@ void mt::TSThread::PrepareOptimizationRun() {
     iterationCount = 0;
     // Tighter stopping criterion in the initialization run (james2009cooperative, p. 814)
     maxFailures *= 100;
-    tabooTenures.ResetWithValue( 0 );
+    tabooTenures.ResetWithValue(0);
 }
