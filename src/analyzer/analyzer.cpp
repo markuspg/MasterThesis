@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -19,31 +19,33 @@
 
 #include "analyzer.h"
 
-mt::Analyzer::Analyzer( const mt::Problem *argProblem ) :
-    problem{ argProblem },
-    tsReferenceSet{ problem }
+mt::Analyzer::Analyzer(const mt::Problem *argProblem) :
+    problem{argProblem},
+    tsReferenceSet{problem}
 {
-    std::cout << "    Constructing Analyzer" << std::endl;
+    std::cout << "    Constructing Analyzer\n";
 }
 
 void mt::Analyzer::Analyze() {
-    std::cout << "     Analyzing ..." << std::endl;
+    std::cout << "     Analyzing ...\n";
 
-    gaThreadObjects.reserve( *settings->gaInstances );
-    for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
-        gaThreadObjects.emplace_back( i, tsReferenceSetMutex, problem, tsReferenceSet );
+    gaThreadObjects.reserve(*settings->gaInstances);
+    for (unsigned short i = 0; i < *settings->gaInstances; ++i) {
+        gaThreadObjects.emplace_back(i, tsReferenceSetMutex,
+                                     problem, tsReferenceSet);
     }
     tsThreadObjects.reserve( *settings->tsInstances );
-    for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-        tsThreadObjects.emplace_back( i, tsReferenceSetMutex, problem, tsReferenceSet );
+    for (unsigned short i = 0; i < *settings->tsInstances; ++i) {
+        tsThreadObjects.emplace_back(i, tsReferenceSetMutex,
+                                     problem, tsReferenceSet);
     }
 
     // Do the initialization run
     Run();
 
     tsReferenceSet.PrepareOptimizationRun();
-    for ( auto it = tsThreadObjects.begin(); it != tsThreadObjects.end(); ++it ) {
-        ( *it ).PrepareOptimizationRun();
+    for (auto it = tsThreadObjects.begin(); it != tsThreadObjects.end(); ++it) {
+        (*it).PrepareOptimizationRun();
     }
 
     // Do the optimization run
@@ -51,51 +53,56 @@ void mt::Analyzer::Analyze() {
 }
 
 void mt::Analyzer::Run() {
-    while ( true ) {
+    while (true) {
         ++tsReferenceSet;
 
         unsigned short finishedThreads = 0;
         // Create the threads
-        std::vector< std::thread > gaThreads;
-        std::vector< std::thread > tsThreads;
-        for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
-            if ( !gaThreadObjects[ i ].IsFinished() ) {
-                gaThreads.emplace_back( &mt::GAThread::Iteration, &gaThreadObjects[ i ] );
+        std::vector<std::thread> gaThreads;
+        std::vector<std::thread> tsThreads;
+        for (unsigned short i = 0; i < *settings->gaInstances; ++i) {
+            if (!gaThreadObjects[i].IsFinished()) {
+                gaThreads.emplace_back(&mt::GAThread::Iteration,
+                                       &gaThreadObjects[i]);
             } else {
                 ++finishedThreads;
                 gaThreads.emplace_back();
             }
         }
-        for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-            if ( !tsThreadObjects[ i ].IsFinished() ) {
-                tsThreads.emplace_back( &mt::TSThread::Iteration, &tsThreadObjects[ i ] );
+        for (unsigned short i = 0; i < *settings->tsInstances; ++i) {
+            if (!tsThreadObjects[i].IsFinished()) {
+                tsThreads.emplace_back(&mt::TSThread::Iteration,
+                                       &tsThreadObjects[i]);
             } else {
                 ++finishedThreads;
                 tsThreads.emplace_back();
             }
         }
-        for ( unsigned short i = 0; i < *settings->gaInstances; ++i ) {
-            if ( gaThreads[ i ].joinable() ) {
-                gaThreads[ i ].join();
+        for (unsigned short i = 0; i < *settings->gaInstances; ++i) {
+            if ( gaThreads[i].joinable()) {
+                gaThreads[i].join();
             }
         }
-        for ( unsigned short i = 0; i < *settings->tsInstances; ++i ) {
-            if ( tsThreads[ i ].joinable() ) {
-                tsThreads[ i ].join();
+        for (unsigned short i = 0; i < *settings->tsInstances; ++i) {
+            if (tsThreads[i].joinable()) {
+                tsThreads[i].join();
             }
         }
 
         tsReferenceSet.RotateSolutions();
 
-        // Since the genetic algorithm never finishes in this implementation, this behaviour is fine
-        if ( finishedThreads == *settings->tsInstances ) {
+        // Since the genetic algorithm never finishes in this implementation,
+        // this behaviour is fine
+        if (finishedThreads == *settings->tsInstances) {
             break;
         }
     }
 
-    // No matter that this will be called twice, since the second run will overwrite the first one's data
+    // No matter that this will be called twice, since the second run will
+    // overwrite the first one's data
     tsReferenceSet.SetFinalStatistics();
 
-    std::cout << "     Analyzer finished after " << tsReferenceSet.GetIterationCount()
-              << " iterations" << std::endl;
+    std::cout << "     Analyzer finished after "
+              << tsReferenceSet.GetIterationCount()
+              << " iterations\n";
 }

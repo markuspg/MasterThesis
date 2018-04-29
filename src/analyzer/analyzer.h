@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -38,21 +38,21 @@ namespace mt {
 
 class Analyzer final {
 public:
-    Analyzer( const mt::Problem *argProblem );
-    Analyzer( const Analyzer &argAnalyzer ) = delete;
-    Analyzer( Analyzer &&argAnalyzer ) = delete;
+    Analyzer(const mt::Problem *argProblem);
+    Analyzer(const Analyzer &argAnalyzer) = delete;
+    Analyzer(Analyzer &&argAnalyzer) = delete;
     
     void Analyze();
     void Run();
 
 private:
-    std::vector< mt::GAThread > gaThreadObjects;
+    std::vector<mt::GAThread> gaThreadObjects;
     const mt::Problem * const problem;
     mt::TSReferenceSet tsReferenceSet;
     std::mutex tsReferenceSetMutex;
-    std::vector< mt::TSThread > tsThreadObjects;
+    std::vector<mt::TSThread> tsThreadObjects;
 };
 
-}
+} // namespace mt
 
 #endif // ANALYZER_H
