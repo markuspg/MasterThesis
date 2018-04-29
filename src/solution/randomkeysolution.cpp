@@ -19,25 +19,26 @@
 
 #include "randomkeysolution.h"
 
-mt::RandomKeySolution::RandomKeySolution( const unsigned int &argSeed, const std::size_t &argSize ) :
-    Solution{ GenerateRandomSolution( argSeed, argSize ) }
+mt::RandomKeySolution::RandomKeySolution(const unsigned int argSeed,
+                                         const std::size_t argSize) :
+    Solution{GenerateRandomSolution(argSeed, argSize)}
 {
 }
 
-mt::RandomKeySolution::RandomKeySolution( std::vector<double> * const argSolution ) :
-    Solution{ argSolution }
+mt::RandomKeySolution::RandomKeySolution(std::vector<double> * const argSolution) :
+    Solution{argSolution}
 {
 }
 
-mt::RandomKeySolution::RandomKeySolution( const mt::RandomKeySolution &argRandomKeySolution ) :
-    Solution{ argRandomKeySolution },
-    permutationVec{ new std::vector< unsigned long >{ *argRandomKeySolution.permutationVec } }
+mt::RandomKeySolution::RandomKeySolution(const mt::RandomKeySolution &argRandomKeySolution) :
+    Solution{argRandomKeySolution},
+    permutationVec{new std::vector<unsigned long>{*argRandomKeySolution.permutationVec}}
 {
 }
 
-mt::RandomKeySolution::RandomKeySolution( mt::RandomKeySolution &&argRandomKeySolution ) :
-    Solution{ std::move( argRandomKeySolution ) },
-    permutationVec{ argRandomKeySolution.permutationVec }
+mt::RandomKeySolution::RandomKeySolution(mt::RandomKeySolution &&argRandomKeySolution) :
+    Solution{std::move(argRandomKeySolution)},
+    permutationVec{argRandomKeySolution.permutationVec}
 {
     argRandomKeySolution.permutationVec = nullptr;
 }
@@ -47,33 +48,29 @@ mt::RandomKeySolution::~RandomKeySolution() {
 }
 
 mt::SolutionBase *mt::RandomKeySolution::Copy() const {
-    return new RandomKeySolution{ *this };
+    return new RandomKeySolution{*this};
 }
 
-std::vector< double > *mt::RandomKeySolution::GenerateRandomSolution( const unsigned int &argSeed,
-                                                                      const std::size_t &argSize ) const {
-    std::vector< double > *tempVec = new std::vector< double >;
-    tempVec->resize( argSize, 0.0 );
+std::vector<double> *mt::RandomKeySolution::GenerateRandomSolution(
+        const unsigned int argSeed, const std::size_t argSize) const {
+    const auto tempVec = new std::vector<double>;
+    tempVec->resize(argSize, 0.0);
 
     std::random_device randomDevice;
-#ifdef Q_PROCESSOR_X86_64
     std::mt19937_64 engine{ randomDevice() + argSeed };
-#else
-    std::mt19937 engine{ randomDevice() + argSeed };
-#endif
-    std::uniform_real_distribution<> distribution{ 0.0, 1.0 };
-    for ( unsigned long i = 0; i < argSize; ++i ) {
-        tempVec->at( i ) = distribution( engine );
+    std::uniform_real_distribution<> distribution{0.0, 1.0};
+    for (unsigned long i = 0; i < argSize; ++i) {
+        tempVec->at(i) = distribution(engine);
     }
 
     return tempVec;
 }
 
 mt::PermSolution *mt::RandomKeySolution::GetPermSolution() {
-    if ( solVecChanged ) {
+    if (solVecChanged) {
         UpdatePermutationVector();
     }
-    return new PermSolution{ new std::vector< unsigned long >{ *permutationVec } };
+    return new PermSolution{new std::vector<unsigned long>{*permutationVec}};
 }
 
 mt::SolutionBase *mt::RandomKeySolution::GetSwappedVariant(const unsigned long argSwapIndexI,
@@ -125,17 +122,18 @@ mt::SolutionBase *mt::RandomKeySolution::ReproduceWithOtherParent(
 void mt::RandomKeySolution::UpdatePermutationVector() {
     delete permutationVec;
     // The solution to be converted and calculated
-    std::vector< double > solution{ *solutionVec };
+    std::vector<double > solution{*solutionVec};
     // Stores the converted solution
-    std::vector< unsigned long > *tempAssignment = new std::vector< unsigned long >;
-    tempAssignment->resize( size );
+    const auto tempAssignment = new std::vector< unsigned long >;
+    tempAssignment->resize(size);
 
-    // Query for 'solution-size' iterations the minimum element and set the index in the assigment vector
-    for ( unsigned long i = 0; i < size; ++i ) {
-        std::vector< double >::iterator minElem = std::min_element( solution.begin(), solution.end() );
-        auto offset = std::distance( solution.begin(), minElem) ;
-        ( *tempAssignment )[ i ] = offset;
-        *minElem = std::numeric_limits< double >::max();
+    // Query for 'solution-size' iterations the minimum element and set the
+    // index in the assigment vector
+    for (unsigned long i = 0; i < size; ++i) {
+        auto minElem = std::min_element(solution.begin(), solution.end());
+        auto offset = std::distance(solution.begin(), minElem) ;
+        (*tempAssignment)[i] = offset;
+        *minElem = std::numeric_limits<double>::max();
     }
 
     permutationVec = tempAssignment;

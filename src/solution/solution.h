@@ -29,71 +29,76 @@ namespace mt {
 
 class PermSolution;
 
-template < typename T >
+template <typename T>
 class Solution : public SolutionBase
 {
 public:
     Solution() = delete;
-    Solution( const Solution &argSolution );
-    Solution( Solution &&argSolution );
-    Solution( std::vector< T > * const argSolution );
-    virtual ~Solution();
+    Solution(const Solution &argSolution);
+    Solution(Solution &&argSolution);
+    Solution(std::vector<T> * const argSolution);
+    ~Solution() override;
 
-    T& operator() ( const unsigned long &argIndex );
-    T& operator() ( const unsigned long &argIndex ) const { return ( *solutionVec )[ argIndex ]; }
+    T& operator() (const unsigned long argIndex);
+    T& operator() (const unsigned long argIndex) const;
 
     // Solution diversification operator (james2009cooperative, p. 816)
     void Diversify(const unsigned long argStepWidthBase) override;
-    virtual std::vector< T > *GenerateRandomSolution( const unsigned int &argSeed,
-                                                      const std::size_t &argSize ) const = 0;
-    typename std::vector< T >::size_type GetSize() const { return size; }
+    virtual std::vector<T> *GenerateRandomSolution(const unsigned int argSeed,
+                                                   const std::size_t argSize) const = 0;
+    typename std::vector< T >::size_type GetSize() const;
 
 protected:
-    typename std::vector< T >::size_type size = 0;
-    std::vector< T > * solutionVec = nullptr;
+    typename std::vector<T>::size_type size = 0;
+    std::vector<T> * solutionVec = nullptr;
     bool solVecChanged = true;
 };
 
 } //namespace mt
 
-template < typename T >
-mt::Solution< T >::Solution( const Solution &argSolution ) :
-    SolutionBase{ argSolution },
-    size{ argSolution.size },
-    solutionVec{ new std::vector< T >{ *argSolution.solutionVec } },
-    solVecChanged{ argSolution.solVecChanged }
+template <typename T>
+mt::Solution<T>::Solution(const Solution &argSolution) :
+    SolutionBase{argSolution},
+    size{argSolution.size},
+    solutionVec{new std::vector<T>{*argSolution.solutionVec}},
+    solVecChanged{argSolution.solVecChanged}
 {
 }
 
-template < typename T >
-mt::Solution< T >::Solution( Solution &&argSolution ) :
-    SolutionBase{ std::move( argSolution ) },
-    size{ argSolution.size },
-    solutionVec{ argSolution.solutionVec },
-    solVecChanged{ argSolution.solVecChanged }
+template <typename T>
+mt::Solution<T>::Solution(Solution &&argSolution) :
+    SolutionBase{std::move(argSolution)},
+    size{argSolution.size},
+    solutionVec{argSolution.solutionVec},
+    solVecChanged{argSolution.solVecChanged}
 {
     argSolution.solutionVec = nullptr;
 }
 
-template < typename T >
-mt::Solution< T >::Solution( std::vector< T > * const argSolution ) :
-    size{ argSolution->size() },
-    solutionVec{ argSolution },
-    solVecChanged{ true }
+template <typename T>
+mt::Solution<T>::Solution(std::vector<T> * const argSolution) :
+    size{argSolution->size()},
+    solutionVec{argSolution},
+    solVecChanged{true}
 {
 }
 
-template < typename T >
-mt::Solution< T >::~Solution() {
+template <typename T>
+mt::Solution<T>::~Solution() {
     delete solutionVec;
 }
 
-template < typename T >
-T& mt::Solution< T >::operator() ( const unsigned long &argIndex ) {
+template <typename T>
+T& mt::Solution<T>::operator() (const unsigned long argIndex) {
     // Because solutionVec could possibly be changed
     solVecChanged = true;
 
-    return ( *solutionVec )[ argIndex ];
+    return (*solutionVec)[argIndex];
+}
+
+template <typename T>
+inline T& mt::Solution<T>::operator() (const unsigned long argIndex) const {
+    return (*solutionVec)[argIndex];
 }
 
 template<typename T>
@@ -119,6 +124,11 @@ void mt::Solution<T>::Diversify(const unsigned long argStepWidthBase) {
         }
     }
     solVecChanged = true;
+}
+
+template <typename T>
+inline typename std::vector<T>::size_type mt::Solution<T>::GetSize() const {
+    return size;
 }
 
 #endif // SOLUTION_H

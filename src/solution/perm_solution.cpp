@@ -19,52 +19,46 @@
 
 #include "perm_solution.h"
 
-mt::PermSolution::PermSolution( const unsigned int &argSeed, const std::size_t &argSize ) :
-    Solution{ GenerateRandomSolution( argSeed, argSize ) }
+mt::PermSolution::PermSolution(const unsigned int argSeed,
+                               const std::size_t argSize) :
+    Solution{GenerateRandomSolution(argSeed, argSize)}
 {
 }
 
-mt::PermSolution::PermSolution( std::vector< unsigned long > * const argSolution ) :
-    Solution{ argSolution }
+mt::PermSolution::PermSolution(std::vector<unsigned long> * const argSolution) :
+    Solution{argSolution}
 {
 }
 
-mt::PermSolution::PermSolution( const mt::PermSolution &argPermSolution ) :
-    Solution{ argPermSolution }
+mt::PermSolution::PermSolution(const mt::PermSolution &argPermSolution) :
+    Solution{argPermSolution}
 {
 }
 
-mt::PermSolution::PermSolution( mt::PermSolution &&argPermSolution ) :
-    Solution{ std::move( argPermSolution ) }
+mt::PermSolution::PermSolution(mt::PermSolution &&argPermSolution) :
+    Solution{std::move(argPermSolution)}
 {
-}
-
-mt::PermSolution::~PermSolution() {
 }
 
 mt::SolutionBase *mt::PermSolution::Copy() const {
-    return new PermSolution{ *this };
+    return new PermSolution{*this};
 }
 
-std::vector< unsigned long > *mt::PermSolution::GenerateRandomSolution( const unsigned int &argSeed,
-                                                                        const std::size_t &argSize ) const {
-    std::vector< unsigned long > *tempVec = new std::vector< unsigned long >;
-    tempVec->resize( argSize, 0 );
-    std::iota( tempVec->begin(), tempVec->end(), 0 );
+std::vector<unsigned long> *mt::PermSolution::GenerateRandomSolution(
+        const unsigned int argSeed, const std::size_t argSize) const {
+    const auto tempVec = new std::vector<unsigned long>;
+    tempVec->resize(argSize, 0);
+    std::iota(tempVec->begin(), tempVec->end(), 0);
 
     std::random_device randomDevice;
-#ifdef Q_PROCESSOR_X86_64
-    std::mt19937_64 engine{ randomDevice() + argSeed };
-#else
-    std::mt19937 engine{ randomDevice() + argSeed };
-#endif
-    std::shuffle( tempVec->begin(), tempVec->end(), engine );
+    std::mt19937_64 engine{randomDevice() + argSeed};
+    std::shuffle(tempVec->begin(), tempVec->end(), engine);
 
     return tempVec;
 }
 
 mt::PermSolution *mt::PermSolution::GetPermSolution() {
-    return new PermSolution{ *this };
+    return new PermSolution{*this};
 }
 
 mt::SolutionBase *mt::PermSolution::GetSwappedVariant(const unsigned long argSwapIndexI,

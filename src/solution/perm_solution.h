@@ -37,24 +37,25 @@ namespace mt {
 
 class RandomKeySolution;
 
-class PermSolution final : public Solution< unsigned long >
+class PermSolution final : public Solution<unsigned long>
 {
 public:
-    PermSolution( const unsigned int &argSeed, const std::size_t &argSize );
-    PermSolution( std::vector< unsigned long > * const argSolution );
-    PermSolution( const PermSolution &argPermSolution );
-    PermSolution( PermSolution &&argPermSolution );
-    virtual ~PermSolution();
+    PermSolution(const unsigned int argSeed, const std::size_t argSize);
+    PermSolution(std::vector<unsigned long> * const argSolution);
+    PermSolution(const PermSolution &argPermSolution);
+    PermSolution(PermSolution &&argPermSolution);
+    ~PermSolution() override = default;
 
-    virtual SolutionBase *Copy() const override;
-    virtual std::vector< unsigned long > *GenerateRandomSolution( const unsigned int &argSeed,
-                                                                  const std::size_t &argSize ) const override;
-    virtual PermSolution *GetPermSolution() override;
+    SolutionBase *Copy() const override;
+    std::vector<unsigned long> *GenerateRandomSolution(
+            const unsigned int argSeed, const std::size_t argSize) const override;
+    PermSolution *GetPermSolution() override;
     SolutionBase *GetSwappedVariant(const unsigned long argSwapIndexI,
                                     const unsigned long argSwapIndexJ) const override;
     void Mutate(std::mt19937_64 &argEngine) override;
-    SolutionBase *ReproduceWithOtherParent(const unsigned long argCrossoverPoint,
-                                           const SolutionBase * const argOtherParent) const override;
+    SolutionBase *ReproduceWithOtherParent(
+            const unsigned long argCrossoverPoint,
+            const SolutionBase * const argOtherParent) const override;
 };
 
 } // namespace mt
