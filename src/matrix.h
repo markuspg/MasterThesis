@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -30,107 +30,100 @@
 
 namespace mt {
 
-template< typename T>
+template<typename T>
 class Matrix final
 {
 public:
     Matrix() = delete;
-    Matrix ( const Matrix &argMatrix ) = delete;
-    Matrix ( Matrix &&argMatrix );
-    Matrix( const std::vector< T > &argItems );
-    Matrix( const unsigned long &argDim, const T &argDefaultValue );
-    ~Matrix();
+    Matrix(const std::vector<T> &argItems);
+    Matrix(const unsigned long argDim, const T &argDefaultValue);
+    ~Matrix() = default;
 
-    static std::vector< int > ConvertStringVecToIntVec( const std::vector< std::string > &argStrList );
-    static std::vector< unsigned long > ConvertStringVecToULongVec
-        ( const std::vector< std::string > &argStrList );
-    T GetMinimumValueIndizes( long &argI, long &argJ, bool( *argComp )( T a, T b ) );
-    void ResetWithValue( const T &argValue );
+    static std::vector<int> ConvertStringVecToIntVec(
+            const std::vector<std::string> &argStrList);
+    static std::vector<unsigned long> ConvertStringVecToULongVec
+        (const std::vector<std::string> &argStrList);
+    T GetMinimumValueIndizes(long &argI, long &argJ, bool(*argComp)(T a, T b));
+    void ResetWithValue(const T &argValue);
 
-    T& operator() ( const unsigned int &argI, const unsigned int &argJ ) const
-        { return A->at( argI * dimension + argJ ); }
+    T& operator() (const unsigned int argI, const unsigned int argJ);
+    const T& operator() (const unsigned int argI, const unsigned int argJ) const;
 
 private:
     const unsigned long dimension = 0;
-    std::vector< T > *A = nullptr;
+    std::vector<T> A;
 };
 
-}
+} // namespace mt
 
-template< typename T >
-mt::Matrix< T >::Matrix( Matrix &&argMatrix ) :
-    dimension{ argMatrix.dimension },
-    A{ argMatrix.A }
+template<typename T>
+mt::Matrix<T>::Matrix(const std::vector<T> &argItems) :
+    dimension{static_cast<unsigned int>(std::round(std::sqrt(argItems.size())))},
+    A{argItems}
 {
-    argMatrix.A = nullptr;
-}
-
-template< typename T>
-mt::Matrix< T >::Matrix( const std::vector< T > &argItems ) :
-    dimension{ static_cast< unsigned int >( std::round( std::sqrt( argItems.size() ) ) ) },
-    A{ new std::vector< T > }
-{
-    A->resize( dimension * dimension, 0 );
-    typename std::vector< T >::size_type size = argItems.size();
-    for ( std::size_t i = 0; i < size; i++ ) {
-        ( *A ).at( i ) = argItems.at( i );
+    if (A.size() != dimension * dimension) {
+        throw std::runtime_error{"Size of new mt::Matrix's vector does not match"};
     }
-
-    assert ( argItems.size() == A->size() );
 }
 
-template< typename T>
-mt::Matrix< T >::Matrix( const unsigned long &argDim, const T &argDefaultValue ) :
-    dimension{ argDim },
-    A{ new std::vector< T > }
+template<typename T>
+mt::Matrix<T>::Matrix(const unsigned long argDim, const T &argDefaultValue) :
+    dimension{argDim},
+    A(dimension * dimension, argDefaultValue)
 {
-    A->resize( dimension * dimension, argDefaultValue );
 }
 
-template< typename T>
-mt::Matrix< T >::~Matrix() {
-    delete A;
+template <typename T>
+inline T& mt::Matrix<T>::operator() (const unsigned int argI,
+                                     const unsigned int argJ) {
+    return A.at(argI * dimension + argJ);
 }
 
-template< typename T >
-std::vector< int > mt::Matrix< T >::ConvertStringVecToIntVec
-        ( const std::vector< std::string > &argStrList ) {
-    std::vector< int > intVec;
-    intVec.reserve( argStrList.size() );
-    for ( auto cit = argStrList.cbegin(); cit != argStrList.cend(); ++cit ) {
-        intVec.emplace_back( std::stoi( *cit ) );
+template <typename T>
+inline const T& mt::Matrix<T>::operator() (const unsigned int argI,
+                                           const unsigned int argJ) const {
+    return A.at(argI * dimension + argJ);
+}
+
+template<typename T>
+std::vector<int> mt::Matrix<T>::ConvertStringVecToIntVec(
+        const std::vector<std::string> &argStrList) {
+    std::vector<int> intVec;
+    intVec.reserve(argStrList.size());
+    for (auto cit = argStrList.cbegin(); cit != argStrList.cend(); ++cit) {
+        intVec.emplace_back(std::stoi(*cit));
     }
     return intVec;
 }
 
-template< typename T >
-std::vector< unsigned long > mt::Matrix< T >::ConvertStringVecToULongVec
-        ( const std::vector< std::string > &argStrList ) {
-    std::vector< unsigned long > uLongVec;
-    uLongVec.reserve( argStrList.size() );
-    for ( auto cit = argStrList.cbegin(); cit != argStrList.cend(); ++cit ) {
-        uLongVec.emplace_back( std::stoul( *cit ) );
+template<typename T>
+std::vector<unsigned long> mt::Matrix<T>::ConvertStringVecToULongVec
+        (const std::vector<std::string> &argStrList) {
+    std::vector<unsigned long> uLongVec;
+    uLongVec.reserve(argStrList.size());
+    for (auto cit = argStrList.cbegin(); cit != argStrList.cend(); ++cit) {
+        uLongVec.emplace_back(std::stoul(*cit));
     }
     return uLongVec;
 }
 
-template< typename T >
-T mt::Matrix< T >::GetMinimumValueIndizes( long &argI, long &argJ, bool( *argComp )( T a, T b ) ) {
-    typename std::vector< T >::iterator minElem = std::min_element( A->begin(), A->end(), argComp );
-    auto offset = std::distance( A->begin(), minElem );
-    std::ldiv_t result = std::div( static_cast< long >( offset ),
-                                   static_cast< long >( dimension ) );
+template<typename T>
+T mt::Matrix<T>::GetMinimumValueIndizes(long &argI, long &argJ,
+                                        bool(*argComp)(T a, T b)) {
+    const auto minElem = std::min_element(A.begin(), A.end(), argComp);
+    auto offset = std::distance(A.begin(), minElem);
+    std::ldiv_t result = std::div(static_cast<long>(offset),
+                                  static_cast<long>(dimension));
     argI = result.quot;
     argJ = result.rem;
 
     return *minElem;
 }
 
-template< typename T >
-void mt::Matrix< T >::ResetWithValue( const T &argValue ) {
-    delete A;
-    A = new std::vector< T >;
-    A->resize( dimension * dimension, argValue );
+template<typename T>
+void mt::Matrix<T>::ResetWithValue(const T &argValue) {
+    A.clear();
+    A.resize(dimension * dimension, argValue);
 }
 
 #endif // MATRIX_H
