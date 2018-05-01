@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -19,32 +19,39 @@
 
 #include "settings.h"
 
-mt::Settings::Settings( const unsigned short &argGAInstances, const bool &argGlobalBestAspiration,
-                        const double &argImmigrationRate, const unsigned int &argMaxFailures,
-                        const double &argMutationImpact, const double &argMutationRate,
-                        const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
-                        const bool &argPromoteGlobalBestSol, const bool &argRandomizedTabooTenures,
-                        const bool &argRandomKeys, const double &argReproductionRate,
-                        const double &argTabooTenureDeviation, const unsigned short &argTabooTenureFac,
-                        const bool &argTabooTenureShuffling, const unsigned short &argTSInstances ) :
-    gaInstances{ new unsigned short{ argGAInstances } },
-    globalBestAspiration{ new bool{ argGlobalBestAspiration } },
-    immigrationRate{ new double{ argImmigrationRate } },
-    maxFailures{ new unsigned int{ argMaxFailures } },
-    mutationImpact{ new double{ argMutationImpact } },
-    mutationRate{ new double{ argMutationRate } },
-    outputFile{ new std::string{ argOutputFile } },
-    problemFiles{ new std::vector< std::string >{ argProblemFiles } },
-    promoteGlobalBestSol{ new bool{ argPromoteGlobalBestSol } },
-    randomizedTabooTenures{ new bool{ argRandomizedTabooTenures } },
-    randomKeys{ new bool{ argRandomKeys } },
-    reproductionRate{ new double{ argReproductionRate } },
-    tabooTenureDeviation{ new double { argTabooTenureDeviation } },
-    tabooTenuresFac{ new unsigned short{ argTabooTenureFac } },
-    tabooTenureShuffling{ new bool{ argTabooTenureShuffling } },
-    tsInstances{ new unsigned short{ argTSInstances } }
+mt::Settings::Settings(const unsigned short argGAInstances,
+                       const bool argGlobalBestAspiration,
+                       const double argImmigrationRate,
+                       const unsigned int argMaxFailures,
+                       const double argMutationImpact,
+                       const double argMutationRate,
+                       const std::string &argOutputFile,
+                       std::vector<std::string> &&argProblemFiles,
+                       const bool argPromoteGlobalBestSol,
+                       const bool argRandomizedTabooTenures,
+                       const bool argRandomKeys, const double argReproductionRate,
+                       const double argTabooTenureDeviation,
+                       const unsigned short argTabooTenureFac,
+                       const bool argTabooTenureShuffling,
+                       const unsigned short argTSInstances) :
+    gaInstances{new unsigned short{argGAInstances}},
+    globalBestAspiration{new bool{argGlobalBestAspiration}},
+    immigrationRate{new double{argImmigrationRate}},
+    maxFailures{new unsigned int{argMaxFailures}},
+    mutationImpact{new double{argMutationImpact}},
+    mutationRate{new double{argMutationRate}},
+    outputFile{new std::string{argOutputFile}},
+    problemFiles{new std::vector<std::string>{argProblemFiles}},
+    promoteGlobalBestSol{new bool{argPromoteGlobalBestSol}},
+    randomizedTabooTenures{new bool{argRandomizedTabooTenures}},
+    randomKeys{new bool{argRandomKeys}},
+    reproductionRate{new double{argReproductionRate}},
+    tabooTenureDeviation{new double{argTabooTenureDeviation}},
+    tabooTenuresFac{new unsigned short{argTabooTenureFac}},
+    tabooTenureShuffling{new bool{argTabooTenureShuffling}},
+    tsInstances{new unsigned short{argTSInstances}}
 {
-    std::cout << "  Settings constructor" << std::endl;
+    std::cout << "  Settings constructor\n";
     std::cout << "   gaInstances:\t\t\t" << *gaInstances
               << "\n   globalBestAspiration:\t" << *globalBestAspiration
               << "\n   immigrationRate:\t\t" << *immigrationRate
@@ -62,16 +69,19 @@ mt::Settings::Settings( const unsigned short &argGAInstances, const bool &argGlo
               << "\n   tabooTenureShuffling:\t" << *tabooTenureShuffling
               << "\n   tsInstances:\t\t\t" << *tsInstances << std::endl;
 
-    std::lock_guard< std::mutex > lockMeasure{ measureMutex };
-    measure.SetSettingsParameters( *gaInstances, *globalBestAspiration, *immigrationRate, *maxFailures,
-                                   *mutationImpact, *mutationRate, *outputFile, *promoteGlobalBestSol,
-                                   *randomizedTabooTenures, *randomKeys, *reproductionRate,
-                                   *tabooTenureDeviation, *tabooTenuresFac, *tabooTenureShuffling,
-                                   *tsInstances );
+    std::lock_guard<std::mutex> lockMeasure{measureMutex};
+    measure.SetSettingsParameters(*gaInstances, *globalBestAspiration,
+                                  *immigrationRate, *maxFailures,
+                                  *mutationImpact, *mutationRate,
+                                  *outputFile, *promoteGlobalBestSol,
+                                  *randomizedTabooTenures, *randomKeys,
+                                  *reproductionRate, *tabooTenureDeviation,
+                                  *tabooTenuresFac, *tabooTenureShuffling,
+                                  *tsInstances);
 }
 
 mt::Settings::~Settings() {
-    std::cout << " Settings destructor" << std::endl;
+    std::cout << " Settings destructor\n";
     delete gaInstances;
     delete globalBestAspiration;
     delete immigrationRate;
@@ -92,11 +102,11 @@ mt::Settings::~Settings() {
 
 std::string mt::Settings::CreateStringOfProblemFiles() const {
     std::string output;
-    for ( auto cit = problemFiles->cbegin(); cit != problemFiles->cend() - 1; ++cit ) {
-        output.append( *cit );
-        output.append( 1, ';' );
+    for (auto cit = problemFiles->cbegin(); cit != problemFiles->cend() - 1; ++cit) {
+        output.append(*cit);
+        output.append(1, ';');
     }
-    output.append( problemFiles->back() );
+    output.append(problemFiles->back());
 
     return output;
 }

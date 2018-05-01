@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -35,16 +35,16 @@ namespace mt {
 
 class Settings final {
 public:
-    Settings( const unsigned short &argGAInstances, const bool &argGlobalBestAspiration,
-              const double &argImmigrationRate, const unsigned int &argMaxFailures,
-              const double &argMutationImpact, const double &argMutationRate,
-              const std::string &argOutputFile, std::vector< std::string > &&argProblemFiles,
-              const bool &argPromoteGlobalBestSol, const bool &argRandomizedTabooTenures,
-              const bool &argRandomKeys, const double &argReproductionRate,
-              const double &argTabooTenureDeviation, const unsigned short &argTabooTenureFac,
-              const bool &argTabooTenureShuffling, const unsigned short &argTSInstances );
-    Settings( const Settings &argSettings ) = delete;
-    Settings( Settings &&argSettings ) = delete;
+    Settings(const unsigned short argGAInstances, const bool argGlobalBestAspiration,
+             const double argImmigrationRate, const unsigned int argMaxFailures,
+             const double argMutationImpact, const double argMutationRate,
+             const std::string &argOutputFile, std::vector<std::string> &&argProblemFiles,
+             const bool argPromoteGlobalBestSol, const bool argRandomizedTabooTenures,
+             const bool argRandomKeys, const double argReproductionRate,
+             const double argTabooTenureDeviation, const unsigned short argTabooTenureFac,
+             const bool argTabooTenureShuffling, const unsigned short argTSInstances);
+    Settings(const Settings &argSettings) = delete;
+    Settings(Settings &&argSettings) = delete;
     ~Settings();
 
     const unsigned short * const gaInstances = nullptr;
@@ -54,7 +54,7 @@ public:
     const double * const mutationImpact = nullptr;
     const double * const mutationRate = nullptr;
     const std::string * const outputFile = nullptr;
-    const std::vector< std::string > * const problemFiles = nullptr;
+    const std::vector<std::string> * const problemFiles = nullptr;
     const bool * const promoteGlobalBestSol = nullptr;
     const bool * const randomizedTabooTenures = nullptr;
     const bool * const randomKeys = nullptr;
@@ -68,6 +68,6 @@ private:
     std::string CreateStringOfProblemFiles() const;
 };
 
-}
+} // namespace mt
 
 #endif // SETTINGS_H
