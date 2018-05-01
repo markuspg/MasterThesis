@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -31,34 +31,35 @@ namespace mt {
 class Measure
 {
 public:
-    Measure();
-    Measure( const Measure &argMeasure ) = delete;
-    Measure( Measure &argMeasure ) = delete;
+    Measure() = default;
 
-    void AddTSThreadIterations( std::string &argIterationsString );
-    void SetFinalStats( const double &argFinMedian, const double &argFinMedium );
-    void SetGlobalBestDevelopment( const std::string &argGlobalBestDevelopment );
-    void SetInitializationStats( const double &argIniMedian, const double &argIniMedium );
-    void SetOptimizationStats( const double &argOptMedian, const double &argOptMedium );
-    void SetOverallIterationCount( const unsigned long &argIterationCount );
-    void SetProblemParameters( const std::string &argName,
-                               const unsigned long &argSize,
-                               const std::string &argType );
-    void SetSettingsParameters( const unsigned short &argGAInstances,
-                                const bool &argGlobalBestAspiration,
-                                const double &argImmigrationRate,
-                                const unsigned int &argMaxFailures,
-                                const double &argMutationImpact,
-                                const double &argMutationRate,
-                                const std::string &argOutputFile,
-                                const bool &argPromoteGlobalBestSol,
-                                const bool &argRandomizedTabooTenures,
-                                const bool &argRandomKeys,
-                                const double &argReproductionRate,
-                                const double &argTabooTenureDeviation,
-                                const unsigned short &argTabooTenuresFac,
-                                const bool &argTabooTenureShuffling,
-                                const unsigned short &argTSInstances );
+    void AddTSThreadIterations(std::string &argIterationsString);
+    void SetFinalStats(const double argFinMedian, const double argFinMedium);
+    void SetGlobalBestDevelopment(const std::string &argGlobalBestDevelopment);
+    void SetInitializationStats(const double argIniMedian,
+                                const double argIniMedium);
+    void SetOptimizationStats(const double argOptMedian,
+                              const double argOptMedium);
+    void SetOverallIterationCount(
+            const unsigned long argIterationCount);
+    void SetProblemParameters(const std::string &argName,
+                              const unsigned long argSize,
+                              const std::string &argType);
+    void SetSettingsParameters(const unsigned short argGAInstances,
+                               const bool argGlobalBestAspiration,
+                               const double argImmigrationRate,
+                               const unsigned int argMaxFailures,
+                               const double argMutationImpact,
+                               const double argMutationRate,
+                               const std::string &argOutputFile,
+                               const bool argPromoteGlobalBestSol,
+                               const bool argRandomizedTabooTenures,
+                               const bool argRandomKeys,
+                               const double argReproductionRate,
+                               const double argTabooTenureDeviation,
+                               const unsigned short argTabooTenuresFac,
+                               const bool argTabooTenureShuffling,
+                               const unsigned short argTSInstances );
     void StartTimer();
     void WriteToDisk();
 
@@ -89,10 +90,10 @@ private:
     double tabooTenureDeviation = 0.1;
     unsigned short tabooTenuresFac = 1;
     bool tabooTenureShuffling = false;
-    std::vector< std::string > tsThreadIterations;
+    std::vector<std::string> tsThreadIterations;
     unsigned short tsInstances = 1;
 };
 
-}
+} // namespace mt
 
 #endif // MEASURE_H

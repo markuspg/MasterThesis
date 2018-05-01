@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -19,60 +19,60 @@
 
 #include "measure.h"
 
-mt::Measure::Measure() {
+void mt::Measure::AddTSThreadIterations(std::string &argIterationsString) {
+    tsThreadIterations.emplace_back(argIterationsString);
 }
 
-void mt::Measure::AddTSThreadIterations( std::string &argIterationsString ) {
-    tsThreadIterations.emplace_back( argIterationsString );
-}
-
-void mt::Measure::SetFinalStats( const double &argFinMedian, const double &argFinMedium ) {
+void mt::Measure::SetFinalStats(const double argFinMedian,
+                                const double argFinMedium) {
     finalMedian = argFinMedian;
     finalMedium = argFinMedium;
 }
 
-void mt::Measure::SetGlobalBestDevelopment( const std::string &argGlobalBestDevelopment ) {
+void mt::Measure::SetGlobalBestDevelopment(const std::string &argGlobalBestDevelopment) {
     globalBestDevelopment = argGlobalBestDevelopment;
     globalBestDevelopment.pop_back();
 }
 
-void mt::Measure::SetInitializationStats( const double &argIniMedian, const double &argIniMedium ) {
+void mt::Measure::SetInitializationStats(const double argIniMedian,
+                                         const double argIniMedium) {
     initializationMedian = argIniMedian;
     initializationMedium = argIniMedium;
 }
 
-void mt::Measure::SetOptimizationStats( const double &argOptMedian, const double &argOptMedium ) {
+void mt::Measure::SetOptimizationStats(const double argOptMedian,
+                                       const double argOptMedium) {
     optimizationMedian = argOptMedian;
     optimizationMedium = argOptMedium;
 }
 
-void mt::Measure::SetOverallIterationCount( const unsigned long &argIterationCount ) {
+void mt::Measure::SetOverallIterationCount(const unsigned long argIterationCount) {
     analyzerIterations = argIterationCount;
 }
 
-void mt::Measure::SetProblemParameters( const std::string &argName,
-                                        const unsigned long &argSize,
-                                        const std::string &argType ) {
+void mt::Measure::SetProblemParameters(const std::string &argName,
+                                       const unsigned long argSize,
+                                       const std::string &argType) {
     problemName = argName;
     problemSize = argSize;
     problemType = argType;
 }
 
-void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
-                                         const bool &argGlobalBestAspiration,
-                                         const double &argImmigrationRate,
-                                         const unsigned int &argMaxFailures,
-                                         const double &argMutationImpact,
-                                         const double &argMutationRate,
-                                         const std::string &argOutputFile,
-                                         const bool &argPromoteGlobalBestSol,
-                                         const bool &argRandomizedTabooTenures,
-                                         const bool &argRandomKeys,
-                                         const double &argReproductionRate,
-                                         const double &argTabooTenureDeviation,
-                                         const unsigned short &argTabooTenuresFac,
-                                         const bool &argTabooTenureShuffling,
-                                         const unsigned short &argTSInstances ) {
+void mt::Measure::SetSettingsParameters(const unsigned short argGAInstances,
+                                        const bool argGlobalBestAspiration,
+                                        const double argImmigrationRate,
+                                        const unsigned int argMaxFailures,
+                                        const double argMutationImpact,
+                                        const double argMutationRate,
+                                        const std::string &argOutputFile,
+                                        const bool argPromoteGlobalBestSol,
+                                        const bool argRandomizedTabooTenures,
+                                        const bool argRandomKeys,
+                                        const double argReproductionRate,
+                                        const double argTabooTenureDeviation,
+                                        const unsigned short argTabooTenuresFac,
+                                        const bool argTabooTenureShuffling,
+                                        const unsigned short argTSInstances ) {
     gaInstances = argGAInstances;
     globalBestAspiration = argGlobalBestAspiration;
     immigrationRate = argImmigrationRate;
@@ -89,7 +89,7 @@ void mt::Measure::SetSettingsParameters( const unsigned short &argGAInstances,
     tabooTenureShuffling = argTabooTenureShuffling;
     tsInstances = argTSInstances;
 
-    tsThreadIterations.reserve( tsInstances );
+    tsThreadIterations.reserve(tsInstances);
 }
 
 void mt::Measure::StartTimer() {
@@ -103,26 +103,32 @@ void mt::Measure::WriteToDisk() {
 
     std::stringstream threadIterationsStream;
     threadIterationsStream << tsThreadIterations.front();
-    for ( auto cit = tsThreadIterations.cbegin() + 1; cit != tsThreadIterations.cend(); ++cit ) {
-        threadIterationsStream << ';' << *cit;
+    for (const auto &tsThreadIteration : tsThreadIterations) {
+        threadIterationsStream << ';' << tsThreadIteration;
     }
     std::string threadIterations = threadIterationsStream.str();
     std::ofstream outputStream;
-    outputStream.open( outputFile.c_str(), std::ios::app | std::ios::out );
-    if ( !outputStream.tellp() ) {
-        outputStream << "problemName|PType|PSize|GAI|GBA|IR|MF|MI|MR|PGB|RTT|RK|RR|TTD|TTF|TTS|TSI|AnIt|"
-                        "ThIt|iniMian|iniMium|optMian|optMium|finMian|finMium|GBD|dur\n";
+    outputStream.open(outputFile.c_str(), std::ios::app | std::ios::out);
+    if (!outputStream.tellp()) {
+        outputStream << "problemName|PType|PSize|GAI|GBA|IR|MF|MI|MR|PGB|RTT|RK"
+                        "|RR|TTD|TTF|TTS|TSI|AnIt|ThIt|iniMian|iniMium|optMian"
+                        "|optMium|finMian|finMium|GBD|dur\n";
     }
-    outputStream << problemName << '|' << problemType << '|' << problemSize << '|' << gaInstances << '|'
-                 << globalBestAspiration << '|' << immigrationRate << '|' << maxFailures << '|'
-                 << mutationImpact << '|' << mutationRate << '|' << promoteGlobalBestSol << '|'
-                 << randomizedTabooTenures << '|' << randomKeys << '|' << reproductionRate << '|'
-                 << tabooTenureDeviation << '|' << tabooTenuresFac << '|' << tabooTenureShuffling
-                 << '|' << tsInstances << '|' << analyzerIterations << '|' << threadIterations << '|'
-                 << initializationMedian << '|' << initializationMedium << '|' << optimizationMedian << '|'
-                 << optimizationMedium << '|' << finalMedian << '|' << finalMedium << '|'
-                 << globalBestDevelopment << '|'
-                 << std::chrono::duration_cast< std::chrono::milliseconds >( optimizationDuration ).count()
+    outputStream << problemName << '|' << problemType << '|' << problemSize
+                 << '|' << gaInstances << '|' << globalBestAspiration
+                 << '|' << immigrationRate << '|' << maxFailures
+                 << '|' << mutationImpact << '|' << mutationRate
+                 << '|' << promoteGlobalBestSol << '|' << randomizedTabooTenures
+                 << '|' << randomKeys << '|' << reproductionRate
+                 << '|' << tabooTenureDeviation << '|' << tabooTenuresFac
+                 << '|' << tabooTenureShuffling << '|' << tsInstances
+                 << '|' << analyzerIterations << '|' << threadIterations
+                 << '|' << initializationMedian << '|' << initializationMedium
+                 << '|' << optimizationMedian << '|' << optimizationMedium
+                 << '|' << finalMedian << '|' << finalMedium
+                 << '|' << globalBestDevelopment << '|'
+                 << std::chrono::duration_cast<std::chrono::milliseconds>(
+                        optimizationDuration).count()
                  << "\n";
     outputStream.flush();
     outputStream.close();
