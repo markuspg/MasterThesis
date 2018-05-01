@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -34,18 +34,16 @@
 
 extern mt::Settings *settings;
 
-namespace mt {
+namespace mt::tools {
 
-namespace tools {
+unsigned int GetTabooTenure(const unsigned int argPS);
+mt::Problem *LoadProblem(const std::string &argLine);
+int ParseCommandLine(const int argC, const char * const argV[]);
+std::vector<std::string> Split(const std::string &argString,
+                               const char argDelim);
+void Split(const std::string &argString, const char argDelim,
+           std::vector<std::string> &argElements);
 
-unsigned int GetTabooTenure( const unsigned int &argPS );
-mt::Problem *LoadProblem( const std::string &argLine );
-int ParseCommandLine( const int &argC, const char * const argV[] );
-std::vector<std::string> Split( const std::string &argString, char argDelim );
-void Split( const std::string &argString, char argDelim, std::vector<std::string> &argElements );
-
-}
-
-}
+} // namespace mt::tools
 
 #endif // HELPER_FUNCTIONS_H
