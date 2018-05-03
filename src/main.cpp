@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Markus Prasser
+ * Copyright 2015-2018 Markus Prasser
  *
  * This file is part of MasterThesis.
  *
@@ -32,27 +32,27 @@ std::mutex measureMutex;
 mt::Measure measure;
 mt::Settings *settings = nullptr;
 
-int main( int argc, char *argv[] ) {
-    std::cout << "<---- MasterThesis ---->" << std::endl;
+int main(int argc, char *argv[]) {
+    std::cout << "<---- MasterThesis ---->\n";
     
-    if ( mt::tools::ParseCommandLine( argc, argv ) ) {
+    if (mt::tools::ParseCommandLine(argc, argv)) {
         return 1;
     }
 
-    for ( auto cit = settings->problemFiles->cbegin(); cit != settings->problemFiles->cend(); ++cit ) {
+    for (const auto &problemFile : *settings->problemFiles) {
         std::ifstream inputFile;
-        inputFile.open( *cit, std::ios::in );
-        for ( std::string line; std::getline( inputFile, line ); ) {
-            const mt::Problem * const problem = mt::tools::LoadProblem( line );
-            if ( problem ) {
-                mt::Analyzer analyzer{ problem };
+        inputFile.open(problemFile, std::ios::in);
+        for (std::string line; std::getline(inputFile, line);) {
+            const auto problem = mt::tools::LoadProblem(line);
+            if (problem) {
+                mt::Analyzer analyzer{problem};
                 // Start measuring the wall-clock time of the optimization part
                 measure.StartTimer();
                 analyzer.Analyze();
                 delete problem;
             } else {
-                throw std::runtime_error{ "  Invalid problem encountered in line '" + line + "' of"
-                                          " file '" + *cit + "'"};
+                throw std::runtime_error{"  Invalid problem encountered in line '"
+                                         + line + "' of file '" + problemFile + "'"};
             }
             measure.WriteToDisk();
         }
@@ -62,7 +62,7 @@ int main( int argc, char *argv[] ) {
     delete settings;
     settings = nullptr;
     
-    std::cout << "Finished MasterThesis" << std::endl;
+    std::cout << "Finished MasterThesis\n";
     
     return 0;
 }
