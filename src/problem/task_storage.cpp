@@ -17,20 +17,25 @@
  *  along with MasterThesis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "task_storage.h"
+#include "../helper_functions.h"
 
+/*!
+ * \brief This copy-constructor got implemented manually to create deep copies
+ * \param argTaskStorage The TaskStorage object to be copied
+ */
 mt::TaskStorage::TaskStorage(const TaskStorage &argTaskStorage) :
     tasks(argTaskStorage.tasks.size(), nullptr)
 {
     const auto size = argTaskStorage.tasks.size();
     for (auto i = decltype(size){0}; i < size; ++i) {
-        std::vector<Task*> *predecessors = new std::vector<Task*>;
-        for (auto cit = argTaskStorage.tasks[i]->predecessors->cbegin();
-             cit != argTaskStorage.tasks[i]->predecessors->cend(); ++cit) {
-            predecessors->emplace_back(tasks[(*cit)->index - 1]);
+        std::vector<Task*> predecessors;
+        for (auto cit = argTaskStorage.tasks[i]->predecessors.cbegin();
+             cit != argTaskStorage.tasks[i]->predecessors.cend(); ++cit) {
+            predecessors.emplace_back(tasks[(*cit)->index - 1]);
         }
         tasks[i] = new Task{argTaskStorage.tasks[i]->duration,
-                            argTaskStorage.tasks[i]->index, predecessors};
+                            argTaskStorage.tasks[i]->index,
+                            std::move(predecessors)};
     }
 }
 
@@ -39,33 +44,32 @@ mt::TaskStorage::TaskStorage(const unsigned long argSize,
     tasks(argSize, nullptr)
 {
     // Split the tokens for their usage whilst the Tasks' construction
-    std::vector<std::string> durationStrings = tools::Split(argTokens[3], ';');
-    std::vector<std::string> precedenceStrings = tools::Split(argTokens[4], ';');
+    const auto durationStrings = tools::Split(argTokens[3], ';');
+    const auto precedenceStrings = tools::Split(argTokens[4], ';');
 
     // Construct all tasks, one after another
     for (unsigned long i = 0; i < argSize; ++i) {
         // First declare and initialize the needed variables
-        std::vector<Task*> *predecessors = new std::vector<Task*>;
+        std::vector<Task*> predecessors;
         unsigned long taskDuration = 0;
         unsigned long taskID = 0;
 
         // Then convert the string values to the needed data items
-        taskDuration = std::stoul(durationStrings[i]);
-        std::vector<std::string> precedenceString
-                = tools::Split(precedenceStrings[i], ':');
-        taskID = std::stoul(precedenceString[0]);
+        taskDuration = std::stoul(durationStrings.at(i));
+        const auto precedenceString = tools::Split(precedenceStrings.at(i), ':');
+        taskID = std::stoul(precedenceString.at(0));
         if (precedenceString.size() > 1) {
-            std::vector<std::string> predecessorIndicesString
-                    = tools::Split(precedenceString[1], ',');
+            const auto predecessorIndicesString
+                    = tools::Split(precedenceString.at(1), ',');
             for (std::size_t j = 0; j < predecessorIndicesString.size(); ++j) {
                 const unsigned long predecessorIndexString
-                        = std::stoul(predecessorIndicesString[j]) - 1;
+                        = std::stoul(predecessorIndicesString.at(j)) - 1;
                 // Ensure lexicographical ordering of the tasks
                 assert(predecessorIndexString < i);
-                predecessors->emplace_back(tasks[predecessorIndexString]);
+                predecessors.emplace_back(tasks.at(predecessorIndexString));
             }
         }
-        tasks[i] = new Task{taskDuration, taskID, predecessors};
+        tasks[i] = new Task{taskDuration, taskID, std::move(predecessors)};
     }
 }
 

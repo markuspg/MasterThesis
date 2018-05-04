@@ -27,8 +27,7 @@ namespace mt {
 class Task final {
 public:
     Task(const unsigned long argDuration, const unsigned long argIndex,
-         const std::vector<Task*> *argPredecessors);
-    ~Task();
+         std::vector<Task*> &&argPredecessors);
 
     bool AllPredecessorsScheduled();
     bool IsScheduled() const noexcept;
@@ -36,7 +35,7 @@ public:
 
     const unsigned long duration = 0;
     const unsigned long index = 0;
-    const std::vector<Task*> *const predecessors = nullptr;
+    const std::vector<Task*> predecessors;
 
 private:
     bool allPredecessorsScheduled = false;

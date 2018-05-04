@@ -20,26 +20,22 @@
 #include "task.h"
 
 mt::Task::Task(const unsigned long argDuration, const unsigned long argIndex,
-               const std::vector<Task*> *argPredecessors) :
+               std::vector<Task*> &&argPredecessors) :
     duration{argDuration},
     index{argIndex},
-    predecessors{argPredecessors}
+    predecessors{std::move(argPredecessors)}
 {
-    if (predecessors->empty()) {
+    if (predecessors.empty()) {
         allPredecessorsScheduled = true;
     }
-}
-
-mt::Task::~Task() {
-    delete predecessors;
 }
 
 bool mt::Task::AllPredecessorsScheduled() {
     if (allPredecessorsScheduled) {
         return true;
     } else {
-        for (auto cit = predecessors->cbegin(); cit != predecessors->cend(); ++cit) {
-            if ((*cit)->IsScheduled() == false) {
+        for (const auto predecessor : predecessors) {
+            if (predecessor->IsScheduled() == false) {
                 return false;
             }
         }
